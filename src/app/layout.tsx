@@ -1,3 +1,4 @@
+// src/app/layout.tsx
 import type { Metadata } from "next";
 import "./globals.css";
 import { Navbar } from "@/components/Navbar";
@@ -20,13 +21,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        {/* JSON-LD for MedicalOrganization */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(orgJsonLd) }}
         />
       </head>
-      <body className="flex min-h-screen flex-col bg-slate-50">
+      <body className="flex min-h-screen flex-col bg-slate-50 text-slate-900">
         <Navbar />
         <main className="flex-1">{children}</main>
         <Footer />
