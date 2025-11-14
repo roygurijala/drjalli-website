@@ -3,9 +3,12 @@
 @tailwind utilities;
 
 body {
-  @apply bg-slate-50 text-slate-900 antialiased;
+  background-color: #f8fafc; /* tailwind bg-slate-50 */
+  color: #0f172a;            /* tailwind text-slate-900 */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 main {
-  @apply min-h-screen;
+  min-height: 100vh;
 }
