@@ -9,14 +9,19 @@ export function HeroSection() {
           <p className="text-xs font-semibold uppercase tracking-wide text-brand-dark mb-2">
             Primary Care · Rockville, MD
           </p>
-          <h1 className="text-3xl font-bold tracking-tight text-slate-900 md:text-4xl">
-            Primary care that listens, explains, and partners with you.
+
+          {/* 🔹 Main standout title */}
+          <h1 className="text-4xl font-extrabold tracking-tight text-slate-900 md:text-5xl md:leading-tight">
+            We Care for You.{" "}
+            <span className="text-brand-dark">Always.</span>
           </h1>
+
+          {/* 🔹 Subtitle under the title */}
           <p className="mt-4 text-sm md:text-base text-slate-700 max-w-xl">
-            At Dr. Jalli MD PC, we provide thoughtful, evidence-based primary
-            care for adults—focusing on prevention, lifestyle, and long-term
-            relationships with our patients.
+            Primary care with heart, expertise, and a personal touch — serving
+            individuals and families in Rockville, Maryland.
           </p>
+
           <div className="mt-6 flex flex-wrap gap-3">
             <a
               href={`tel:${PRACTICE_PHONE.replace(/[^0-9]/g, "")}`}
@@ -31,6 +36,7 @@ export function HeroSection() {
               New patient info
             </Link>
           </div>
+
           <p className="mt-3 text-xs text-slate-600">
             Established patients: please use the patient portal for secure
             messages and medical questions.
