@@ -3,8 +3,8 @@
 @tailwind utilities;
 
 body {
-  background-color: #f8fafc; /* tailwind bg-slate-50 */
-  color: #0f172a;            /* tailwind text-slate-900 */
+  background-color: #f8fafc; /* Tailwind bg-slate-50 */
+  color: #0f172a;            /* Tailwind text-slate-900 */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
