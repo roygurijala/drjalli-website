@@ -1,7 +1,6 @@
 // src/app/page.tsx
 
 import { HeroSection } from "@/components/HeroSection";
-import { DoctorsSection } from "@/components/DoctorsSection";
 import { ServicesGrid } from "@/components/ServicesGrid";
 import { InBodyHighlightSection } from "@/components/InBodyHighlightSection";
 import { WaveDivider } from "@/components/WaveDivider";
@@ -140,40 +139,24 @@ function ContactCtaStrip() {
 export default function HomePage() {
   return (
     <div className="bg-neutralBg">
-      {/* Hero with peach gradient + doctor cards */}
       <HeroSection />
 
-      {/* Soft wave into the info strip */}
       <WaveDivider color="#FFFFFF" />
 
-      {/* Card-like location / new patient info strip */}
       <InfoStrip />
 
-      {/* Wave into clinicians section */}
-      <WaveDivider color="#FFF7F0" flip />
+      <WaveDivider color="#FFF4EC" flip />
 
-      {/* Clinician profiles */}
-      <DoctorsSection />
-
-      {/* Wave into services */}
-      <WaveDivider color="#FFF4EC" />
-
-      {/* Services grid */}
       <ServicesGrid />
 
-      {/* Wave into InBody highlight */}
       <WaveDivider color="#FFE7DA" flip />
 
-      {/* InBody / lifestyle band */}
       <InBodyHighlightSection />
 
-      {/* Wave into care journey */}
       <WaveDivider color="#FFF2EC" />
 
-      {/* How we care section */}
       <CareJourneySection />
 
-      {/* Final call-to-action strip */}
       <ContactCtaStrip />
     </div>
   );

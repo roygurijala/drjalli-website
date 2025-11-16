@@ -5,33 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { useEffect, useRef } from "react";
 import { PRACTICE_PHONE } from "@/lib/constants";
-
-const doctors = [
-  {
-    name: "Dr. Sireesha Jalli, MD, FACP",
-    title: "Primary Care Physician",
-    imageSrc: "/images/doctors/sireesha-jalli.jpg",
-    imageAlt: "Portrait of Dr. Sireesha Jalli",
-    blurb:
-      "Compassionate, relationship-based primary care with a focus on prevention and long-term health.",
-  },
-  {
-    name: "Dr. Mythili Vancha, MD",
-    title: "Primary Care Physician",
-    imageSrc: "/images/doctors/mythili-vancha.jpg",
-    imageAlt: "Portrait of Dr. Mythili Vancha",
-    blurb:
-      "Thorough, communicative care that helps patients understand their conditions and options.",
-  },
-  {
-    name: "Ntoge Penda, NP",
-    title: "Nurse Practitioner",
-    imageSrc: "/images/doctors/ntoge-penda.jpg",
-    imageAlt: "Portrait of Nurse Practitioner Ntoge Penda",
-    blurb:
-      "Attentive, patient-centered visits with clear explanations and support for day-to-day health.",
-  },
-];
+import { doctors } from "@/data/doctors";
 
 export function HeroSection() {
   const scrollRef = useRef<HTMLDivElement | null>(null);
@@ -70,13 +44,6 @@ export function HeroSection() {
       container.removeEventListener("mouseleave", startScrolling);
     };
   }, []);
-
-  function handleDoctorClick() {
-    const section = document.getElementById("clinicians");
-    if (section) {
-      section.scrollIntoView({ behavior: "smooth", block: "start" });
-    }
-  }
 
   return (
     <section className="relative overflow-hidden bg-gradient-to-b from-[#FBE7DF] to-[#FFF7F0] pb-12 pt-10 text-slate-900 md:pb-16 md:pt-14">
@@ -136,7 +103,7 @@ export function HeroSection() {
           </p>
         </div>
 
-        {/* RIGHT: doctor cards */}
+        {/* RIGHT: doctor cards – now LINK to individual pages */}
         <div className="flex flex-col">
           <p className="mb-3 inline-flex w-fit items-center gap-2 rounded-full bg-white/70 px-3 py-1 text-[11px] font-medium text-slate-700 shadow-sm">
             <span className="h-1.5 w-1.5 rounded-full bg-[#F29B82]" />
@@ -148,10 +115,9 @@ export function HeroSection() {
             className="flex gap-4 overflow-hidden pb-2 pt-1"
           >
             {[...doctors, ...doctors].map((doc, index) => (
-              <button
-                key={doc.name + index}
-                type="button"
-                onClick={handleDoctorClick}
+              <Link
+                key={doc.slug + index}
+                href={`/clinicians/${doc.slug}`}
                 className="relative flex min-w-[230px] max-w-[250px] flex-col rounded-3xl border border-[#F3D3C6] bg-white/90 p-4 text-left shadow-sm transition hover:-translate-y-0.5 hover:shadow-md"
               >
                 <div className="relative mb-3 h-28 w-full overflow-hidden rounded-2xl bg-[#FFE7DA]">
@@ -169,14 +135,14 @@ export function HeroSection() {
                   {doc.title}
                 </p>
                 <p className="mt-2 text-[11px] leading-relaxed text-slate-700">
-                  {doc.blurb}
+                  {doc.shortBlurb}
                 </p>
-              </button>
+              </Link>
             ))}
           </div>
 
           <p className="mt-1 text-[11px] text-slate-500">
-            Tap or click a profile to see more about our clinicians.
+            Tap or click a profile to read more about each clinician.
           </p>
         </div>
       </div>
