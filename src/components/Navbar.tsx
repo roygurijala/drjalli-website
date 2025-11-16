@@ -7,6 +7,7 @@ import { PRACTICE_NAME, PRACTICE_PHONE } from "@/lib/constants";
 
 const links = [
   { href: "/", label: "Home" },
+  { href: "/clinicians", label: "Our Clinicians" },
   { href: "/about", label: "About" },
   { href: "/services", label: "Services" },
   { href: "/patient-resources", label: "Patient Resources" },

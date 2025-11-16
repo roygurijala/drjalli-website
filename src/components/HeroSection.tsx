@@ -27,7 +27,7 @@ export function HeroSection() {
         ) {
           container.scrollLeft = 0;
         }
-      }, 20);
+      }, 40);
     }
 
     function stopScrolling() {
