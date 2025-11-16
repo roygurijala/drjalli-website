@@ -1,0 +1,116 @@
+<svg
+  width="40"
+  height="40"
+  viewBox="0 0 40 40"
+  fill="none"
+  xmlns="http://www.w3.org/2000/svg"
+>
+  <defs>
+    <!-- Soft peach gradient for strokes -->
+    <linearGradient id="stethoscope-peach" x1="8" y1="6" x2="32" y2="34" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#F29B82" />
+      <stop offset="1" stop-color="#F7C0A7" />
+    </linearGradient>
+
+    <!-- Glow gradient -->
+    <radialGradient id="stethoscope-glow" cx="0" cy="0" r="1"
+      gradientUnits="userSpaceOnUse"
+      gradientTransform="translate(20 22) rotate(90) scale(14 14)">
+      <stop offset="0" stop-color="#F29B82" stop-opacity="0.7"/>
+      <stop offset="1" stop-color="#F29B82" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <!-- Pulsing peach glow behind -->
+  <circle cx="20" cy="22" r="11" fill="url(#stethoscope-glow)" opacity="0.6">
+    <animate
+      attributeName="r"
+      values="10;12.5;10"
+      dur="1.8s"
+      repeatCount="indefinite"
+    />
+    <animate
+      attributeName="opacity"
+      values="0.55;0.25;0.55"
+      dur="1.8s"
+      repeatCount="indefinite"
+    />
+  </circle>
+
+  <!-- Card background -->
+  <rect
+    x="4"
+    y="4"
+    width="32"
+    height="32"
+    rx="12"
+    fill="white"
+  />
+  <rect
+    x="4.5"
+    y="4.5"
+    width="31"
+    height="31"
+    rx="11.5"
+    stroke="#F3D3C6"
+    stroke-width="1.2"
+  />
+
+  <!-- Left earpiece & tube branch -->
+  <path
+    d="M13 9C13 8.17157 13.6716 7.5 14.5 7.5C15.3284 7.5 16 8.17157 16 9V12C16 13.933 14.433 15.5 12.5 15.5C10.567 15.5 9 13.933 9 12"
+    stroke="url(#stethoscope-peach)"
+    stroke-width="1.8"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  />
+
+  <!-- Right earpiece & tube branch -->
+  <path
+    d="M27 9C27 8.17157 26.3284 7.5 25.5 7.5C24.6716 7.5 24 8.17157 24 9V12C24 13.933 25.567 15.5 27.5 15.5C29.433 15.5 31 13.933 31 12"
+    stroke="url(#stethoscope-peach)"
+    stroke-width="1.8"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  />
+
+  <!-- Main tubing into chest piece -->
+  <path
+    d="M12.5 15.5C12.5 19.5 15.5 22.5 19.2 22.5H20.5C23.5376 22.5 26 24.9624 26 28V29.5"
+    stroke="url(#stethoscope-peach)"
+    stroke-width="1.8"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  />
+
+  <!-- Chest piece outer ring -->
+  <circle
+    cx="26"
+    cy="29.5"
+    r="3"
+    fill="white"
+    stroke="url(#stethoscope-peach)"
+    stroke-width="1.8"
+  />
+
+  <!-- Chest piece inner detail -->
+  <circle cx="26" cy="29.5" r="1.2" fill="#FCE6DC" />
+
+  <!-- Subtle highlight on ring -->
+  <path
+    d="M24.5 28.4C24.9 27.9 25.4 27.6 26 27.6"
+    stroke="white"
+    stroke-width="0.9"
+    stroke-linecap="round"
+    opacity="0.7"
+  />
+
+  <!-- Small highlight on tubing -->
+  <path
+    d="M18 21C19.2 21.4 20.4 21.4 21.5 21"
+    stroke="white"
+    stroke-width="0.9"
+    stroke-linecap="round"
+    opacity="0.5"
+  />
+</svg>

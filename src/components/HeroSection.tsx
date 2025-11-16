@@ -1,37 +1,130 @@
+// src/components/HeroSection.tsx
+"use client";
+
 import Link from "next/link";
+import Image from "next/image";
+import { useEffect, useRef } from "react";
 import { PRACTICE_PHONE } from "@/lib/constants";
 
+const doctors = [
+  {
+    name: "Dr. Sireesha Jalli, MD, FACP",
+    title: "Primary Care Physician",
+    imageSrc: "/images/doctors/sireesha-jalli.jpg",
+    imageAlt: "Portrait of Dr. Sireesha Jalli",
+    blurb:
+      "Compassionate, relationship-based primary care with a focus on prevention and long-term health.",
+  },
+  {
+    name: "Dr. Mythili Vancha, MD",
+    title: "Primary Care Physician",
+    imageSrc: "/images/doctors/mythili-vancha.jpg",
+    imageAlt: "Portrait of Dr. Mythili Vancha",
+    blurb:
+      "Thorough, communicative care that helps patients understand their conditions and options.",
+  },
+  {
+    name: "Ntoge Penda, NP",
+    title: "Nurse Practitioner",
+    imageSrc: "/images/doctors/ntoge-penda.jpg",
+    imageAlt: "Portrait of Nurse Practitioner Ntoge Penda",
+    blurb:
+      "Attentive, patient-centered visits with clear explanations and support for day-to-day health.",
+  },
+];
+
 export function HeroSection() {
+  const scrollRef = useRef<HTMLDivElement | null>(null);
+
+  // Auto-scroll doctor cards
+  useEffect(() => {
+    const container = scrollRef.current;
+    if (!container) return;
+
+    let scrollInterval: NodeJS.Timeout;
+
+    function startScrolling() {
+      scrollInterval = setInterval(() => {
+        if (!container) return;
+        container.scrollLeft += 1;
+        if (
+          container.scrollLeft + container.clientWidth >=
+          container.scrollWidth - 2
+        ) {
+          container.scrollLeft = 0;
+        }
+      }, 20);
+    }
+
+    function stopScrolling() {
+      clearInterval(scrollInterval);
+    }
+
+    startScrolling();
+    container.addEventListener("mouseenter", stopScrolling);
+    container.addEventListener("mouseleave", startScrolling);
+
+    return () => {
+      clearInterval(scrollInterval);
+      container.removeEventListener("mouseenter", stopScrolling);
+      container.removeEventListener("mouseleave", startScrolling);
+    };
+  }, []);
+
+  function handleDoctorClick() {
+    const section = document.getElementById("clinicians");
+    if (section) {
+      section.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  }
+
   return (
-    <section className="bg-gradient-to-b from-brand-light to-slate-50">
-      <div className="mx-auto flex max-w-6xl flex-col gap-8 px-4 py-12 md:flex-row md:items-center md:py-16">
-        <div className="flex-1">
-          <p className="text-xs font-semibold uppercase tracking-wide text-brand-dark mb-2">
+    <section className="relative overflow-hidden bg-gradient-to-b from-[#FBE7DF] to-[#FFF7F0] pb-12 pt-10 text-slate-900 md:pb-16 md:pt-14">
+      {/* soft background blobs */}
+      <div className="pointer-events-none absolute -left-24 -top-32 h-64 w-64 rounded-full bg-[#FFD4C0]/50 blur-3xl" />
+      <div className="pointer-events-none absolute -right-24 -bottom-40 h-64 w-64 rounded-full bg-[#FCE0FF]/50 blur-3xl" />
+
+      <div className="relative mx-auto grid max-w-6xl gap-10 px-4 md:grid-cols-2 md:items-center">
+        {/* LEFT: main content */}
+        <div>
+          {/* top pill */}
+          <p className="mb-4 inline-flex items-center gap-2 rounded-full bg-white/70 px-3 py-1 text-[11px] font-medium text-slate-700 shadow-sm">
+            <span className="h-1.5 w-1.5 rounded-full bg-[#F29B82]" />
             Primary Care · Rockville, MD
           </p>
 
-          {/* 🔹 Main standout title */}
-          <h1 className="text-4xl font-extrabold tracking-tight text-slate-900 md:text-5xl md:leading-tight">
-            We Care for You.{" "}
-            <span className="text-brand-dark">Always.</span>
-          </h1>
+          {/* tagline with premium stethoscope icon */}
+          <div className="flex items-center gap-3">
+            <div className="relative h-10 w-10 md:h-11 md:w-11">
+              <Image
+                src="/icons/stethoscope.svg"
+                alt="Stethoscope icon"
+                fill
+                className="drop-shadow-[0_0_10px_rgba(242,155,130,0.55)]"
+              />
+            </div>
+            <h1 className="text-xl font-semibold text-slate-900 md:text-2xl">
+              We care for you...
+            </h1>
+          </div>
 
-          {/* 🔹 Subtitle under the title */}
-          <p className="mt-4 text-sm md:text-base text-slate-700 max-w-xl">
+          {/* subheading copy */}
+          <p className="mt-4 max-w-2xl text-sm text-slate-700 md:text-base">
             Primary care with heart, expertise, and a personal touch — serving
             individuals and families in Rockville, Maryland.
           </p>
 
+          {/* buttons */}
           <div className="mt-6 flex flex-wrap gap-3">
             <a
               href={`tel:${PRACTICE_PHONE.replace(/[^0-9]/g, "")}`}
-              className="rounded-full bg-brand px-5 py-2.5 text-sm font-semibold text-white shadow hover:bg-brand-dark"
+              className="rounded-full bg-black px-5 py-2.5 text-sm font-semibold text-white shadow-lg hover:bg-slate-900"
             >
               Call {PRACTICE_PHONE}
             </a>
             <Link
               href="/contact"
-              className="rounded-full border border-brand px-5 py-2.5 text-sm font-semibold text-brand hover:bg-white"
+              className="rounded-full border border-slate-300 bg-white/70 px-5 py-2.5 text-sm font-semibold text-slate-800 shadow-sm hover:bg-white"
             >
               New patient info
             </Link>
@@ -43,22 +136,48 @@ export function HeroSection() {
           </p>
         </div>
 
-        <div className="flex-1">
-          <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
-            <h2 className="text-sm font-semibold text-slate-900">
-              Same-day and next-day appointments
-            </h2>
-            <ul className="mt-3 space-y-1 text-xs text-slate-700">
-              <li>• Comprehensive primary care for adults</li>
-              <li>• Preventive visits and chronic disease management</li>
-              <li>• Lifestyle and weight management support</li>
-              <li>• InBody body composition analysis (as appropriate)</li>
-            </ul>
-            <p className="mt-3 text-xs text-slate-500">
-              This site is for general information only and does not provide
-              medical advice. If you are having an emergency, call 911.
-            </p>
+        {/* RIGHT: doctor cards */}
+        <div className="flex flex-col">
+          <p className="mb-3 inline-flex w-fit items-center gap-2 rounded-full bg-white/70 px-3 py-1 text-[11px] font-medium text-slate-700 shadow-sm">
+            <span className="h-1.5 w-1.5 rounded-full bg-[#F29B82]" />
+            <span>Meet your care team</span>
+          </p>
+
+          <div
+            ref={scrollRef}
+            className="flex gap-4 overflow-hidden pb-2 pt-1"
+          >
+            {[...doctors, ...doctors].map((doc, index) => (
+              <button
+                key={doc.name + index}
+                type="button"
+                onClick={handleDoctorClick}
+                className="relative flex min-w-[230px] max-w-[250px] flex-col rounded-3xl border border-[#F3D3C6] bg-white/90 p-4 text-left shadow-sm transition hover:-translate-y-0.5 hover:shadow-md"
+              >
+                <div className="relative mb-3 h-28 w-full overflow-hidden rounded-2xl bg-[#FFE7DA]">
+                  <Image
+                    src={doc.imageSrc}
+                    alt={doc.imageAlt}
+                    fill
+                    className="object-cover"
+                  />
+                </div>
+                <h3 className="text-sm font-semibold text-slate-900">
+                  {doc.name}
+                </h3>
+                <p className="mt-0.5 text-[11px] font-medium text-[#D46A4A]">
+                  {doc.title}
+                </p>
+                <p className="mt-2 text-[11px] leading-relaxed text-slate-700">
+                  {doc.blurb}
+                </p>
+              </button>
+            ))}
           </div>
+
+          <p className="mt-1 text-[11px] text-slate-500">
+            Tap or click a profile to see more about our clinicians.
+          </p>
         </div>
       </div>
     </section>
