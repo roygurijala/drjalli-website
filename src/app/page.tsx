@@ -4,7 +4,6 @@ import { HeroSection } from "@/components/HeroSection";
 import { ServicesGrid } from "@/components/ServicesGrid";
 import { InBodyHighlightSection } from "@/components/InBodyHighlightSection";
 import { WaveDivider } from "@/components/WaveDivider";
-import { StickyFooterBar } from "@/components/StickyFooterBar";
 import {
   PRACTICE_ADDRESS_LINE1,
   PRACTICE_CITY_STATE_ZIP,
@@ -190,10 +189,9 @@ function ContactCtaStrip() {
 
 export default function HomePage() {
   return (
-    <div className="bg-neutralBg min-h-screen pb-16">
+    <div className="bg-neutralBg min-h-screen">
       <HeroSection />
 
-      {/* From hero to services */}
       <WaveDivider color="#FFF4EC" />
 
       <ServicesGrid />
@@ -211,8 +209,7 @@ export default function HomePage() {
       <LocationAndMapSection />
 
       <ContactCtaStrip />
-
-      <StickyFooterBar />
     </div>
   );
 }
+
