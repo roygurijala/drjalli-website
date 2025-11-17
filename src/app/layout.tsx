@@ -1,14 +1,16 @@
-// src/app/layout.tsx
 import type { Metadata } from "next";
 import "./globals.css";
+
 import { Navbar } from "@/components/Navbar";
-import { Footer } from "@/components/Footer";
-import { defaultMeta, generateOrganizationJsonLd } from "@/lib/seo";
-import { ChatbotWidget } from "@/components/ChatbotWidget";
+import { FloatingChatWidget } from "@/components/FloatingChatWidget";
 
 export const metadata: Metadata = {
-  title: defaultMeta.title,
-  description: defaultMeta.description,
+  title: "Dr. Jalli MD PC · Primary Care in Rockville, MD",
+  description:
+    "Compassionate primary care services provided by Dr. Sireesha Jalli MD FACP and team in Rockville, Maryland.",
+  icons: {
+    icon: "/favicon.ico",
+  },
 };
 
 export default function RootLayout({
@@ -16,21 +18,20 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const orgJsonLd = generateOrganizationJsonLd();
-
   return (
     <html lang="en">
-      <head>
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(orgJsonLd) }}
-        />
-      </head>
-      <body className="flex min-h-screen flex-col bg-slate-50 text-slate-900">
+      <body
+        className="min-h-screen bg-neutralBg text-slate-900 antialiased"
+        suppressHydrationWarning
+      >
+        {/* Global Navigation */}
         <Navbar />
-        <main className="flex-1">{children}</main>
-        <Footer />
-        <ChatbotWidget />
+
+        {/* Page Content */}
+        <main className="pt-0">{children}</main>
+
+        {/* Floating AI Assistant */}
+        <FloatingChatWidget />
       </body>
     </html>
   );
