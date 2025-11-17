@@ -1,5 +1,6 @@
 // src/app/page.tsx
 
+import QRCode from "react-qr-code";
 import { HeroSection } from "@/components/HeroSection";
 import { ServicesGrid } from "@/components/ServicesGrid";
 import { InBodyHighlightSection } from "@/components/InBodyHighlightSection";
@@ -70,9 +71,6 @@ function LocationAndMapSection() {
   const mapsLink =
     "https://www.google.com/maps?q=Dr.+Jalli+MD+PC+2401+Research+Blvd+Suite+330+Rockville+MD+20850";
   const mapsEmbed = mapsLink + "&output=embed";
-  const qrUrl = `https://chart.googleapis.com/chart?cht=qr&chs=220x220&chl=${encodeURIComponent(
-    mapsLink
-  )}`;
 
   return (
     <section className="bg-white py-12 md:py-16">
@@ -125,10 +123,16 @@ function LocationAndMapSection() {
             <div className="flex items-center gap-4">
               <div className="flex flex-col items-center gap-1">
                 <div className="overflow-hidden rounded-2xl bg-white p-2 shadow-sm">
-                  <img
-                    src={qrUrl}
-                    alt="QR code to open directions to Dr. Jalli MD PC"
-                    className="h-32 w-32 md:h-40 md:w-40"
+                  <QRCode
+                    value={mapsLink}
+                    size={160}
+                    bgColor="#FFFFFF"
+                    fgColor="#111827"
+                    style={{
+                      height: "auto",
+                      maxWidth: "100%",
+                      width: "100%",
+                    }}
                   />
                 </div>
                 <p className="text-center text-[11px] text-slate-600">
@@ -212,4 +216,3 @@ export default function HomePage() {
     </div>
   );
 }
-

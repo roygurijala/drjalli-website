@@ -2,6 +2,7 @@
 
 import type { Metadata } from "next";
 import Link from "next/link";
+import QRCode from "react-qr-code";
 import {
   PRACTICE_NAME,
   PRACTICE_ADDRESS_LINE1,
@@ -19,9 +20,6 @@ export default function ContactPage() {
   const mapsLink =
     "https://www.google.com/maps?q=Dr.+Jalli+MD+PC+2401+Research+Blvd+Suite+330+Rockville+MD+20850";
   const mapsEmbed = mapsLink + "&output=embed";
-  const qrUrl = `https://chart.googleapis.com/chart?cht=qr&chs=220x220&chl=${encodeURIComponent(
-    mapsLink
-  )}`;
 
   return (
     <div className="min-h-screen bg-neutralBg pb-16">
@@ -50,7 +48,7 @@ export default function ContactPage() {
           </Link>
         </div>
 
-        {/* Contact + hours + phone card */}
+        {/* Contact + info cards */}
         <section className="mb-10 grid gap-6 md:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)]">
           <div className="rounded-3xl bg-white/90 p-5 shadow-sm md:p-6">
             <h2 className="text-sm font-semibold uppercase tracking-wide text-slate-600">
@@ -114,7 +112,7 @@ export default function ContactPage() {
           </div>
         </section>
 
-        {/* Location + Map + QR (matches home style) */}
+        {/* Location + Map + QR */}
         <section className="mb-12 rounded-3xl bg-white p-5 shadow-sm md:p-8">
           <div className="mb-4 flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
             <div>
@@ -141,7 +139,7 @@ export default function ContactPage() {
               />
             </div>
 
-            {/* QR + address recap */}
+            {/* QR + extra info */}
             <div className="flex flex-col justify-between gap-4 rounded-3xl bg-[#FFF7F0] p-5 shadow-sm">
               <div>
                 <p className="text-[11px] font-semibold uppercase tracking-wide text-slate-600">
@@ -149,16 +147,22 @@ export default function ContactPage() {
                 </p>
                 <div className="mt-2 flex items-center gap-4">
                   <div className="overflow-hidden rounded-2xl bg-white p-2 shadow-sm">
-                    <img
-                      src={qrUrl}
-                      alt="QR code to open directions to Dr. Jalli MD PC"
-                      className="h-32 w-32 md:h-40 md:w-40"
+                    <QRCode
+                      value={mapsLink}
+                      size={180}
+                      bgColor="#FFFFFF"
+                      fgColor="#111827"
+                      style={{
+                        height: "auto",
+                        maxWidth: "100%",
+                        width: "100%",
+                      }}
                     />
                   </div>
                   <p className="text-[11px] text-slate-700 md:text-xs">
-                    Open your camera or QR reader app and point it at this
-                    code. Your phone should offer to open your maps or
-                    navigation app with our address filled in.
+                    Open your camera or QR reader app and point it at this code.
+                    Your phone should offer to open your maps or navigation app
+                    with our address filled in.
                   </p>
                 </div>
               </div>
