@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
+import { PRACTICE_PHONE, PRACTICE_PHONE_TEL } from "@/lib/constants";
 
 type ChatMessage = {
   role: "user" | "assistant";
@@ -8,6 +9,7 @@ type ChatMessage = {
 };
 
 export function FloatingChatWidget() {
+  // isOpen=false means "minimized" (panel hidden) but component stays mounted and state preserved
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
@@ -18,22 +20,65 @@ export function FloatingChatWidget() {
   ]);
   const [input, setInput] = useState("");
   const [isSending, setIsSending] = useState(false);
-  const messagesEndRef = useRef<HTMLDivElement | null>(null);
+  const [hasUnread, setHasUnread] = useState(false);
 
+  // Refs
+  const panelRef = useRef<HTMLDivElement | null>(null);
+  const launcherRef = useRef<HTMLButtonElement | null>(null);
+  const textareaRef = useRef<HTMLTextAreaElement | null>(null);
+
+  // Autofocus when opening
   useEffect(() => {
-    if (messagesEndRef.current) {
-      messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
+    if (isOpen) {
+      const id = requestAnimationFrame(() => textareaRef.current?.focus());
+      setHasUnread(false); // clear unread when opened
+      return () => cancelAnimationFrame(id);
     }
-  }, [messages, isOpen]);
+  }, [isOpen]);
+
+  // Minimize on outside click (do NOT clear state)
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const handlePointerDown = (e: MouseEvent | TouchEvent) => {
+      const target = e.target as Node | null;
+      const insidePanel = panelRef.current?.contains(target) ?? false;
+      const onLauncher = launcherRef.current?.contains(target) ?? false;
+      if (!insidePanel && !onLauncher) setIsOpen(false); // minimize
+    };
+
+    const handleKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setIsOpen(false); // minimize on Esc
+    };
+
+    document.addEventListener("mousedown", handlePointerDown, true);
+    document.addEventListener("touchstart", handlePointerDown, true);
+    document.addEventListener("keydown", handleKey);
+
+    return () => {
+      document.removeEventListener("mousedown", handlePointerDown, true);
+      document.removeEventListener("touchstart", handlePointerDown, true);
+      document.removeEventListener("keydown", handleKey);
+    };
+  }, [isOpen]);
+
+  // Mark unread when a new assistant message arrives while minimized
+  useEffect(() => {
+    if (isOpen) return;
+    // detect last message from assistant
+    const last = messages[messages.length - 1];
+    if (last && last.role === "assistant") {
+      setHasUnread(true);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [messages.length]);
 
   async function handleSend(e?: React.FormEvent) {
     e?.preventDefault();
     const trimmed = input.trim();
     if (!trimmed || isSending) return;
 
-    const newMessage: ChatMessage = { role: "user", content: trimmed };
-    const nextMessages = [...messages, newMessage];
-
+    const nextMessages = [...messages, { role: "user", content: trimmed } as const];
     setMessages(nextMessages);
     setInput("");
     setIsSending(true);
@@ -44,21 +89,15 @@ export function FloatingChatWidget() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ messages: nextMessages }),
       });
-
-      if (!res.ok) {
-        throw new Error("Failed to reach AI.");
-      }
+      if (!res.ok) throw new Error("Failed to reach AI");
 
       const data = await res.json();
-      const reply: ChatMessage = {
-        role: "assistant",
-        content:
-          data.reply ||
-          "I’m sorry, I couldn’t process that just now. Please try again or call the office.",
-      };
+      const reply =
+        data.reply ??
+        "I’m sorry, I couldn’t process that just now. Please try again or call the office.";
 
-      setMessages((prev) => [...prev, reply]);
-    } catch (err) {
+      setMessages((prev) => [...prev, { role: "assistant", content: reply }]);
+    } catch {
       setMessages((prev) => [
         ...prev,
         {
@@ -74,24 +113,38 @@ export function FloatingChatWidget() {
 
   return (
     <>
-      {/* Floating button */}
+      {/* Floating launcher button */}
       <button
+        ref={launcherRef}
         type="button"
         onClick={() => setIsOpen((o) => !o)}
         className="fixed bottom-4 right-4 z-40 flex items-center gap-2 rounded-full bg-[#F29B82] px-4 py-2 text-sm font-semibold text-white shadow-lg shadow-orange-300/40 hover:bg-[#E68566] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#F29B82]"
+        aria-expanded={isOpen}
+        aria-controls="clinic-ai-chat"
       >
-        <span className="inline-block h-2 w-2 rounded-full bg-green-400" />
+        {/* unread indicator */}
+        <span
+          className={`inline-block h-2 w-2 rounded-full transition ${
+            hasUnread ? "bg-green-500 animate-pulse" : "bg-green-400"
+          }`}
+          aria-hidden
+        />
         <span>Chat with AI</span>
       </button>
 
-      {/* Chat panel */}
+      {/* Chat panel (minimized = hidden, but state preserved) */}
       {isOpen && (
-        <div className="fixed bottom-16 right-4 z-40 w-[320px] max-w-[90vw] rounded-3xl border border-[#F3D3C6] bg-white shadow-2xl">
+        <div
+          ref={panelRef}
+          id="clinic-ai-chat"
+          role="dialog"
+          aria-modal="false"
+          aria-label="Clinic AI chat"
+          className="fixed bottom-16 right-4 z-40 w-[320px] max-w-[90vw] rounded-3xl border border-[#F3D3C6] bg-white shadow-2xl"
+        >
           <div className="flex items-center justify-between border-b border-[#F4D9CA] px-4 py-3">
             <div className="flex flex-col">
-              <span className="text-xs font-semibold text-slate-900">
-                Chat with AI
-              </span>
+              <span className="text-xs font-semibold text-slate-900">Chat with AI</span>
               <span className="text-[10px] text-slate-500">
                 General info only · Not for emergencies
               </span>
@@ -99,9 +152,11 @@ export function FloatingChatWidget() {
             <button
               type="button"
               className="text-xs text-slate-500 hover:text-slate-800"
-              onClick={() => setIsOpen(false)}
+              onClick={() => setIsOpen(false)} // minimize via X as well
+              aria-label="Minimize chat"
+              title="Minimize"
             >
-              ✕
+              ⤢
             </button>
           </div>
 
@@ -110,9 +165,7 @@ export function FloatingChatWidget() {
             {messages.map((m, idx) => (
               <div
                 key={idx}
-                className={`mb-2 flex ${
-                  m.role === "user" ? "justify-end" : "justify-start"
-                }`}
+                className={`mb-2 flex ${m.role === "user" ? "justify-end" : "justify-start"}`}
               >
                 <div
                   className={`max-w-[85%] rounded-2xl px-3 py-2 ${
@@ -133,12 +186,12 @@ export function FloatingChatWidget() {
                 </div>
               </div>
             )}
-            <div ref={messagesEndRef} />
           </div>
 
           {/* Input */}
           <form onSubmit={handleSend} className="border-t border-[#F4D9CA] p-3">
             <textarea
+              ref={textareaRef}
               rows={2}
               className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-3 py-2 text-xs text-slate-800 outline-none focus:border-[#F29B82] focus:bg-white focus:ring-1 focus:ring-[#F29B82]"
               placeholder="Ask about clinic hours, services, location…"
@@ -147,8 +200,7 @@ export function FloatingChatWidget() {
             />
             <div className="mt-2 flex items-center justify-between">
               <span className="text-[9px] text-slate-500">
-                For medical emergencies, call 911. This chat cannot give
-                personal medical advice.
+                For emergencies, call 911. No personal medical advice here.
               </span>
               <button
                 type="submit"
@@ -158,6 +210,15 @@ export function FloatingChatWidget() {
                 Send
               </button>
             </div>
+            <div className="flex items-center justify-between border-t border-[#F4D9CA] bg-[#FFF7F0] px-4 py-2 text-[11px] text-slate-700">
+  <span>Need to talk to a person?</span>
+  <a
+    href={`tel:${PRACTICE_PHONE_TEL}`}
+    className="rounded-full bg-black px-3 py-1 font-semibold text-white hover:bg-slate-900"
+  >
+    Call {PRACTICE_PHONE}
+  </a>
+</div>
           </form>
         </div>
       )}

@@ -4,7 +4,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useEffect, useRef } from "react";
-import { PRACTICE_PHONE } from "@/lib/constants";
+import { PRACTICE_PHONE, PRACTICE_PHONE_TEL } from "@/lib/constants";
 import { doctors } from "@/data/doctors";
 
 export function HeroSection() {
@@ -84,7 +84,7 @@ export function HeroSection() {
           {/* buttons */}
           <div className="mt-6 flex flex-wrap gap-3">
             <a
-              href={`tel:${PRACTICE_PHONE.replace(/[^0-9]/g, "")}`}
+              href={`tel:${PRACTICE_PHONE_TEL}`}
               className="rounded-full bg-black px-5 py-2.5 text-sm font-semibold text-white shadow-lg hover:bg-slate-900"
             >
               Call {PRACTICE_PHONE}

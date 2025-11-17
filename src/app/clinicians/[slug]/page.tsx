@@ -5,7 +5,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { getDoctorBySlug, doctors } from "@/data/doctors";
-import { PRACTICE_NAME, PRACTICE_PHONE } from "@/lib/constants";
+import { PRACTICE_NAME, PRACTICE_PHONE, PRACTICE_PHONE_TEL } from "@/lib/constants";
 
 type ClinicianPageProps = {
   params: Promise<{
@@ -114,7 +114,7 @@ export default async function ClinicianPage({ params }: ClinicianPageProps) {
 
             <div className="mt-6 flex flex-wrap gap-3 text-xs">
               <a
-                href={`tel:${PRACTICE_PHONE.replace(/[^0-9]/g, "")}`}
+                href={`tel:${PRACTICE_PHONE_TEL}`}
                 className="inline-flex items-center justify-center rounded-full bg-black px-4 py-2 text-xs font-semibold text-white shadow-sm hover:bg-slate-900"
               >
                 Call {PRACTICE_PHONE}

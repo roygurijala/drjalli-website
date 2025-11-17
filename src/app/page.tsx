@@ -9,6 +9,7 @@ import {
   PRACTICE_ADDRESS_LINE1,
   PRACTICE_CITY_STATE_ZIP,
   PRACTICE_PHONE,
+  PRACTICE_PHONE_TEL,
 } from "@/lib/constants";
 
 function CareJourneySection() {
@@ -177,7 +178,7 @@ function ContactCtaStrip() {
         </div>
         <div className="flex flex-col gap-2 md:items-end">
           <a
-            href={`tel:${PRACTICE_PHONE.replace(/[^0-9]/g, "")}`}
+            href={`tel:${PRACTICE_PHONE_TEL}, "")}`}
             className="inline-flex items-center justify-center rounded-full bg-black px-5 py-2 text-sm font-semibold text-white shadow-sm hover:bg-slate-900"
           >
             Call {PRACTICE_PHONE}
