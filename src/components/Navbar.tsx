@@ -1,8 +1,7 @@
-// src/components/Navbar.tsx
-
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { PRACTICE_NAME, PRACTICE_PHONE } from "@/lib/constants";
@@ -27,10 +26,15 @@ export function Navbar() {
     <header className="sticky top-0 z-40 border-b bg-white/95 backdrop-blur">
       <nav className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3 md:py-4">
         {/* Logo + practice name */}
-        <div className="flex items-center gap-3">
-          <div className="flex h-9 w-9 items-center justify-center rounded-full bg-[#F29B82] text-xs font-semibold text-white shadow-sm">
-            DJ
-          </div>
+        <Link href="/" className="flex items-center gap-3">
+          <Image
+            src="/Jalli%20Logo.jpg"
+            alt="Dr. Jalli MD PC logo"
+            width={40}
+            height={40}
+            className="rounded-md"
+            priority
+          />
           <div className="flex flex-col">
             <span className="text-lg font-bold tracking-tight text-slate-900">
               {PRACTICE_NAME}
@@ -39,7 +43,7 @@ export function Navbar() {
               Primary Care · Rockville, MD
             </span>
           </div>
-        </div>
+        </Link>
 
         {/* Desktop nav */}
         <div className="hidden items-center gap-5 md:flex">
@@ -80,7 +84,7 @@ export function Navbar() {
           onClick={() => setOpen((o) => !o)}
           aria-label="Toggle navigation"
         >
-          <span className="material-icons text-slate-700 text-xl">
+          <span className="material-icons text-xl text-slate-700">
             {open ? "close" : "menu"}
           </span>
         </button>
