@@ -4,6 +4,7 @@ import { HeroSection } from "@/components/HeroSection";
 import { ServicesGrid } from "@/components/ServicesGrid";
 import { InBodyHighlightSection } from "@/components/InBodyHighlightSection";
 import { WaveDivider } from "@/components/WaveDivider";
+import { StickyFooterBar } from "@/components/StickyFooterBar";
 import {
   PRACTICE_ADDRESS_LINE1,
   PRACTICE_CITY_STATE_ZIP,
@@ -66,39 +67,90 @@ function CareJourneySection() {
   );
 }
 
-function InfoStrip() {
+function LocationAndMapSection() {
+  const mapsLink =
+    "https://www.google.com/maps?q=Dr.+Jalli+MD+PC+2401+Research+Blvd+Suite+330+Rockville+MD+20850";
+  const mapsEmbed = mapsLink + "&output=embed";
+  const qrUrl = `https://chart.googleapis.com/chart?cht=qr&chs=220x220&chl=${encodeURIComponent(
+    mapsLink
+  )}`;
+
   return (
-    <section className="bg-white/95">
-      <div className="mx-auto max-w-6xl px-4 py-5">
-        <div className="flex flex-col gap-4 rounded-3xl bg-white/90 px-4 py-4 shadow-sm md:flex-row md:items-center md:justify-between">
-          <div className="flex flex-1 flex-col gap-3 md:flex-row md:items-center md:gap-8">
-            <div>
-              <p className="text-[11px] font-semibold uppercase tracking-wide text-slate-500">
-                Location
-              </p>
-              <p className="text-xs text-slate-800">
-                {PRACTICE_ADDRESS_LINE1}, {PRACTICE_CITY_STATE_ZIP}
-              </p>
-            </div>
-            <div>
-              <p className="text-[11px] font-semibold uppercase tracking-wide text-slate-500">
-                New Patients
-              </p>
-              <p className="text-xs text-slate-800">
-                Welcoming adult patients for primary care and preventive visits.
-              </p>
-            </div>
+    <section className="bg-white py-12 md:py-16">
+      <div className="mx-auto max-w-6xl px-4">
+        <div className="mb-6 flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
+          <div>
+            <h2 className="text-2xl font-semibold tracking-tight text-slate-900 md:text-3xl">
+              Visit our office
+            </h2>
+            <p className="mt-2 max-w-xl text-sm text-slate-700">
+              We are located in Rockville, Maryland, with convenient access and
+              on-site parking. Scan the QR code to open navigation on your
+              phone, or tap &quot;Open in Google Maps&quot; below.
+            </p>
           </div>
-          <div className="flex items-center gap-3">
-            <div className="rounded-full bg-[#FFE7DA] px-3 py-1 text-[11px] font-semibold text-slate-800">
-              Relationship-based primary care.
+        </div>
+
+        <div className="grid gap-6 md:grid-cols-[minmax(0,1.5fr)_minmax(0,1fr)] md:items-stretch">
+          {/* Map */}
+          <div className="overflow-hidden rounded-3xl border border-[#F3D3C6] bg-[#FFF7F0] shadow-sm">
+            <iframe
+              src={mapsEmbed}
+              title="Dr. Jalli MD PC location"
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+              className="h-72 w-full md:h-80"
+            />
+          </div>
+
+          {/* Address + QR */}
+          <div className="flex flex-col justify-between gap-4 rounded-3xl bg-[#FFF7F0] p-5 shadow-sm">
+            <div>
+              <p className="text-[11px] font-semibold uppercase tracking-wide text-slate-600">
+                Office address
+              </p>
+              <p className="mt-2 text-sm font-semibold text-slate-900">
+                Dr. Jalli MD PC
+              </p>
+              <p className="text-sm text-slate-800">
+                {PRACTICE_ADDRESS_LINE1}
+                <br />
+                {PRACTICE_CITY_STATE_ZIP}
+              </p>
+              <p className="mt-2 text-xs text-slate-600">
+                Please call for appointments or questions. Established patients
+                may use the portal when appropriate. For emergencies, call 911.
+              </p>
             </div>
-            <a
-              href={`tel:${PRACTICE_PHONE.replace(/[^0-9]/g, "")}`}
-              className="text-xs font-semibold text-slate-900 underline-offset-2 hover:underline"
-            >
-              Call {PRACTICE_PHONE}
-            </a>
+
+            <div className="flex items-center gap-4">
+              <div className="flex flex-col items-center gap-1">
+                <div className="overflow-hidden rounded-2xl bg-white p-2 shadow-sm">
+                  <img
+                    src={qrUrl}
+                    alt="QR code to open directions to Dr. Jalli MD PC"
+                    className="h-32 w-32 md:h-40 md:w-40"
+                  />
+                </div>
+                <p className="text-center text-[11px] text-slate-600">
+                  Scan to open maps
+                </p>
+              </div>
+              <div className="flex flex-1 flex-col gap-2 text-xs">
+                <a
+                  href={mapsLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center justify-center rounded-full bg-black px-4 py-2 font-semibold text-white shadow-sm hover:bg-slate-900"
+                >
+                  Open in Google Maps
+                </a>
+                <p className="text-[11px] text-slate-600">
+                  Works with most navigation apps on your phone. You may need to
+                  confirm opening Maps or your preferred navigation app.
+                </p>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -138,14 +190,11 @@ function ContactCtaStrip() {
 
 export default function HomePage() {
   return (
-    <div className="bg-neutralBg">
+    <div className="bg-neutralBg min-h-screen pb-16">
       <HeroSection />
 
-      <WaveDivider color="#FFFFFF" />
-
-      <InfoStrip />
-
-      <WaveDivider color="#FFF4EC" flip />
+      {/* From hero to services */}
+      <WaveDivider color="#FFF4EC" />
 
       <ServicesGrid />
 
@@ -157,7 +206,13 @@ export default function HomePage() {
 
       <CareJourneySection />
 
+      <WaveDivider color="#FFFFFF" flip />
+
+      <LocationAndMapSection />
+
       <ContactCtaStrip />
+
+      <StickyFooterBar />
     </div>
   );
 }
