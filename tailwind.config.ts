@@ -1,5 +1,6 @@
 // tailwind.config.ts
 import type { Config } from "tailwindcss";
+import typography from "@tailwindcss/typography";  // ⬅️ ADD THIS
 
 const config: Config = {
   content: [
@@ -10,19 +11,21 @@ const config: Config = {
     extend: {
       colors: {
         brand: {
-          light: "#FFE7DA",     // soft peach
-          DEFAULT: "#F29B82",   // warm coral/peach
-          dark: "#D46A4A",      // deeper accent
+          light: "#FFE7DA",
+          DEFAULT: "#F29B82",
+          dark: "#D46A4A",
         },
-        neutralBg: "#FFF7F0",   // page background
-        pill: "#F6E6DE",        // little tag backgrounds
+        neutralBg: "#FFF7F0",
+        pill: "#F6E6DE",
       },
       borderRadius: {
         "3xl": "1.75rem",
       },
     },
   },
-  plugins: [],
+  plugins: [
+    typography, // ⬅️ ADD THIS
+  ],
 };
 
 export default config;

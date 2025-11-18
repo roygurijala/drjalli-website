@@ -1,149 +1,122 @@
-// src/components/HeroSection.tsx
 "use client";
 
-import Link from "next/link";
 import Image from "next/image";
-import { useEffect, useRef } from "react";
-import { PRACTICE_PHONE, PRACTICE_PHONE_TEL } from "@/lib/constants";
-import { doctors } from "@/data/doctors";
+import Link from "next/link";
+import { useCallback, useEffect, useState } from "react";
+import useEmblaCarousel, { EmblaOptionsType } from "embla-carousel-react";
+import { doctorCards as doctors } from "@/data/doctors";
+
+const OPTIONS: EmblaOptionsType = {
+  loop: true,
+  containScroll: "trimSnaps",
+  align: "center",
+};
 
 export function HeroSection() {
-  const scrollRef = useRef<HTMLDivElement | null>(null);
+  const [emblaRef, emblaApi] = useEmblaCarousel(OPTIONS);
+  const [selectedIndex, setSelectedIndex] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
 
-  // Auto-scroll doctor cards
+  // Autoplay every 5s; pause on hover/touch
   useEffect(() => {
-    const container = scrollRef.current;
-    if (!container) return;
+    if (!emblaApi || isPaused) return;
+    const id = setInterval(() => emblaApi.scrollNext(), 5000);
+    return () => clearInterval(id);
+  }, [emblaApi, isPaused]);
 
-    let scrollInterval: NodeJS.Timeout;
+  const onSelect = useCallback(() => {
+    if (!emblaApi) return;
+    setSelectedIndex(emblaApi.selectedScrollSnap());
+  }, [emblaApi]);
 
-    function startScrolling() {
-      scrollInterval = setInterval(() => {
-        if (!container) return;
-        container.scrollLeft += 1;
-        if (
-          container.scrollLeft + container.clientWidth >=
-          container.scrollWidth - 2
-        ) {
-          container.scrollLeft = 0;
-        }
-      }, 40);
-    }
+  useEffect(() => {
+    if (!emblaApi) return;
+    emblaApi.on("select", onSelect);
+    onSelect();
+  }, [emblaApi, onSelect]);
 
-    function stopScrolling() {
-      clearInterval(scrollInterval);
-    }
-
-    startScrolling();
-    container.addEventListener("mouseenter", stopScrolling);
-    container.addEventListener("mouseleave", startScrolling);
-
-    return () => {
-      clearInterval(scrollInterval);
-      container.removeEventListener("mouseenter", stopScrolling);
-      container.removeEventListener("mouseleave", startScrolling);
-    };
-  }, []);
+  const scrollTo = useCallback(
+    (i: number) => emblaApi && emblaApi.scrollTo(i),
+    [emblaApi]
+  );
 
   return (
-    <section className="relative overflow-hidden bg-gradient-to-b from-[#FBE7DF] to-[#FFF7F0] pb-12 pt-10 text-slate-900 md:pb-16 md:pt-14">
-      {/* soft background blobs */}
-      <div className="pointer-events-none absolute -left-24 -top-32 h-64 w-64 rounded-full bg-[#FFD4C0]/50 blur-3xl" />
-      <div className="pointer-events-none absolute -right-24 -bottom-40 h-64 w-64 rounded-full bg-[#FCE0FF]/50 blur-3xl" />
+    <section className="relative bg-[#FFF7F0]">
+      {/* Toned-down heading area */}
+      <div className="mx-auto max-w-6xl px-4 pt-10 text-center md:pt-14">
+        <h1 className="text-2xl font-semibold tracking-tight text-slate-800 md:text-3xl">
+          <span className="text-slate-700">Primary Care</span>
+          <span className="mx-2 text-slate-400">·</span>
+          <span className="text-slate-700">Rockville, MD</span>
+        </h1>
 
-      <div className="relative mx-auto grid max-w-6xl gap-10 px-4 md:grid-cols-2 md:items-center">
-        {/* LEFT: main content */}
-        <div>
-          {/* top pill */}
-          <p className="mb-4 inline-flex items-center gap-2 rounded-full bg-white/70 px-3 py-1 text-[11px] font-medium text-slate-700 shadow-sm">
-            <span className="h-1.5 w-1.5 rounded-full bg-[#F29B82]" />
-            Primary Care · Rockville, MD
-          </p>
+        <p className="mt-2 text-base font-normal text-slate-600 md:text-lg">
+          We care for you<span aria-hidden>…</span>
+        </p>
 
-          {/* tagline with premium stethoscope icon */}
-          <div className="flex items-center gap-3">
-            <div className="relative h-10 w-10 md:h-11 md:w-11">
-              <Image
-                src="/icons/stethoscope.svg"
-                alt="Stethoscope icon"
-                fill
-                className="drop-shadow-[0_0_10px_rgba(242,155,130,0.55)]"
-              />
-            </div>
-            <h1 className="text-xl font-semibold text-slate-900 md:text-2xl">
-              We care for you...
-            </h1>
-          </div>
+        <p className="mx-auto mt-3 max-w-3xl text-[13px] leading-6 text-slate-600 md:text-sm">
+          Primary care with heart, expertise, and a personal touch — serving individuals and
+          families in Rockville, Maryland.
+        </p>
+      </div>
 
-          {/* subheading copy */}
-          <p className="mt-4 max-w-2xl text-sm text-slate-700 md:text-base">
-            Primary care with heart, expertise, and a personal touch — serving
-            individuals and families in Rockville, Maryland.
-          </p>
-
-          {/* buttons */}
-          <div className="mt-6 flex flex-wrap gap-3">
-            <a
-              href={`tel:${PRACTICE_PHONE_TEL}`}
-              className="rounded-full bg-black px-5 py-2.5 text-sm font-semibold text-white shadow-lg hover:bg-slate-900"
-            >
-              Call {PRACTICE_PHONE}
-            </a>
-            <Link
-              href="/contact"
-              className="rounded-full border border-slate-300 bg-white/70 px-5 py-2.5 text-sm font-semibold text-slate-800 shadow-sm hover:bg-white"
-            >
-              New patient info
-            </Link>
-          </div>
-
-          <p className="mt-3 text-xs text-slate-600">
-            Established patients: please use the patient portal for secure
-            messages and medical questions.
-          </p>
-        </div>
-
-        {/* RIGHT: doctor cards – now LINK to individual pages */}
-        <div className="flex flex-col">
-          <p className="mb-3 inline-flex w-fit items-center gap-2 rounded-full bg-white/70 px-3 py-1 text-[11px] font-medium text-slate-700 shadow-sm">
-            <span className="h-1.5 w-1.5 rounded-full bg-[#F29B82]" />
-            <span>Meet your care team</span>
-          </p>
-
-          <div
-            ref={scrollRef}
-            className="flex gap-4 overflow-hidden pb-2 pt-1"
-          >
-            {[...doctors, ...doctors].map((doc, index) => (
-              <Link
-                key={doc.slug + index}
-                href={`/clinicians/${doc.slug}`}
-                className="relative flex min-w-[230px] max-w-[250px] flex-col rounded-3xl border border-[#F3D3C6] bg-white/90 p-4 text-left shadow-sm transition hover:-translate-y-0.5 hover:shadow-md"
-              >
-                <div className="relative mb-3 h-28 w-full overflow-hidden rounded-2xl bg-[#FFE7DA]">
-                  <Image
-                    src={doc.imageSrc}
-                    alt={doc.imageAlt}
-                    fill
-                    className="object-cover"
-                  />
+      {/* Carousel */}
+      <div className="mx-auto max-w-6xl px-4 pb-10 pt-6 md:pb-12">
+        <div
+          className="rounded-2xl border border-[#F3D3C6] bg-white/80 p-3 shadow-sm"
+          onMouseEnter={() => setIsPaused(true)}
+          onMouseLeave={() => setIsPaused(false)}
+          onTouchStart={() => setIsPaused(true)}
+          onTouchEnd={() => setIsPaused(false)}
+        >
+          <div className="embla" ref={emblaRef}>
+            <div className="embla__container flex">
+              {doctors.map((doc, i) => (
+                <div
+                  key={doc.slug}
+                  className="embla__slide shrink-0 px-2 basis-[85%] sm:basis-[60%] md:basis-[46%] lg:basis-[32%]"
+                  aria-label={`Clinician ${i + 1} of ${doctors.length}`}
+                >
+                  <Link
+                    href={`/clinicians/${doc.slug}`}
+                    className="group block overflow-hidden rounded-2xl border border-[#F3D3C6] bg-white shadow-sm transition-shadow hover:shadow-md focus:outline-none focus:ring-2 focus:ring-[#F29B82] focus:ring-offset-2"
+                  >
+                    <div className="relative aspect-[4/3] w-full bg-[#FFF4EC]">
+                      <Image
+                        src={doc.imageSrc ?? (doc as any).image ?? "/images/doctors/doctor-placeholder.svg"}
+                        alt={doc.imageAlt ?? doc.name}
+                        fill
+                        priority={i === 0}
+                        sizes="(max-width: 640px) 85vw, (max-width: 1024px) 60vw, (max-width: 1280px) 46vw, 32vw"
+                        className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+                      />
+                    </div>
+                    <div className="p-5 text-center">
+                      <h3 className="text-[15px] font-semibold text-slate-900 md:text-base">
+                        {doc.name}
+                      </h3>
+                      <p className="mt-1 text-xs text-slate-600 md:text-sm">{doc.title}</p>
+                    </div>
+                    <div className="pointer-events-none h-1 w-full bg-gradient-to-r from-[#F29B82]/40 via-[#F7C0A7]/50 to-[#F29B82]/40 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+                  </Link>
                 </div>
-                <h3 className="text-sm font-semibold text-slate-900">
-                  {doc.name}
-                </h3>
-                <p className="mt-0.5 text-[11px] font-medium text-[#D46A4A]">
-                  {doc.title}
-                </p>
-                <p className="mt-2 text-[11px] leading-relaxed text-slate-700">
-                  {doc.shortBlurb}
-                </p>
-              </Link>
+              ))}
+            </div>
+          </div>
+
+          {/* Dots */}
+          <div className="mt-3 flex items-center justify-center gap-2">
+            {doctors.map((_, i) => (
+              <button
+                key={i}
+                aria-label={`Go to slide ${i + 1}`}
+                onClick={() => scrollTo(i)}
+                className={`h-2 w-2 rounded-full transition ${
+                  i === selectedIndex ? "bg-[#F29B82]" : "bg-slate-300 hover:bg-slate-400"
+                }`}
+              />
             ))}
           </div>
-
-          <p className="mt-1 text-[11px] text-slate-500">
-            Tap or click a profile to read more about each clinician.
-          </p>
         </div>
       </div>
     </section>

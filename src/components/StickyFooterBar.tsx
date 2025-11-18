@@ -1,9 +1,9 @@
 "use client";
 
-import { PRACTICE_ADDRESS_LINE1, PRACTICE_CITY_STATE_ZIP, PRACTICE_PHONE } from "@/lib/constants";
+import { PRACTICE_ADDRESS_LINE1, PRACTICE_CITY_STATE_ZIP, PRACTICE_PHONE, PRACTICE_PHONE_TEL } from "@/lib/constants";
 
 export function StickyFooterBar() {
-  const tel = PRACTICE_PHONE.replace(/[^0-9]/g, "");
+  const tel = PRACTICE_PHONE_TEL;
   const mapsLink =
     "https://www.google.com/maps?q=Dr.+Jalli+MD+PC+2401+Research+Blvd+Suite+330+Rockville+MD+20850";
 

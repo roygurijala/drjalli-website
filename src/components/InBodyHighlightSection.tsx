@@ -1,4 +1,4 @@
-import { PRACTICE_PHONE } from "@/lib/constants";
+import { PRACTICE_PHONE, PRACTICE_PHONE_TEL } from "@/lib/constants";
 
 export function InBodyHighlightSection() {
   return (
@@ -51,7 +51,7 @@ export function InBodyHighlightSection() {
           </p>
           <div className="mt-4 flex flex-col gap-2 text-xs">
             <a
-              href={`tel:${PRACTICE_PHONE.replace(/[^0-9]/g, "")}`}
+              href={`tel:${PRACTICE_PHONE_TEL}`}
               className="inline-flex items-center justify-center rounded-full bg-black px-4 py-2 text-xs font-semibold text-white shadow hover:bg-slate-900"
             >
               Call {PRACTICE_PHONE} with questions

@@ -9,11 +9,17 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@tailwindcss/typography": "^0.5.19",
+    "embla-carousel-react": "^8.6.0",
     "next": "16.0.3",
     "openai": "^6.9.0",
     "react": "19.2.0",
     "react-dom": "19.2.0",
-    "react-qr-code": "^2.0.18"
+    "react-markdown": "^10.1.0",
+    "react-qr-code": "^2.0.18",
+    "rehype-raw": "^7.0.0",
+    "rehype-sanitize": "^6.0.0",
+    "remark-gfm": "^4.0.1"
   },
   "devDependencies": {
     "@types/node": "^20",
