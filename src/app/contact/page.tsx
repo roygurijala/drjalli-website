@@ -1,5 +1,7 @@
 // src/app/contact/page.tsx
 
+import BrandedQRCode from "@/components/BrandedQRCode";
+import { MAPS_DIRECTIONS_URL } from "@/lib/constants";
 import type { Metadata } from "next";
 import Link from "next/link";
 import QRCode from "react-qr-code";
@@ -147,18 +149,21 @@ export default function ContactPage() {
                   Scan to open maps
                 </p>
                 <div className="mt-2 flex items-center gap-4">
-                  <div className="overflow-hidden rounded-2xl bg-white p-2 shadow-sm">
-                    <QRCode
-                      value={mapsLink}
-                      size={180}
-                      bgColor="#FFFFFF"
-                      fgColor="#111827"
-                      style={{
-                        height: "auto",
-                        maxWidth: "100%",
-                        width: "100%",
-                      }}
+                  <div className="overflow-visible rounded-2xl bg-white p-2 shadow-sm">
+                  <a
+                    href={MAPS_DIRECTIONS_URL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    title="Open in Google Maps"
+                    aria-label="Open directions to Dr. Jalli MD PC on Google Maps"
+                  >
+                    <BrandedQRCode
+                      value={MAPS_DIRECTIONS_URL}
+                      size={80} // tweak 220–300 to fit your design
+                      className="!p-1"   // reduce the outer card’s padding from our default
+                    // logoSrc="/images/Jalli Logo.jpg" // use this if your file name has a space
                     />
+                  </a>
                   </div>
                   <p className="text-[11px] text-slate-700 md:text-xs">
                     Open your camera or QR reader app and point it at this code.

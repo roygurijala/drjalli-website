@@ -1,6 +1,7 @@
 // src/app/page.tsx
 
-import QRCode from "react-qr-code";
+import BrandedQRCode from "@/components/BrandedQRCode";
+import { MAPS_DIRECTIONS_URL } from "@/lib/constants";
 import { HeroSection } from "@/components/HeroSection";
 import { ServicesGrid } from "@/components/ServicesGrid";
 import { InBodyHighlightSection } from "@/components/InBodyHighlightSection";
@@ -72,7 +73,6 @@ function LocationAndMapSection() {
   const mapsLink =
     "https://www.google.com/maps?q=Dr.+Jalli+MD+PC+2401+Research+Blvd+Suite+330+Rockville+MD+20850";
   const mapsEmbed = mapsLink + "&output=embed";
-
   return (
     <section className="bg-white py-12 md:py-16">
       <div className="mx-auto max-w-6xl px-4">
@@ -124,17 +124,19 @@ function LocationAndMapSection() {
             <div className="flex items-center gap-4">
               <div className="flex flex-col items-center gap-1">
                 <div className="overflow-hidden rounded-2xl bg-white p-2 shadow-sm">
-                  <QRCode
-                    value={mapsLink}
-                    size={160}
-                    bgColor="#FFFFFF"
-                    fgColor="#111827"
-                    style={{
-                      height: "auto",
-                      maxWidth: "100%",
-                      width: "100%",
-                    }}
-                  />
+                  <a
+                    href={MAPS_DIRECTIONS_URL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    title="Open in Google Maps"
+                    aria-label="Open directions to Dr. Jalli MD PC on Google Maps"
+                  >
+                    <BrandedQRCode
+                      value={MAPS_DIRECTIONS_URL}
+                      size={160} // tweak 220–300 to fit your design
+                    // logoSrc="/images/Jalli Logo.jpg" // use this if your file name has a space
+                    />
+                  </a>
                 </div>
                 <p className="text-center text-[11px] text-slate-600">
                   Scan to open maps

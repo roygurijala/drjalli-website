@@ -5,3 +5,5 @@ export const PRACTICE_ADDRESS_LINE1 = "2401 Research Blvd, Suite 330";
 export const PRACTICE_CITY_STATE_ZIP = "Rockville, MD 20854";
 export const PRACTICE_DOMAIN = "https://www.drjalli.com";
 export const PRACTICE_EMAIL = "patientcare@drjalli.com"; // change if needed
+export const MAPS_DIRECTIONS_URL =
+  "https://www.google.com/maps?q=Dr.%20Jalli%20MD%20PC%2C%202401%20Research%20Blvd%20Suite%20330%2C%20Rockville%2C%20MD%2020854";
