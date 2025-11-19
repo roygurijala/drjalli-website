@@ -2,6 +2,7 @@
 
 import BrandedQRCode from "@/components/BrandedQRCode";
 import { MAPS_DIRECTIONS_URL } from "@/lib/constants";
+import ServicesCarousel from "@/components/ServicesCarousel";
 import { HeroSection } from "@/components/HeroSection";
 import { ServicesGrid } from "@/components/ServicesGrid";
 import { InBodyHighlightSection } from "@/components/InBodyHighlightSection";
@@ -201,7 +202,7 @@ export default function HomePage() {
 
       <WaveDivider color="#FFF4EC" />
 
-      <ServicesGrid />
+      <ServicesCarousel heading="Services we provide" />
 
       <WaveDivider color="#FFE7DA" flip />
 
