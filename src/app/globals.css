@@ -52,3 +52,9 @@ h6 {
 .card {
   @apply rounded-3xl bg-white shadow-sm;
 }
+
+@keyframes marquee {
+  0%   { transform: translateX(0%); }
+  100% { transform: translateX(-50%); }
+}
+
