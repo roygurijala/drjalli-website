@@ -6,17 +6,17 @@ const providers = [
   {
     name: "Dr. Sireesha Jalli, MD, FACP",
     role: "Primary Care Physician",
-    image: "/images/providers/jalli.jpg",
+    image: "/images/doctors/sireesha-jalli.jpg",
   },
   {
     name: "Dr. Mythily Vancha, MD",
     role: "Primary Care Physician",
-    image: "/images/providers/vancha.jpg",
+    image: "/images/doctors/mythily-vancha.jpg",
   },
   {
     name: "Ntoge Penda, CRNP",
     role: "Nurse Practitioner",
-    image: "/images/providers/penda.jpg",
+    image: "/images/doctors/doctor-placeholder.svg",
   },
 ];
 

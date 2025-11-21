@@ -40,7 +40,7 @@ export default async function ClinicianPage({
       <section className="mx-auto max-w-5xl px-4 py-10 md:py-12">
         <div className="rounded-3xl bg-white p-6 shadow-sm md:p-8">
           <div className="grid gap-6 md:grid-cols-[minmax(0,1fr)_minmax(0,1.3fr)] md:items-start">
-            <div className="relative aspect-[4/3] w-full overflow-hidden rounded-2xl border border-[#F3D3C6] bg-[#FFF4EC]">
+          <div className="relative mb-4 w-full overflow-hidden rounded-3xl bg-[#FFE7DA] aspect-[3/4]">
               <Image
                 src={doc.imageSrc}
                 alt={doc.imageAlt}
