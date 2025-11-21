@@ -35,12 +35,21 @@ export default async function ClinicianPage({
   const doc = getDoctorBySlug(slug);
   if (!doc) notFound();
 
+  // ---- STEP 3: Normalize bio into paragraphs (supports array or string) ----
+  const paragraphs: string[] = Array.isArray(doc.bio)
+    ? doc.bio
+    : String(doc.bio)
+        .replace(/\r\n/g, "\n")  // normalize CRLF
+        .split(/\n{2,}/)         // split on blank line(s)
+        .map((p) => p.trim())
+        .filter(Boolean);
+
   return (
     <main className="min-h-screen bg-[#FFF7F0]">
       <section className="mx-auto max-w-5xl px-4 py-10 md:py-12">
         <div className="rounded-3xl bg-white p-6 shadow-sm md:p-8">
           <div className="grid gap-6 md:grid-cols-[minmax(0,1fr)_minmax(0,1.3fr)] md:items-start">
-          <div className="relative mb-4 w-full overflow-hidden rounded-3xl bg-[#FFE7DA] aspect-[3/4]">
+            <div className="relative mb-4 w-full overflow-hidden rounded-3xl bg-[#FFE7DA] aspect-[3/4]">
               <Image
                 src={doc.imageSrc}
                 alt={doc.imageAlt}
@@ -63,8 +72,13 @@ export default async function ClinicianPage({
                 <p className="mt-1 text-xs text-slate-600">{doc.credentials}</p>
               )}
 
+              {/* Render each paragraph */}
               <div className="mt-4 text-sm text-slate-700">
-                <p>{doc.bio}</p>
+                {paragraphs.map((p, i) => (
+                  <p key={i} className={i > 0 ? "mt-3" : undefined}>
+                    {p}
+                  </p>
+                ))}
               </div>
 
               <div className="mt-6 grid gap-2 text-xs text-slate-700">
