@@ -103,9 +103,8 @@ export default function ContactPage() {
                 , call 911 or go to the nearest emergency department.
               </li>
               <li>
-                • For medication refills and routine questions, please call the
-                office during business hours or use the patient portal if
-                available.
+                • For medication refills, please reach out to your pharmacy first. 
+                If you still need help, feel free to call our office during business hours or use the patient portal.
               </li>
               <li>
                 • Please bring your photo ID, insurance card, and medication

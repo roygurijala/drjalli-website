@@ -50,8 +50,10 @@ export const doctors: Doctor[] = [
     imageAlt: "Portrait of Nurse Practitioner Ntoge Penda",
     shortBlurb:
       "Attentive, patient-centered visits with clear explanations and support for day-to-day health.",
-    bio:
-      "Ntoge Penda is a nurse practitioner focused on patient-centered primary care. She takes time to listen, answer questions, and make sure patients feel heard and understood. She enjoys helping patients navigate both routine visits and ongoing conditions, with a calm, supportive presence and an emphasis on clear, practical guidance.",
+    bio: [
+      "Ntoge Penda is a warm and highly skilled Family Nurse Practitioner dedicated to helping patients achieve their best health. With over six years of experience, she provides comprehensive care that includes preventive health, chronic disease management, and personalized treatment plans tailored to your lifestyle.",
+      "Ntoge earned her credentials as a Family Nurse Practitioner in 2019, graduating with honors and is fully licensed in Maryland. She is part of the collaborative care team at Dr. Jalli MD PC, ensuring patients receive seamless, coordinated care. Her approach emphasizes listening, understanding, and partnering with patients to create practical health solutions that work for everyday life.",
+    ]
   },
 ];
 
