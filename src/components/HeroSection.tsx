@@ -46,14 +46,9 @@ export function HeroSection() {
       {/* Toned-down heading area */}
       <div className="mx-auto max-w-6xl px-4 pt-10 text-center md:pt-14">
         <h1 className="text-2xl font-semibold tracking-tight text-slate-800 md:text-3xl">
-          <span className="text-slate-700">Primary Care</span>
-          <span className="mx-2 text-slate-400">·</span>
-          <span className="text-slate-700">Rockville, MD</span>
+          <span className="text-slate-700">We care for you</span>
+          <span aria-hidden>…</span>
         </h1>
-
-        <p className="mt-2 text-base font-normal text-slate-600 md:text-lg">
-          We care for you<span aria-hidden>…</span>
-        </p>
 
         <p className="mx-auto mt-3 max-w-3xl text-[13px] leading-6 text-slate-600 md:text-sm">
           Primary care with heart, expertise, and a personal touch — serving individuals and
