@@ -20,13 +20,13 @@ const doctors: Doctor[] = [
       "Dr. Sireesha Jalli is a compassionate and experienced primary care physician with over 20 years of clinical experience. She believes in long-term relationships, clear communication, and evidence-based care focused on prevention and early detection.",
   },
   {
-    name: "Dr. Mythili Vancha",
+    name: "Dr. Mythily Vancha",
     title: "MD · Primary Care Physician",
     credentials: "Board-Certified in Internal Medicine",
-    imageSrc: "/images/doctors/mythili-vancha.jpg",
-    imageAlt: "Portrait of Dr. Mythili Vancha",
+    imageSrc: "/images/doctors/mythily-vancha.jpg",
+    imageAlt: "Portrait of Dr. Mythily Vancha",
     blurb:
-      "Dr. Mythili Vancha provides comprehensive adult primary care with a thoughtful, communicative approach. She emphasizes patient education and shared decision-making, especially in chronic disease management and preventive care.",
+      "Dr. Mythily Vancha provides comprehensive adult primary care with a thoughtful, communicative approach. She emphasizes patient education and shared decision-making, especially in chronic disease management and preventive care.",
   },
   {
     name: "Ntoge Penda",

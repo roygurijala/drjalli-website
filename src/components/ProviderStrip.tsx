@@ -9,7 +9,7 @@ const providers = [
     image: "/images/providers/jalli.jpg",
   },
   {
-    name: "Dr. Mythili Vancha, MD",
+    name: "Dr. Mythily Vancha, MD",
     role: "Primary Care Physician",
     image: "/images/providers/vancha.jpg",
   },

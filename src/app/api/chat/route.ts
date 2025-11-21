@@ -178,7 +178,7 @@ Board-Certified in Internal Medicine. Fellow of the American College of Physicia
 
 <br/>
 
-**Dr. Mythili Vancha, MD**  
+**Dr. Mythily Vancha, MD**  
 Primary Care Physician  
 Board-Certified in Internal Medicine. Focus on evidence-based adult primary care.  
 

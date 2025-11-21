@@ -17,7 +17,7 @@ export const doctors: Doctor[] = [
     name: "Dr. Sireesha Jalli, MD, FACP",
     title: "Primary Care Physician",
     credentials: "Board-Certified in Internal Medicine",
-    imageSrc: "/images/doctors/doctor-placeholder.svg",
+    imageSrc: "/images/doctors/sireesha-jalli.jpg",
     imageAlt: "Portrait of Dr. Sireesha Jalli",
     shortBlurb:
       "Compassionate, relationship-based primary care with a focus on prevention and long-term health.",
@@ -25,11 +25,11 @@ export const doctors: Doctor[] = [
       "Dr. Sireesha Jalli is a board-certified internal medicine physician and Fellow of the American College of Physicians (FACP). She has more than two decades of experience caring for adults in primary care. Her approach is relationship-based and grounded in evidence, with a strong focus on prevention, early detection, and helping patients understand their health in a clear, practical way. She enjoys long-term continuity with her patients and believes good care happens when there is time, listening, and shared decision-making.",
   },
   {
-    slug: "mythili-vancha",
-    name: "Dr. Mythili Vancha, MD",
+    slug: "mythily-vancha",
+    name: "Dr. Mythily Vancha, MD",
     title: "Primary Care Physician",
     credentials: "Board-Certified in Internal Medicine",
-    imageSrc: "/images/doctors/doctor-placeholder.svg",
+    imageSrc: "/images/doctors/mythily-vancha.jpg",
     imageAlt: "Portrait of Dr. Mythili Vancha",
     shortBlurb:
       "Thorough, communicative care that helps patients understand their conditions and options.",
