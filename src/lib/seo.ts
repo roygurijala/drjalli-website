@@ -18,7 +18,7 @@ export function generateOrganizationJsonLd() {
       "streetAddress": PRACTICE_ADDRESS_LINE1,
       "addressLocality": "Rockville",
       "addressRegion": "MD",
-      "postalCode": "20854",
+      "postalCode": "20850",
       "addressCountry": "US"
     },
     "medicalSpecialty": [
