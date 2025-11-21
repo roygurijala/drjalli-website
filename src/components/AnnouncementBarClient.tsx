@@ -1,16 +1,20 @@
 // src/components/AnnouncementBarClient.tsx
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import type { AnnouncementMessage } from "@/lib/announcement";
 
 type Props = {
   messages: AnnouncementMessage[];
-  rotateMs?: number;
+  rotateMs?: number;                 // fallback for rotate/single, and minimum for marquee
   mode?: "rotate" | "marquee" | "single";
 };
 
 const DISMISS_KEY = "dj_announce_dismiss_v2";
+
+// Tweak this to change marquee speed (px/sec)
+const MARQUEE_SPEED_PX_PER_SEC = 110;
+const MARQUEE_BUFFER_MS = 600; // small pause after finishing before switching
 
 function variantClasses(v?: AnnouncementMessage["variant"]) {
   switch (v) {
@@ -33,7 +37,7 @@ export default function AnnouncementBarClient({
   const [dismissedId, setDismissedId] = useState<string | null>(null);
   const [index, setIndex] = useState(0);
 
-  // Restore dismissal
+  // restore dismissal
   useEffect(() => {
     try {
       const saved = localStorage.getItem(DISMISS_KEY);
@@ -41,27 +45,75 @@ export default function AnnouncementBarClient({
     } catch {}
   }, []);
 
-  // Messages to show (skip dismissed)
   const visible = useMemo(
     () => messages.filter((m) => m.id !== dismissedId),
     [messages, dismissedId]
   );
-
-  // Rotate through messages in BOTH rotate & marquee modes
-  useEffect(() => {
-    if (mode === "single" || visible.length <= 1) return;
-    const t = setInterval(
-      () => setIndex((i) => (i + 1) % visible.length),
-      Math.max(2000, rotateMs)
-    );
-    return () => clearInterval(t);
-  }, [visible.length, rotateMs, mode]);
 
   if (!visible.length) return null;
 
   const current =
     mode === "single" ? visible[0] : visible[index % visible.length];
 
+  // ---------- ROTATION CONTROL ----------
+  // Rotate for rotate/single via interval; for marquee we compute duration and use timeout.
+
+  const containerRef = useRef<HTMLDivElement | null>(null);
+  const textRef = useRef<HTMLDivElement | null>(null);
+  const [marqueeMs, setMarqueeMs] = useState<number>(rotateMs); // computed per message
+
+  // Recompute marquee duration whenever message or size changes
+  useEffect(() => {
+    if (mode !== "marquee") return;
+
+    const compute = () => {
+      const containerW = containerRef.current?.offsetWidth ?? 0;
+      const textW = textRef.current?.scrollWidth ?? 0;
+      // distance to travel is text width + container width (off-screen right to off-screen left)
+      const distance = containerW + textW;
+      const sec = distance / Math.max(1, MARQUEE_SPEED_PX_PER_SEC);
+      const ms = sec * 1000 + MARQUEE_BUFFER_MS;
+      setMarqueeMs(Math.max(ms, rotateMs)); // never shorter than fallback
+    };
+
+    compute();
+
+    // Recompute on resize
+    const ro = new ResizeObserver(() => compute());
+    if (containerRef.current) ro.observe(containerRef.current);
+    if (textRef.current) ro.observe(textRef.current);
+    window.addEventListener("orientationchange", compute);
+    window.addEventListener("resize", compute);
+
+    return () => {
+      ro.disconnect();
+      window.removeEventListener("orientationchange", compute);
+      window.removeEventListener("resize", compute);
+    };
+  }, [mode, index, rotateMs, current.id]);
+
+  // Rotation timers
+  useEffect(() => {
+    if (visible.length <= 1 || mode === "single") return;
+
+    if (mode === "marquee") {
+      // Wait until the marquee finishes scrolling this long line
+      const t = setTimeout(
+        () => setIndex((i) => (i + 1) % visible.length),
+        marqueeMs
+      );
+      return () => clearTimeout(t);
+    } else {
+      // classic rotate
+      const t = setInterval(
+        () => setIndex((i) => (i + 1) % visible.length),
+        Math.max(2000, rotateMs)
+      );
+      return () => clearInterval(t);
+    }
+  }, [visible.length, marqueeMs, rotateMs, mode, index]);
+
+  // ---------- RENDER ----------
   const base = "sticky top-0 z-40 border-b";
   const isMarquee = mode === "marquee";
 
@@ -75,11 +127,14 @@ export default function AnnouncementBarClient({
 
         {/* Message */}
         {isMarquee ? (
-          <div className="relative w-full overflow-hidden">
+          <div ref={containerRef} className="relative w-full overflow-hidden">
             {/* key restarts CSS animation when message changes */}
             <div
               key={current.id}
-              className="animate-[marquee_16s_linear_infinite] whitespace-nowrap font-semibold"
+              ref={textRef}
+              // Set animation duration dynamically from measurement
+              style={{ animationDuration: `${Math.max(1, marqueeMs - MARQUEE_BUFFER_MS) / 1000}s` }}
+              className="marquee whitespace-nowrap font-semibold"
               title={current.text}
             >
               {current.href ? (
@@ -95,14 +150,16 @@ export default function AnnouncementBarClient({
                 current.text
               )}
             </div>
+
             <style jsx>{`
-              @keyframes marquee {
-                0% {
-                  transform: translateX(100%);
-                }
-                100% {
-                  transform: translateX(-100%);
-                }
+              .marquee {
+                animation-name: dj-marquee;
+                animation-timing-function: linear;
+                animation-iteration-count: 1; /* one pass per message */
+              }
+              @keyframes dj-marquee {
+                0%   { transform: translateX(100%); }
+                100% { transform: translateX(-100%); }
               }
             `}</style>
           </div>
@@ -126,7 +183,7 @@ export default function AnnouncementBarClient({
           </div>
         )}
 
-        {/* Dismiss current message */}
+        {/* dismiss current message */}
         <button
           onClick={() => {
             try {
