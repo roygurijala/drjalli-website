@@ -25,11 +25,15 @@ function variantClasses(v?: AnnouncementMessage["variant"]) {
   }
 }
 
-export default function AnnouncementBarClient({ messages, rotateMs = 7000, mode = "rotate" }: Props) {
+export default function AnnouncementBarClient({
+  messages,
+  rotateMs = 7000,
+  mode = "rotate",
+}: Props) {
   const [dismissedId, setDismissedId] = useState<string | null>(null);
   const [index, setIndex] = useState(0);
 
-  // restore dismissal on mount
+  // Restore dismissal
   useEffect(() => {
     try {
       const saved = localStorage.getItem(DISMISS_KEY);
@@ -37,44 +41,68 @@ export default function AnnouncementBarClient({ messages, rotateMs = 7000, mode 
     } catch {}
   }, []);
 
-  // filter out any dismissed message (only one remembered)
-  const visible = useMemo(() => {
-    return messages.filter((m) => m.id !== dismissedId);
-  }, [messages, dismissedId]);
+  // Messages to show (skip dismissed)
+  const visible = useMemo(
+    () => messages.filter((m) => m.id !== dismissedId),
+    [messages, dismissedId]
+  );
 
-  // auto-rotate when multiple messages & mode is rotate
+  // Rotate through messages in BOTH rotate & marquee modes
   useEffect(() => {
-    if (mode !== "rotate" || visible.length <= 1) return;
-    const t = setInterval(() => setIndex((i) => (i + 1) % visible.length), rotateMs);
+    if (mode === "single" || visible.length <= 1) return;
+    const t = setInterval(
+      () => setIndex((i) => (i + 1) % visible.length),
+      Math.max(2000, rotateMs)
+    );
     return () => clearInterval(t);
   }, [visible.length, rotateMs, mode]);
 
   if (!visible.length) return null;
 
-  const current = mode === "rotate" ? visible[index % visible.length] : visible[0];
-  const base = "sticky top-0 z-40 border-b";
+  const current =
+    mode === "single" ? visible[0] : visible[index % visible.length];
 
-  // Marquee effect: simple CSS animation using translateX
-  const marquee = mode === "marquee";
+  const base = "sticky top-0 z-40 border-b";
+  const isMarquee = mode === "marquee";
 
   return (
-    <div className={`${base} ${variantClasses(current.variant)}`}>
+    <div className={`${base} ${variantClasses(current.variant)}`} aria-live="polite">
       <div className="mx-auto flex max-w-6xl items-center gap-3 px-3 py-2">
-        {/* pill */}
-        <span className="inline-flex shrink-0 items-center rounded-full bg-black/10 px-2.5 py-0.5 text-[11px] font-semibold">
-          Announcements
+        {/* Label pill */}
+        <span className="inline-flex shrink-0 items-center rounded-full bg-black/10 px-2.5 py-0.5 text-[11px] font-bold">
+          Announcement
         </span>
 
-        {/* message */}
-        {marquee ? (
+        {/* Message */}
+        {isMarquee ? (
           <div className="relative w-full overflow-hidden">
-            <div className="animate-[marquee_16s_linear_infinite] whitespace-nowrap font-semibold">
-              {current.text}
+            {/* key restarts CSS animation when message changes */}
+            <div
+              key={current.id}
+              className="animate-[marquee_16s_linear_infinite] whitespace-nowrap font-semibold"
+              title={current.text}
+            >
+              {current.href ? (
+                <a
+                  href={current.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="underline decoration-2 underline-offset-[3px]"
+                >
+                  {current.text}
+                </a>
+              ) : (
+                current.text
+              )}
             </div>
             <style jsx>{`
               @keyframes marquee {
-                0%   { transform: translateX(100%); }
-                100% { transform: translateX(-100%); }
+                0% {
+                  transform: translateX(100%);
+                }
+                100% {
+                  transform: translateX(-100%);
+                }
               }
             `}</style>
           </div>
@@ -86,16 +114,19 @@ export default function AnnouncementBarClient({ messages, rotateMs = 7000, mode 
                 className="truncate font-semibold underline decoration-2 underline-offset-[3px]"
                 target="_blank"
                 rel="noopener noreferrer"
+                title={current.text}
               >
                 {current.text}
               </a>
             ) : (
-              <p className="truncate font-semibold">{current.text}</p>
+              <p className="truncate font-semibold" title={current.text}>
+                {current.text}
+              </p>
             )}
           </div>
         )}
 
-        {/* dismiss (hides the currently shown message) */}
+        {/* Dismiss current message */}
         <button
           onClick={() => {
             try {
@@ -103,7 +134,7 @@ export default function AnnouncementBarClient({ messages, rotateMs = 7000, mode 
             } catch {}
             setDismissedId(current.id);
           }}
-          className="ml-auto inline-flex h-7 w-7 items-center justify-center rounded-full bg-black/10 text-xs font-bold"
+          className="ml-auto inline-flex h-7 w-7 items-center justify-center rounded-full bg-black/10 text-xs font-bold hover:bg-black/15"
           aria-label="Dismiss announcement"
           title="Dismiss"
         >
