@@ -82,7 +82,7 @@ export function HeroSection() {
                     href={`/clinicians/${doc.slug}`}
                     className="group block overflow-hidden rounded-2xl border border-[#F3D3C6] bg-white shadow-sm transition-shadow hover:shadow-md focus:outline-none focus:ring-2 focus:ring-[#F29B82] focus:ring-offset-2"
                   >
-                    <div className="relative aspect-[4/3] w-full bg-[#FFF4EC]">
+                    <div className="relative mb-4 w-full overflow-hidden rounded-3xl bg-[#FFE7DA] aspect-[3/4]">
                       <Image
                         src={doc.imageSrc ?? (doc as any).image ?? "/images/doctors/doctor-placeholder.svg"}
                         alt={doc.imageAlt ?? doc.name}
