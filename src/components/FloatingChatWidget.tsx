@@ -17,20 +17,7 @@ function normalizeBotText(src: string) {
 /** Safe schema: allow basic formatting + links */
 const safeSchema = {
   ...defaultSchema,
-  tagNames: [
-    "p",
-    "br",
-    "strong",
-    "em",
-    "u",
-    "s",
-    "a",
-    "ul",
-    "ol",
-    "li",
-    "blockquote",
-    "code",
-  ],
+  tagNames: ["p", "br", "strong", "em", "u", "s", "a", "ul", "ol", "li", "blockquote", "code"],
   attributes: {
     a: ["href", "title", "rel", "target"],
   },
@@ -135,9 +122,15 @@ export function FloatingChatWidget() {
     }
   }
 
+  // NEW: Enter submits, Shift+Enter makes a newline, and IME composition is respected.
   function handleKeyDown(e: React.KeyboardEvent<HTMLTextAreaElement>) {
-    const isModEnter = (e.ctrlKey || e.metaKey) && e.key === "Enter";
-    if (isModEnter) {
+    const onlyEnter =
+      e.key === "Enter" && !e.shiftKey && !e.altKey && !e.ctrlKey && !e.metaKey;
+
+    // If user is composing text (IME), ignore Enter.
+    const isComposing = (e.nativeEvent as any)?.isComposing;
+
+    if (onlyEnter && !isComposing) {
       e.preventDefault();
       handleSend();
     }
@@ -239,10 +232,11 @@ export function FloatingChatWidget() {
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={handleKeyDown}
+              enterKeyHint="send"
             />
             <div className="mt-2 flex items-center justify-between">
               <span className="text-[10px] text-slate-500">
-                For emergencies, call 911. No personal medical advice here.
+                Press <strong>Enter</strong> to send, <strong>Shift+Enter</strong> for a new line.
               </span>
               <button
                 type="submit"

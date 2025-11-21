@@ -14,7 +14,7 @@ const DISMISS_KEY = "dj_announce_dismiss_v2";
 
 // Tweak this to change marquee speed (px/sec)
 const MARQUEE_SPEED_PX_PER_SEC = 110;
-const MARQUEE_BUFFER_MS = 600; // small pause after finishing before switching
+const MARQUEE_BUFFER_MS = 300; // small pause after finishing before switching
 
 function variantClasses(v?: AnnouncementMessage["variant"]) {
   switch (v) {
