@@ -84,7 +84,7 @@ export default function CliniciansIndexPage() {
           </div>
 
           <div className="flex flex-col gap-4">
-            <div className="relative h-56 w-full overflow-hidden rounded-3xl bg-[#FFE7DA] shadow-sm md:h-64">
+          <div className="relative mb-4 w-full overflow-hidden rounded-3xl bg-[#FFE7DA] aspect-[3/4]">
               <Image
                 src={primary.imageSrc}
                 alt={primary.imageAlt}
@@ -120,7 +120,7 @@ export default function CliniciansIndexPage() {
                   href={`/clinicians/${doc.slug}`}
                   className="group flex flex-col rounded-3xl border border-[#F3D3C6] bg-white/90 p-4 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md"
                 >
-                  <div className="relative mb-4 h-40 w-full overflow-hidden rounded-2xl bg-[#FFE7DA]">
+                  <div className="relative mb-4 w-full overflow-hidden rounded-3xl bg-[#FFE7DA] aspect-[3/4]">
                     <Image
                       src={doc.imageSrc}
                       alt={doc.imageAlt}
