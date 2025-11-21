@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import AnnouncementBar from "@/components/AnnouncementBar";
 import { Navbar } from "@/components/Navbar";
+import { FloatingChatWidget } from "@/components/FloatingChatWidget";
 
 export const metadata: Metadata = {
   title: "Dr. Jalli MD PC · Primary Care in Rockville, MD",
@@ -17,6 +18,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <AnnouncementBar />
         <Navbar />
         <main className="pt-0">{children}</main>
+        {/* Floating AI Assistant */}
+        <FloatingChatWidget />
       </body>
     </html>
   );
