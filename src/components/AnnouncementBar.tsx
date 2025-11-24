@@ -24,7 +24,7 @@ export default async function AnnouncementBar() {
       ? cfg.mode
       : "rotate";
 
-  // Always render the client wrapper; it will no-op when messages is empty.
+  // Always render the client wrapper; it will no-op when messages is empty and should work without hydration issues.
   return (
     <AnnouncementBarClient
       messages={messages}

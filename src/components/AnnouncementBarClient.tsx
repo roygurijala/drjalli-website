@@ -182,21 +182,6 @@ export default function AnnouncementBarClient({
             )}
           </div>
         )}
-
-        {/* dismiss current message */}
-        <button
-          onClick={() => {
-            try {
-              localStorage.setItem(DISMISS_KEY, current.id);
-            } catch {}
-            setDismissedId(current.id);
-          }}
-          className="ml-auto inline-flex h-7 w-7 items-center justify-center rounded-full bg-black/10 text-xs font-bold hover:bg-black/15"
-          aria-label="Dismiss announcement"
-          title="Dismiss"
-        >
-          ×
-        </button>
       </div>
     </div>
   );
