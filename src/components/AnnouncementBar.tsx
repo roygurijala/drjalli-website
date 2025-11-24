@@ -1,35 +1,19 @@
 // src/components/AnnouncementBar.tsx
-// Server Component (no "use client")
-import dynamic from "next/dynamic";
+import AnnouncementBarClient from "./AnnouncementBarClient";
 import { activeAnnouncements, fetchAnnouncementConfig } from "@/lib/announcement";
 
-// Dynamically load the client component on the browser only.
-const AnnouncementBarClient = dynamic(() => import("./AnnouncementBarClient"), {
-  ssr: false,
-});
-
 export default async function AnnouncementBar() {
-  // Soft-fail: if Edge Config fails, treat as empty config
+  // Fail soft: if Edge Config is unreachable, just render nothing
   const cfg = await fetchAnnouncementConfig().catch(() => null);
+  const messages = activeAnnouncements(cfg);
 
-  const messages = Array.isArray(activeAnnouncements(cfg))
-    ? activeAnnouncements(cfg)
-    : [];
+  //if (!messages.length) return null;
 
-  const rotateMs =
-    typeof cfg?.rotateMs === "number" && cfg.rotateMs > 0 ? cfg.rotateMs : 7000;
-
-  const mode =
-    cfg?.mode === "marquee" || cfg?.mode === "single" || cfg?.mode === "rotate"
-      ? cfg.mode
-      : "rotate";
-
-  // Always render the client wrapper; it will no-op when messages is empty and should work without hydration issues.
   return (
     <AnnouncementBarClient
       messages={messages}
-      rotateMs={rotateMs}
-      mode={mode}
+      rotateMs={cfg?.rotateMs ?? 7000}
+      mode={cfg?.mode ?? "rotate"}
     />
   );
 }
