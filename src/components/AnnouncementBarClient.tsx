@@ -13,7 +13,7 @@ type Props = {
 const DISMISS_KEY = "dj_announce_dismiss_v2";
 
 /** Tune marquee feel */
-const PX_PER_SEC = 300;               // ↓ slow down/speed up the scroll here
+const PX_PER_SEC = 200;               // ↓ slow down/speed up the scroll here
 const GAP_PX = 256;                    // space between repeated content in marquee
 
 function variantClasses(v?: AnnouncementMessage["variant"]) {
