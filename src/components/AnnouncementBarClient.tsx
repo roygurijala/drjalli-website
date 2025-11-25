@@ -13,8 +13,8 @@ type Props = {
 const DISMISS_KEY = "dj_announce_dismiss_v2";
 
 /** Tune marquee feel */
-const PX_PER_SEC = 40;               // ↓ slow down/speed up the scroll here
-const GAP_PX = 32;                    // space between repeated content in marquee
+const PX_PER_SEC = 80;               // ↓ slow down/speed up the scroll here
+const GAP_PX = 64;                    // space between repeated content in marquee
 
 function variantClasses(v?: AnnouncementMessage["variant"]) {
   switch (v) {
@@ -139,18 +139,6 @@ export default function AnnouncementBarClient({
             )}
           </div>
         )}
-
-        <button
-          onClick={() => {
-            try { localStorage.setItem(DISMISS_KEY, current.id); } catch {}
-            setDismissedId(current.id);
-          }}
-          className="ml-auto inline-flex h-7 w-7 items-center justify-center rounded-full bg-black/10 text-xs font-bold hover:bg-black/15"
-          aria-label="Dismiss announcement"
-          title="Dismiss"
-        >
-          ×
-        </button>
       </div>
     </div>
   );
