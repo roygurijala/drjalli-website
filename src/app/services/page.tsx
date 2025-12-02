@@ -1,4 +1,4 @@
-import { ServicesGrid } from "@/components/ServicesGrid";
+import { ServicesGridNew } from "@/components/ServicesGridNew";
 
 export default function ServicesPage() {
   return (
@@ -10,7 +10,7 @@ export default function ServicesPage() {
         We provide comprehensive primary care for adults, with a focus on
         prevention, chronic disease management, and lifestyle support.
       </p>
-      <ServicesGrid />
+      <ServicesGridNew />
     </div>
   );
 }
