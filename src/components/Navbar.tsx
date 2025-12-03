@@ -11,6 +11,7 @@ const links = [
   { href: "/clinicians", label: "Our Clinicians" },
   { href: "/services", label: "Services" },
   { href: "/patient-resources", label: "Patient Resources" },
+  { href: "/insurance", label: "Insurance" },
   { href: "/contact", label: "Contact" },
 ];
 
