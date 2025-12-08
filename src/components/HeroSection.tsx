@@ -7,6 +7,7 @@ import useEmblaCarousel from "embla-carousel-react";
 import type { EmblaOptionsType } from "embla-carousel"; // <-- from core, not react
 import { doctorCards as doctors } from "@/data/doctors";
 
+
 const OPTIONS: EmblaOptionsType = {
   loop: true,
   containScroll: "trimSnaps",
@@ -100,6 +101,8 @@ export function HeroSection() {
             </div>
           </div>
 
+
+
           {/* Dots */}
           <div className="mt-3 flex items-center justify-center gap-2">
             {doctors.map((_, i) => (
@@ -115,6 +118,8 @@ export function HeroSection() {
           </div>
         </div>
       </div>
+
+
     </section>
   );
 }

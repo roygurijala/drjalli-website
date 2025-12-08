@@ -6,7 +6,9 @@ export type InfoCardItem = {
   description: string;
   tags: string[];
   icon: string;
+  href?: string; 
 };
+
 
 type InfoCardProps = {
   item: InfoCardItem;
