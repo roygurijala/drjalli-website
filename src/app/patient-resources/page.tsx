@@ -1,3 +1,6 @@
+
+
+
 import { InfoCard, type InfoCardItem } from "../../components/InfoCard";
 import { PRACTICE_PHONE } from "@/lib/constants";
 
@@ -8,6 +11,7 @@ const patientResources: InfoCardItem[] = [
       "Learn how to schedule your first visit, what to bring, and how insurance works at our clinic.",
     tags: ["First visit", "New patient forms", "Insurance"],
     icon: "🆕",
+    href: "/patient-resources/new-patient",
   },
   {
     name: "Existing Patient",
@@ -15,7 +19,7 @@ const patientResources: InfoCardItem[] = [
       "Access information on refills, follow-up visits, portal access, and after-hours instructions.",
     tags: ["Refills", "Patient portal", "Follow-ups"],
     icon: "👤",
-    href: "https://athenaone.com", // opens in new tab via InfoCard
+    href: "https://30779-1.portal.athenahealth.com/",
   },
 ];
 
@@ -32,7 +36,37 @@ export default function PatientResourcesPage() {
         details, visit preparation, and portal access.
       </p>
 
-      {/* ⭐ MAIN TWO-COLUMN SECTION: INSURANCE (LEFT) + CARDS (RIGHT) */}
+      {/* ✅ MOVED UP: PATIENT PORTAL CTA (right under intro) */}
+      <section className="mt-6">
+        <div className="rounded-3xl border border-[#CBD5F5] bg-[#F5F7FF] p-6 shadow-sm flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+          <div>
+            <h2 className="text-lg font-semibold text-slate-900">
+              Patient Portal Login
+            </h2>
+            <p className="mt-2 text-sm text-slate-700 max-w-xl">
+              Established patients can use the secure portal to review results,
+              request refills, and send non-urgent messages. For urgent concerns,
+              please call the office directly.
+            </p>
+          </div>
+
+          <div className="flex flex-col gap-2 md:items-end">
+            <a
+              href="https://30779-1.portal.athenahealth.com/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center justify-center rounded-full bg-[#1E3A8A] px-5 py-2 text-sm font-semibold text-white shadow-sm hover:bg-[#111827]"
+            >
+              Open patient portal ↗
+            </a>
+            <p className="text-[11px] text-slate-600">
+              You may be redirected to AthenaHealth to complete sign-in.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* ✅ MAIN TWO-COLUMN SECTION */}
       <section className="mt-8 grid gap-8 md:grid-cols-[minmax(0,1.5fr)_minmax(0,1fr)] md:items-start">
         {/* LEFT: INSURANCE CARD */}
         <div className="rounded-3xl border border-[#F3D3C6] bg-[#FFF7F0] p-8 shadow-sm">
@@ -45,7 +79,7 @@ export default function PatientResourcesPage() {
             Insurance Plans We Work With
           </h2>
 
-          <p className="mt-2 max-w-3xl text-sm text-slate-700">
+          <p className="mt-2 text-sm text-slate-700">
             We participate with many major insurance providers. Coverage may vary
             depending on your specific plan. Please call us if you&apos;d like help
             verifying your benefits before your appointment.
@@ -106,9 +140,9 @@ export default function PatientResourcesPage() {
           </p>
         </div>
 
-        {/* RIGHT: NEW / EXISTING PATIENT CARDS */}
+        {/* RIGHT: CARDS + WHAT TO BRING UNDER THEM */}
         <div>
-         
+
           <div className="mt-6 grid gap-5">
             {patientResources.map((item) => (
               <InfoCard
@@ -119,56 +153,26 @@ export default function PatientResourcesPage() {
               />
             ))}
           </div>
-        </div>
-      </section>
 
-      {/* ⭐ WHAT TO BRING CARD */}
-      <section className="mt-12">
-        <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
-          <h2 className="text-lg font-semibold text-slate-900">
-            What to Bring to Your Visit
-          </h2>
-          <p className="mt-2 text-sm text-slate-700 max-w-2xl">
-            Bringing a few key items helps us make the most of your time in the office.
-          </p>
-          <ul className="mt-3 list-disc space-y-1 pl-5 text-sm text-slate-700">
-            <li>Photo ID and insurance card</li>
-            <li>List of your current medications (or bottles)</li>
-            <li>Any recent lab work or imaging reports</li>
-            <li>A list of your questions or concerns</li>
-            <li>Completed new patient forms (if provided ahead of time)</li>
-          </ul>
-          <p className="mt-3 text-xs text-slate-600">
-            Please arrive 10–15 minutes early for paperwork and check-in, especially
-            for your first visit or annual physical.
-          </p>
-        </div>
-      </section>
-
-      {/* ⭐ PATIENT PORTAL CTA */}
-      <section className="mt-12">
-        <div className="rounded-3xl border border-[#CBD5F5] bg-[#F5F7FF] p-6 shadow-sm flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
-          <div>
-            <h2 className="text-lg font-semibold text-slate-900">
-              Patient Portal Login
-            </h2>
-            <p className="mt-2 text-sm text-slate-700 max-w-xl">
-              Established patients can use the secure portal to review results, request
-              refills, and send non-urgent messages. For urgent concerns, please call the
-              office directly.
+          {/* ✅ MOVED HERE: WHAT TO BRING (under the cards) */}
+          <div className="mt-8 rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+            <h3 className="text-base font-semibold text-slate-900">
+              What to Bring to Your Visit
+            </h3>
+            <p className="mt-2 text-sm text-slate-700">
+              Bringing a few items helps us make the most of your appointment.
             </p>
-          </div>
-          <div className="flex flex-col gap-2 md:items-end">
-            <a
-              href="https://athenaone.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center justify-center rounded-full bg-[#1E3A8A] px-5 py-2 text-sm font-semibold text-white shadow-sm hover:bg-[#111827]"
-            >
-              Open patient portal ↗
-            </a>
-            <p className="text-[11px] text-slate-600">
-              You may be redirected to AthenaHealth to complete sign-in.
+
+            <ul className="mt-3 list-disc space-y-1 pl-5 text-sm text-slate-700">
+              <li>Photo ID and insurance card</li>
+              <li>List of your current medications (or bottles)</li>
+              <li>Any recent lab work or imaging reports</li>
+              <li>A list of your questions or concerns</li>
+              <li>Completed new patient forms (if provided ahead of time)</li>
+            </ul>
+
+            <p className="mt-3 text-xs text-slate-600">
+              Please arrive 10–15 minutes early, especially for your first visit.
             </p>
           </div>
         </div>
@@ -176,6 +180,3 @@ export default function PatientResourcesPage() {
     </div>
   );
 }
-
-
-  
