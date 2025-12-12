@@ -49,18 +49,38 @@ export function InfoCard({ item, pillLabel, href }: InfoCardProps) {
     </article>
   );
 
-  // If href is provided → make the whole card clickable using <Link>
-  if (href) {
+
+ // If href is provided → make the whole card clickable
+if (href) {
+  const isExternal = href.startsWith("http");
+
+  // External link → open in new tab
+  if (isExternal) {
     return (
-      <Link
+      <a
         href={href}
+        target="_blank"
+        rel="noopener noreferrer"
         className="block h-full focus:outline-none focus:ring-2 focus:ring-[#E9B6A3] focus:ring-offset-2 focus:ring-offset-[#FFF4EC]"
         aria-label={`Open ${item.name}`}
       >
         <CardContent />
-      </Link>
+      </a>
     );
   }
+
+  // Internal link → normal Next.js navigation
+  return (
+    <Link
+      href={href}
+      className="block h-full focus:outline-none focus:ring-2 focus:ring-[#E9B6A3] focus:ring-offset-2 focus:ring-offset-[#FFF4EC]"
+      aria-label={`Open ${item.name}`}
+    >
+      <CardContent />
+    </Link>
+  );
+}
+
 
   // Otherwise just render the static card
   return <CardContent />;
