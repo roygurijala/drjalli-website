@@ -4,7 +4,7 @@ import BrandedQRCode from "@/components/BrandedQRCode";
 import { MAPS_DIRECTIONS_URL } from "@/lib/constants";
 import ServicesCarousel from "@/components/ServicesCarousel";
 import { HeroSection } from "@/components/HeroSection";
-import { ServicesGrid } from "@/components/ServicesGrid";
+import { ServicesGridNew } from "@/components/ServicesGridNew";
 import { InBodyHighlightSection } from "@/components/InBodyHighlightSection";
 import { WaveDivider } from "@/components/WaveDivider";
 import {

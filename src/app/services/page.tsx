@@ -1,5 +1,5 @@
-import { ServicesGrid } from "@/components/ServicesGrid";
-
+import { ServicesGridNew } from "@/components/ServicesGridNew";
+import { InsuranceHighlightSection } from "@/components/InsuranceHighlightSection";
 export default function ServicesPage() {
   return (
     <div className="mx-auto max-w-6xl px-4 py-10">
@@ -10,7 +10,7 @@ export default function ServicesPage() {
         We provide comprehensive primary care for adults, with a focus on
         prevention, chronic disease management, and lifestyle support.
       </p>
-      <ServicesGrid />
+      <ServicesGridNew />
     </div>
   );
 }
