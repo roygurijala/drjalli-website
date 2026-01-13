@@ -7,7 +7,7 @@ export default async function AnnouncementBar() {
   const cfg = await fetchAnnouncementConfig().catch(() => null);
   const messages = activeAnnouncements(cfg);
 
-  if (!messages.length) return null;
+  //if (!messages.length) return null;
 
   return (
     <AnnouncementBarClient

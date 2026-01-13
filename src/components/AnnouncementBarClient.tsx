@@ -6,160 +6,118 @@ import type { AnnouncementMessage } from "@/lib/announcement";
 
 type Props = {
   messages: AnnouncementMessage[];
-  rotateMs?: number;                 // fallback for rotate/single, and minimum for marquee
+  rotateMs?: number;                  // used by rotate/single, fallback for marquee
   mode?: "rotate" | "marquee" | "single";
 };
 
 const DISMISS_KEY = "dj_announce_dismiss_v2";
 
-// Tweak this to change marquee speed (px/sec)
-const MARQUEE_SPEED_PX_PER_SEC = 110;
-const MARQUEE_BUFFER_MS = 300; // small pause after finishing before switching
+/** Tune marquee feel */
+const PX_PER_SEC = 200;               // ↓ slow down/speed up the scroll here
+const GAP_PX = 256;                    // space between repeated content in marquee
 
 function variantClasses(v?: AnnouncementMessage["variant"]) {
   switch (v) {
-    case "warning":
-      return "bg-amber-50 border-amber-200 text-amber-900";
-    case "success":
-      return "bg-emerald-50 border-emerald-200 text-emerald-900";
-    case "danger":
-      return "bg-rose-50 border-rose-200 text-rose-900";
-    default:
-      return "bg-sky-50 border-sky-200 text-sky-900";
+    case "warning": return "bg-amber-50 border-amber-200 text-amber-900";
+    case "success": return "bg-emerald-50 border-emerald-200 text-emerald-900";
+    case "danger":  return "bg-rose-50 border-rose-200 text-rose-900";
+    default:        return "bg-sky-50 border-sky-200 text-sky-900";
   }
 }
 
 export default function AnnouncementBarClient({
   messages,
   rotateMs = 7000,
-  mode = "rotate",
+  mode = "marquee",
 }: Props) {
-  const [dismissedId, setDismissedId] = useState<string | null>(null);
-  const [index, setIndex] = useState(0);
-
-  // restore dismissal
-  useEffect(() => {
+  /** ------- hooks are declared unconditionally (no early returns before this line) ------- */
+  const [dismissedId, setDismissedId] = useState<string | null>(() => {
     try {
-      const saved = localStorage.getItem(DISMISS_KEY);
-      if (saved) setDismissedId(saved);
+      if (typeof window !== "undefined") return localStorage.getItem(DISMISS_KEY);
     } catch {}
-  }, []);
+    return null;
+  });
+  const [index, setIndex] = useState(0);
+  const [durationSec, setDurationSec] = useState(8); // marquee animation duration
 
+  const containerRef = useRef<HTMLDivElement | null>(null);
+  const trackRef = useRef<HTMLDivElement | null>(null);
+
+  // Visible messages (filter dismissed)
   const visible = useMemo(
     () => messages.filter((m) => m.id !== dismissedId),
     [messages, dismissedId]
   );
 
-  if (!visible.length) return null;
-
-  const current =
-    mode === "single" ? visible[0] : visible[index % visible.length];
-
-  // ---------- ROTATION CONTROL ----------
-  // Rotate for rotate/single via interval; for marquee we compute duration and use timeout.
-
-  const containerRef = useRef<HTMLDivElement | null>(null);
-  const textRef = useRef<HTMLDivElement | null>(null);
-  const [marqueeMs, setMarqueeMs] = useState<number>(rotateMs); // computed per message
-
-  // Recompute marquee duration whenever message or size changes
+  // Compute marquee duration from measured width (container + content + gap)
   useEffect(() => {
     if (mode !== "marquee") return;
-
     const compute = () => {
       const containerW = containerRef.current?.offsetWidth ?? 0;
-      const textW = textRef.current?.scrollWidth ?? 0;
-      // distance to travel is text width + container width (off-screen right to off-screen left)
-      const distance = containerW + textW;
-      const sec = distance / Math.max(1, MARQUEE_SPEED_PX_PER_SEC);
-      const ms = sec * 1000 + MARQUEE_BUFFER_MS;
-      setMarqueeMs(Math.max(ms, rotateMs)); // never shorter than fallback
+      const contentW = trackRef.current?.firstElementChild
+        ? (trackRef.current.firstElementChild as HTMLElement).offsetWidth
+        : 0;
+      const travel = containerW + contentW + GAP_PX; // distance to slide off-screen
+      const d = Math.max(1, travel / PX_PER_SEC);    // seconds
+      setDurationSec(d);
     };
-
     compute();
-
-    // Recompute on resize
-    const ro = new ResizeObserver(() => compute());
+    const ro = new ResizeObserver(compute);
     if (containerRef.current) ro.observe(containerRef.current);
-    if (textRef.current) ro.observe(textRef.current);
-    window.addEventListener("orientationchange", compute);
+    if (trackRef.current?.firstElementChild) ro.observe(trackRef.current.firstElementChild as Element);
     window.addEventListener("resize", compute);
-
+    window.addEventListener("orientationchange", compute);
     return () => {
       ro.disconnect();
-      window.removeEventListener("orientationchange", compute);
       window.removeEventListener("resize", compute);
+      window.removeEventListener("orientationchange", compute);
     };
-  }, [mode, index, rotateMs, current.id]);
+  }, [mode, index, visible.length]);
 
-  // Rotation timers
+  // Rotate for non-marquee mode
   useEffect(() => {
-    if (visible.length <= 1 || mode === "single") return;
+    if (mode === "single" || visible.length <= 1 || mode === "marquee") return;
+    const t = setInterval(() => setIndex((i) => (i + 1) % visible.length), Math.max(2000, rotateMs));
+    return () => clearInterval(t);
+  }, [mode, rotateMs, visible.length]);
 
-    if (mode === "marquee") {
-      // Wait until the marquee finishes scrolling this long line
-      const t = setTimeout(
-        () => setIndex((i) => (i + 1) % visible.length),
-        marqueeMs
-      );
-      return () => clearTimeout(t);
-    } else {
-      // classic rotate
-      const t = setInterval(
-        () => setIndex((i) => (i + 1) % visible.length),
-        Math.max(2000, rotateMs)
-      );
-      return () => clearInterval(t);
-    }
-  }, [visible.length, marqueeMs, rotateMs, mode, index]);
+  // It’s okay to return null now (after all hooks)
+  if (visible.length === 0) return null;
 
-  // ---------- RENDER ----------
+  const current = mode === "single" ? visible[0] : visible[index % visible.length];
   const base = "sticky top-0 z-40 border-b";
-  const isMarquee = mode === "marquee";
 
   return (
     <div className={`${base} ${variantClasses(current.variant)}`} aria-live="polite">
       <div className="mx-auto flex max-w-6xl items-center gap-3 px-3 py-2">
-        {/* Label pill */}
         <span className="inline-flex shrink-0 items-center rounded-full bg-black/10 px-2.5 py-0.5 text-[11px] font-bold">
           Announcement
         </span>
 
-        {/* Message */}
-        {isMarquee ? (
+        {mode === "marquee" ? (
           <div ref={containerRef} className="relative w-full overflow-hidden">
-            {/* key restarts CSS animation when message changes */}
+            {/* Continuous marquee: duplicate content inside a single animated track */}
             <div
-              key={current.id}
-              ref={textRef}
-              // Set animation duration dynamically from measurement
-              style={{ animationDuration: `${Math.max(1, marqueeMs - MARQUEE_BUFFER_MS) / 1000}s` }}
-              className="marquee whitespace-nowrap font-semibold"
-              title={current.text}
+              ref={trackRef}
+              className="flex w-max items-center"
+              style={{
+                // CSS var controls the speed
+                // (use inline style to avoid hydration mismatch)
+                ["--dj-duration" as any]: `${durationSec}s`,
+                animation: "dj-scroll var(--dj-duration) linear infinite",
+              }}
             >
-              {current.href ? (
-                <a
-                  href={current.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="underline decoration-2 underline-offset-[3px]"
-                >
-                  {current.text}
-                </a>
-              ) : (
-                current.text
-              )}
+              <MarqueeContent message={current} />
+              <Spacer />
+              <MarqueeContent message={current} />
+              <Spacer />
             </div>
 
+            {/* Keyframes scoped to this component */}
             <style jsx>{`
-              .marquee {
-                animation-name: dj-marquee;
-                animation-timing-function: linear;
-                animation-iteration-count: 1; /* one pass per message */
-              }
-              @keyframes dj-marquee {
-                0%   { transform: translateX(100%); }
-                100% { transform: translateX(-100%); }
+              @keyframes dj-scroll {
+                0%   { transform: translateX(0); }
+                100% { transform: translateX(-50%); } /* -50% because we duplicated content */
               }
             `}</style>
           </div>
@@ -169,8 +127,7 @@ export default function AnnouncementBarClient({
               <a
                 href={current.href}
                 className="truncate font-semibold underline decoration-2 underline-offset-[3px]"
-                target="_blank"
-                rel="noopener noreferrer"
+                // same tab on purpose
                 title={current.text}
               >
                 {current.text}
@@ -182,22 +139,31 @@ export default function AnnouncementBarClient({
             )}
           </div>
         )}
-
-        {/* dismiss current message */}
-        <button
-          onClick={() => {
-            try {
-              localStorage.setItem(DISMISS_KEY, current.id);
-            } catch {}
-            setDismissedId(current.id);
-          }}
-          className="ml-auto inline-flex h-7 w-7 items-center justify-center rounded-full bg-black/10 text-xs font-bold hover:bg-black/15"
-          aria-label="Dismiss announcement"
-          title="Dismiss"
-        >
-          ×
-        </button>
       </div>
     </div>
   );
+}
+
+/** Single message chip used twice to create a seamless loop */
+function MarqueeContent({ message }: { message: AnnouncementMessage }) {
+  return (
+    <div className="whitespace-nowrap font-semibold">
+      {message.href ? (
+        <a
+          href={message.href}
+          className="underline decoration-2 underline-offset-[3px]"
+          // same-tab navigation
+          title={message.text}
+        >
+          {message.text}
+        </a>
+      ) : (
+        <span title={message.text}>{message.text}</span>
+      )}
+    </div>
+  );
+}
+
+function Spacer() {
+  return <span style={{ display: "inline-block", width: GAP_PX }} aria-hidden />;
 }
