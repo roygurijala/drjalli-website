@@ -40,6 +40,8 @@ body {
   background: var(--color-bg);
   color: #0F1B3D;
   font-family: var(--font-body);
+  font-size: 16px;          /* AAO min recommendation for 50+ healthcare audiences */
+  line-height: 1.7;
   @apply antialiased min-h-screen;
 }
 

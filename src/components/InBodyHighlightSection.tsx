@@ -7,29 +7,33 @@ const metrics = [
     icon: "💪",
     label: "Skeletal Muscle Mass",
     desc: "Track muscle distribution across arms, legs, and trunk — not just total weight.",
-    accent: "border-teal-500/30 bg-teal-500/5 hover:border-teal-400/50",
-    text: "text-teal-300",
+    card: "bg-teal-50 border-teal-200 hover:border-teal-300",
+    label_color: "text-teal-800",
+    desc_color: "text-teal-900/70",
   },
   {
     icon: "📊",
     label: "Body Fat Percentage",
     desc: "Segmental body fat analysis far more precise than a BMI calculation alone.",
-    accent: "border-cyan-500/30 bg-cyan-500/5 hover:border-cyan-400/50",
-    text: "text-cyan-300",
+    card: "bg-cyan-50 border-cyan-200 hover:border-cyan-300",
+    label_color: "text-cyan-800",
+    desc_color: "text-cyan-900/70",
   },
   {
     icon: "💧",
     label: "Hydration & Water Balance",
     desc: "Intracellular and extracellular water levels — a key marker for cellular health.",
-    accent: "border-blue-500/30 bg-blue-500/5 hover:border-blue-400/50",
-    text: "text-blue-300",
+    card: "bg-sky-50 border-sky-200 hover:border-sky-300",
+    label_color: "text-sky-800",
+    desc_color: "text-sky-900/70",
   },
   {
     icon: "⚡",
     label: "Metabolic Rate Estimate",
     desc: "Basal metabolic rate based on lean mass, essential for guiding weight management.",
-    accent: "border-emerald-500/30 bg-emerald-500/5 hover:border-emerald-400/50",
-    text: "text-emerald-300",
+    card: "bg-emerald-50 border-emerald-200 hover:border-emerald-300",
+    label_color: "text-emerald-800",
+    desc_color: "text-emerald-900/70",
   },
 ];
 
@@ -55,64 +59,56 @@ export function InBodyHighlightSection() {
   return (
     <section
       id="inbody"
-      className="relative overflow-hidden bg-navy-950 py-16 text-white md:py-24"
+      className="relative overflow-hidden py-16 md:py-24"
+      style={{ background: "linear-gradient(180deg, #F0FDFA 0%, #FFFFFF 100%)" }}
       aria-label="InBody body composition analysis"
     >
-      {/* ─── Background effects ─────────────────────────────────────── */}
-      <div className="pointer-events-none absolute inset-0" aria-hidden>
-        <div className="absolute inset-0 grid-pattern opacity-40" />
-        <div className="absolute left-1/4 top-0 h-96 w-96 rounded-full bg-teal-500/10 blur-3xl" />
-        <div className="absolute bottom-0 right-1/4 h-80 w-80 rounded-full bg-cyan-500/8 blur-3xl" />
-      </div>
+      {/* Subtle teal tint at top */}
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-transparent via-teal-400/50 to-transparent" aria-hidden />
 
       <div className="relative mx-auto max-w-6xl px-4">
 
-        {/* ─── Section header ─────────────────────────────────────────── */}
+        {/* Section header */}
         <div className="text-center">
-          <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-teal-400/30 bg-teal-400/10 px-4 py-2 text-[11px] font-semibold uppercase tracking-widest text-teal-300">
+          <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-teal-300 bg-teal-50 px-4 py-2 text-xs font-semibold uppercase tracking-widest text-teal-700">
             Advanced In-Office Technology
           </div>
-          <h2 className="font-display text-3xl font-bold tracking-tight md:text-5xl">
-            <span className="text-gradient-teal">InBody</span> Analysis —{" "}
+          <h2 className="font-display text-3xl font-bold tracking-tight text-slate-900 md:text-4xl lg:text-5xl">
+            <span className="text-teal-600">InBody</span> Analysis —{" "}
             <br className="hidden md:block" />
             Know Your Body Beyond the Scale
           </h2>
-          <p className="mx-auto mt-5 max-w-2xl text-base leading-relaxed text-slate-300 md:text-lg">
+          <p className="mx-auto mt-5 max-w-2xl text-base leading-relaxed text-slate-600 md:text-lg">
             In-office InBody body composition scanning gives you and your
             clinician precise, objective data — muscle, fat, hydration, and
             more — to guide metabolic health, weight management, and lifestyle goals.
           </p>
         </div>
 
-        {/* ─── Metrics grid ────────────────────────────────────────────── */}
+        {/* Metrics grid — light cards, dark readable text */}
         <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {metrics.map((m) => (
             <div
               key={m.label}
-              className={`rounded-2xl border p-5 transition-all duration-300 hover:scale-[1.02] ${m.accent}`}
+              className={`rounded-2xl border p-5 transition-all duration-300 hover:scale-[1.02] hover:shadow-md ${m.card}`}
             >
               <div className="mb-3 text-3xl" aria-hidden>{m.icon}</div>
-              <h3 className={`font-display text-sm font-semibold ${m.text}`}>
+              <h3 className={`text-sm font-bold md:text-base ${m.label_color}`}>
                 {m.label}
               </h3>
-              <p className="mt-2 text-xs leading-relaxed text-slate-400">
+              <p className={`mt-2 text-sm leading-relaxed ${m.desc_color}`}>
                 {m.desc}
               </p>
             </div>
           ))}
         </div>
 
-        {/* ─── Body visual + CTA card ──────────────────────────────────── */}
+        {/* Body visual + info card */}
         <div className="mt-16 grid gap-10 md:grid-cols-[1fr_1.3fr] md:items-center">
 
-          {/* Animated body outline */}
-          <div className="flex items-center justify-center py-4">
+          {/* Animated body outline — kept on a soft teal wash */}
+          <div className="flex items-center justify-center rounded-3xl bg-teal-50 py-8 border border-teal-100">
             <div className="relative">
-              {/* Outer glow ring */}
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="h-64 w-40 rounded-full bg-teal-500/10 blur-2xl" />
-              </div>
-
               <svg
                 viewBox="0 0 240 480"
                 className="relative mx-auto h-80 w-auto"
@@ -121,81 +117,77 @@ export function InBodyHighlightSection() {
               >
                 {/* Head */}
                 <ellipse cx="120" cy="42" rx="34" ry="38"
-                  stroke="#2DD4BF" strokeWidth="1.5" fill="rgba(45,212,191,0.06)" />
+                  stroke="#0D9488" strokeWidth="1.5" fill="rgba(13,148,136,0.08)" />
                 {/* Neck */}
                 <rect x="108" y="78" width="24" height="22" rx="5"
-                  fill="rgba(45,212,191,0.05)" stroke="#2DD4BF" strokeWidth="1.2" />
+                  fill="rgba(13,148,136,0.06)" stroke="#0D9488" strokeWidth="1.2" />
                 {/* Torso */}
                 <path
                   d="M78 100 L68 100 L54 240 L95 252 L120 257 L145 252 L186 240 L172 100 L162 100 Q148 90 120 90 Q92 90 78 100Z"
-                  fill="rgba(45,212,191,0.04)" stroke="#2DD4BF" strokeWidth="1.5"
+                  fill="rgba(13,148,136,0.05)" stroke="#0D9488" strokeWidth="1.5"
                 />
                 {/* Left arm */}
                 <path d="M78 108 L50 116 L34 200 L48 205 L66 124"
-                  fill="rgba(45,212,191,0.03)" stroke="#22D3EE" strokeWidth="1.3" />
+                  fill="rgba(13,148,136,0.04)" stroke="#0891B2" strokeWidth="1.3" />
                 {/* Right arm */}
                 <path d="M162 108 L190 116 L206 200 L192 205 L174 124"
-                  fill="rgba(45,212,191,0.03)" stroke="#22D3EE" strokeWidth="1.3" />
+                  fill="rgba(13,148,136,0.04)" stroke="#0891B2" strokeWidth="1.3" />
                 {/* Left leg */}
                 <path d="M95 252 L83 258 L72 408 L95 414 L113 258"
-                  fill="rgba(45,212,191,0.03)" stroke="#2DD4BF" strokeWidth="1.3" />
+                  fill="rgba(13,148,136,0.04)" stroke="#0D9488" strokeWidth="1.3" />
                 {/* Right leg */}
                 <path d="M145 252 L157 258 L168 408 L145 414 L127 258"
-                  fill="rgba(45,212,191,0.03)" stroke="#2DD4BF" strokeWidth="1.3" />
+                  fill="rgba(13,148,136,0.04)" stroke="#0D9488" strokeWidth="1.3" />
 
-                {/* Animated data point: torso center */}
-                <circle cx="120" cy="168" r="5" fill="#2DD4BF">
+                {/* Pulsing data points */}
+                <circle cx="120" cy="168" r="5" fill="#0D9488">
                   <animate attributeName="opacity" values="0.9;0.3;0.9" dur="2s" repeatCount="indefinite" />
                   <animate attributeName="r" values="5;7;5" dur="2s" repeatCount="indefinite" />
                 </circle>
-                {/* Data point: left arm */}
-                <circle cx="56" cy="156" r="4" fill="#22D3EE">
+                <circle cx="56" cy="156" r="4" fill="#0891B2">
                   <animate attributeName="opacity" values="0.8;0.2;0.8" dur="2.5s" begin="0.4s" repeatCount="indefinite" />
                 </circle>
-                {/* Data point: right arm */}
-                <circle cx="184" cy="156" r="4" fill="#22D3EE">
+                <circle cx="184" cy="156" r="4" fill="#0891B2">
                   <animate attributeName="opacity" values="0.8;0.2;0.8" dur="2.5s" begin="0.8s" repeatCount="indefinite" />
                 </circle>
-                {/* Data point: left leg */}
-                <circle cx="93" cy="330" r="4" fill="#2DD4BF">
+                <circle cx="93" cy="330" r="4" fill="#0D9488">
                   <animate attributeName="opacity" values="0.7;0.2;0.7" dur="3s" begin="0.6s" repeatCount="indefinite" />
                 </circle>
-                {/* Data point: right leg */}
-                <circle cx="147" cy="330" r="4" fill="#2DD4BF">
+                <circle cx="147" cy="330" r="4" fill="#0D9488">
                   <animate attributeName="opacity" values="0.7;0.2;0.7" dur="3s" begin="1.2s" repeatCount="indefinite" />
                 </circle>
 
                 {/* Scanning line */}
-                <line x1="35" y1="80" x2="205" y2="80" stroke="#2DD4BF"
+                <line x1="35" y1="80" x2="205" y2="80" stroke="#0D9488"
                   strokeWidth="0.8" strokeDasharray="5 5">
                   <animate attributeName="y1" values="80;420;80" dur="4s" repeatCount="indefinite" />
                   <animate attributeName="y2" values="80;420;80" dur="4s" repeatCount="indefinite" />
-                  <animate attributeName="opacity" values="0.6;0;0.6" dur="4s" repeatCount="indefinite" />
+                  <animate attributeName="opacity" values="0.5;0;0.5" dur="4s" repeatCount="indefinite" />
                 </line>
               </svg>
 
-              {/* Floating metric labels */}
-              <div className="absolute right-0 top-10 rounded-xl border border-teal-400/25 bg-teal-400/10 px-3 py-2 text-center backdrop-blur">
-                <p className="text-[10px] text-teal-300 font-semibold">Body Fat</p>
-                <p className="text-sm font-bold text-white">22.4%</p>
+              {/* Floating metric labels — dark text on light tinted backgrounds */}
+              <div className="absolute right-0 top-10 rounded-xl border border-teal-200 bg-white px-3 py-2 text-center shadow-sm">
+                <p className="text-xs font-semibold text-teal-700">Body Fat</p>
+                <p className="text-sm font-bold text-slate-900">22.4%</p>
               </div>
-              <div className="absolute -left-2 top-1/3 rounded-xl border border-cyan-400/25 bg-cyan-400/10 px-3 py-2 text-center backdrop-blur">
-                <p className="text-[10px] text-cyan-300 font-semibold">Muscle</p>
-                <p className="text-sm font-bold text-white">34.2 kg</p>
+              <div className="absolute -left-2 top-1/3 rounded-xl border border-cyan-200 bg-white px-3 py-2 text-center shadow-sm">
+                <p className="text-xs font-semibold text-cyan-700">Muscle</p>
+                <p className="text-sm font-bold text-slate-900">34.2 kg</p>
               </div>
-              <div className="absolute bottom-16 right-0 rounded-xl border border-blue-400/25 bg-blue-400/10 px-3 py-2 text-center backdrop-blur">
-                <p className="text-[10px] text-blue-300 font-semibold">Hydration</p>
-                <p className="text-sm font-bold text-white">Optimal</p>
+              <div className="absolute bottom-16 right-0 rounded-xl border border-sky-200 bg-white px-3 py-2 text-center shadow-sm">
+                <p className="text-xs font-semibold text-sky-700">Hydration</p>
+                <p className="text-sm font-bold text-slate-900">Optimal</p>
               </div>
             </div>
           </div>
 
-          {/* Info card */}
-          <div className="rounded-3xl border border-white/10 bg-white/5 p-6 backdrop-blur-sm md:p-8">
-            <h3 className="font-display text-xl font-bold text-white md:text-2xl">
+          {/* Info card — white, dark text, fully readable */}
+          <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-md md:p-8">
+            <h3 className="font-display text-xl font-bold text-slate-900 md:text-2xl">
               Is InBody right for you?
             </h3>
-            <p className="mt-3 text-sm leading-relaxed text-slate-300">
+            <p className="mt-3 text-base leading-relaxed text-slate-700">
               InBody testing is especially valuable if you are working toward
               weight management, building strength, managing a metabolic
               condition such as diabetes or pre-diabetes, or simply want a more
@@ -211,57 +203,51 @@ export function InBodyHighlightSection() {
                 "Tracking progress over time — beyond the scale",
               ].map((item) => (
                 <li key={item} className="flex items-start gap-3">
-                  <span className="mt-0.5 flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full bg-teal-500/20">
+                  <span className="mt-0.5 flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full bg-teal-100">
                     <svg viewBox="0 0 12 12" fill="none" className="h-3 w-3" aria-hidden>
-                      <path d="M2 6l3 3 5-5" stroke="#2DD4BF" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                      <path d="M2 6l3 3 5-5" stroke="#0D9488" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                     </svg>
                   </span>
-                  <span className="text-sm text-slate-300">{item}</span>
+                  <span className="text-base text-slate-700">{item}</span>
                 </li>
               ))}
             </ul>
 
             {/* Safety note */}
-            <div className="mt-5 rounded-xl border border-amber-400/20 bg-amber-400/8 p-3 text-xs text-amber-200">
+            <div className="mt-5 rounded-xl border border-amber-200 bg-amber-50 p-3 text-sm text-amber-800">
               <strong className="font-semibold">Please note:</strong> InBody may
               not be appropriate for patients with implanted cardiac devices or
-              during pregnancy. Always discuss with your clinician before
-              scheduling.
+              during pregnancy. Always discuss with your clinician before scheduling.
             </div>
 
-            {/* CTAs */}
             <div className="mt-6 flex flex-col gap-3">
               <a
                 href={`tel:${PRACTICE_PHONE_TEL}`}
-                className="inline-flex items-center justify-center gap-2 rounded-full bg-teal-500 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-teal-500/20 transition-all hover:bg-teal-400"
+                className="inline-flex items-center justify-center gap-2 rounded-full bg-teal-600 px-5 py-3 text-base font-semibold text-white shadow-md shadow-teal-600/20 transition-all hover:bg-teal-500"
               >
-                <svg viewBox="0 0 20 20" fill="currentColor" className="h-4 w-4" aria-hidden>
-                  <path fillRule="evenodd" d="M2 3.5A1.5 1.5 0 013.5 2h1.148a1.5 1.5 0 011.465 1.175l.716 3.223a1.5 1.5 0 01-1.052 1.767l-.933.267c-.41.117-.643.555-.48.95a11.542 11.542 0 006.254 6.254c.395.163.833-.07.95-.48l.267-.933a1.5 1.5 0 011.767-1.052l3.223.716A1.5 1.5 0 0118 15.352V16.5a1.5 1.5 0 01-1.5 1.5H15c-1.149 0-2.263-.15-3.326-.43A13.022 13.022 0 012.43 8.326 13.019 13.019 0 012 5V3.5z" clipRule="evenodd" />
-                </svg>
                 Ask About InBody: {PRACTICE_PHONE}
               </a>
-              <p className="text-center text-[10px] text-slate-500">
-                For general information only · Not a substitute for medical
-                advice
+              <p className="text-center text-xs text-slate-500">
+                For general information only · Not a substitute for medical advice
               </p>
             </div>
           </div>
         </div>
 
-        {/* ─── How it works ────────────────────────────────────────────── */}
+        {/* How it works — light cards */}
         <div className="mt-14 grid gap-4 sm:grid-cols-3">
           {howItWorks.map((item) => (
             <div
               key={item.step}
-              className="rounded-2xl border border-white/10 bg-white/4 p-6 transition hover:border-teal-400/20 hover:bg-white/6"
+              className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition hover:border-teal-300 hover:shadow-md"
             >
-              <div className="font-display text-4xl font-bold text-teal-400/30">
+              <div className="font-display text-4xl font-bold text-teal-200">
                 {item.step}
               </div>
-              <h4 className="mt-3 font-display text-sm font-semibold text-white">
+              <h4 className="mt-3 text-base font-bold text-slate-900">
                 {item.title}
               </h4>
-              <p className="mt-2 text-xs leading-relaxed text-slate-400">
+              <p className="mt-2 text-sm leading-relaxed text-slate-600">
                 {item.desc}
               </p>
             </div>
