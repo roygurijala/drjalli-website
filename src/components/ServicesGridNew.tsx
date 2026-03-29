@@ -6,11 +6,11 @@ import Link from "next/link";
 
 export function ServicesGridNew() {
   return (
-    <section className="bg-[#FFF4EC] py-12 md:py-16">
+    <section className="bg-neutralBg py-12 md:py-16">
       <div className="mx-auto max-w-6xl px-4">
         <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
           <div>
-            <h2 className="text-2xl font-semibold tracking-tight text-slate-900 md:text-3xl">
+            <h2 className="font-display text-2xl font-bold tracking-tight text-slate-900 md:text-3xl">
               How we can help
             </h2>
             <p className="mt-2 max-w-2xl text-sm text-slate-700 md:text-base">

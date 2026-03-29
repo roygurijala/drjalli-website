@@ -25,7 +25,7 @@ const services: Service[] = [
     description:
       "Support for conditions like high blood pressure, diabetes, high cholesterol, and more.",
     tags: ["Hypertension", "Diabetes", "Cholesterol"],
-    icon: "📊",
+    icon: "🎯",
   },
   {
     name: "Women’s Health",
@@ -39,7 +39,7 @@ const services: Service[] = [
     description:
       "Coaching around nutrition, activity, weight management, and metabolic health using tools like InBody body composition.",
     tags: ["InBody", "Weight", "Metabolic health"],
-    icon: "⚖️",
+    icon: "🏃",
   },
   {
     name: "Telehealth (When Appropriate)",
@@ -52,11 +52,11 @@ const services: Service[] = [
 
 export function ServicesGrid() {
   return (
-    <section className="bg-[#FFF4EC] py-12 md:py-16">
+    <section className="bg-neutralBg py-12 md:py-16">
       <div className="mx-auto max-w-6xl px-4">
         <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
           <div>
-            <h2 className="text-2xl font-semibold tracking-tight text-slate-900 md:text-3xl">
+            <h2 className="font-display text-2xl font-bold tracking-tight text-slate-900 md:text-3xl">
               How we can help
             </h2>
             <p className="mt-2 max-w-2xl text-sm text-slate-700 md:text-base">
@@ -75,16 +75,16 @@ export function ServicesGrid() {
           {services.map((service) => (
             <article
               key={service.name}
-              className="group flex h-full flex-col rounded-3xl border border-[#F3D3C6] bg-white/90 p-4 shadow-sm transition hover:-translate-y-1 hover:shadow-md"
+              className="group flex h-full flex-col rounded-3xl border border-teal-200/70 bg-white p-4 shadow-sm transition hover:-translate-y-1 hover:border-teal-300 hover:shadow-md"
             >
-              <div className="mb-3 inline-flex items-center gap-2 rounded-full bg-[#FFE7DA] px-3 py-1 text-[11px] font-medium text-slate-800">
-                <span className="flex h-6 w-6 items-center justify-center rounded-full bg-white/80 text-sm">
+              <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-teal-200/60 bg-teal-50 px-3 py-1 text-[11px] font-medium text-slate-800">
+                <span className="flex h-6 w-6 items-center justify-center rounded-full bg-white text-sm shadow-sm">
                   {service.icon}
                 </span>
                 <span>Primary care service</span>
               </div>
 
-              <h3 className="text-sm font-semibold text-slate-900 md:text-base">
+              <h3 className="font-display text-sm font-semibold text-slate-900 md:text-base">
                 {service.name}
               </h3>
               <p className="mt-2 flex-1 text-xs leading-relaxed text-slate-700 md:text-sm">
@@ -95,7 +95,7 @@ export function ServicesGrid() {
                 {service.tags.map((tag) => (
                   <span
                     key={tag}
-                    className="rounded-full bg-[#FFF2EC] px-2.5 py-1 text-[10px] font-medium text-slate-700 group-hover:bg-[#FFD9C4]"
+                    className="rounded-full border border-teal-100 bg-teal-50/80 px-2.5 py-1 text-[10px] font-medium text-slate-700 group-hover:bg-teal-100/80"
                   >
                     {tag}
                   </span>

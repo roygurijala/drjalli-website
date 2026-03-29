@@ -2,7 +2,7 @@
 
 export function WaveDivider({
     flip = false,
-    color = "#FFF7F0",
+    color = "#f8fafc",
   }: {
     flip?: boolean;
     color?: string;

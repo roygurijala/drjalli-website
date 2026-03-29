@@ -2,7 +2,11 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { PRACTICE_PHONE, PRACTICE_PHONE_TEL } from "@/lib/constants";
+import {
+  AI_CHAT_DISCLAIMER_COMPACT,
+  PRACTICE_PHONE,
+  PRACTICE_PHONE_TEL,
+} from "@/lib/constants";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeSanitize, { defaultSchema } from "rehype-sanitize";
@@ -89,7 +93,7 @@ export function FloatingChatWidget() {
     {
       role: "assistant",
       content:
-        "Hi, I'm the **Dr. Jalli MD PC** AI assistant.\n\nI can answer general questions about the clinic, services, and how to visit. I can't give personal medical advice.\n\n**How can I help?**",
+        "Hi, I'm the **Dr. Jalli MD PC** assistant.\n\nI can help with **hours, location, providers, insurance, and scheduling**—general information only.\n\nPlease **do not share personal health details** (symptoms, diagnoses, medications, or ID numbers) here. For those topics, call us or use the **patient portal**.\n\n**How can I help?**",
     },
   ]);
   const [input, setInput] = useState("");
@@ -223,7 +227,7 @@ export function FloatingChatWidget() {
             <AiLogo size={34} active />
             <div className="flex flex-col leading-tight">
               <span className="text-sm font-bold text-white">Dr. Jalli AI Assistant</span>
-              <span className="text-xs text-teal-200">General info · Not medical advice</span>
+              <span className="text-xs text-teal-200">General info only — not for personal health details</span>
             </div>
             <button
               type="button"
@@ -306,7 +310,8 @@ export function FloatingChatWidget() {
                 ref={textareaRef}
                 rows={2}
                 className="flex-1 resize-none rounded-2xl border border-slate-300 bg-white px-3 py-2 text-sm text-slate-800 placeholder-slate-400 outline-none transition focus:border-teal-500 focus:ring-1 focus:ring-teal-500"
-                placeholder="Ask about hours, services, location…"
+                placeholder="Hours, location, insurance… (no personal health info)"
+                aria-describedby="floating-chat-disclaimer"
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 onKeyDown={handleKeyDown}
@@ -323,7 +328,9 @@ export function FloatingChatWidget() {
                 </svg>
               </button>
             </div>
-            <p className="mt-1.5 text-xs text-slate-400">Enter to send · Shift+Enter for new line</p>
+            <p id="floating-chat-disclaimer" className="mt-1.5 text-[11px] leading-snug text-slate-500">
+              {AI_CHAT_DISCLAIMER_COMPACT} · Enter to send · Shift+Enter for new line
+            </p>
           </form>
 
           {/* Footer */}

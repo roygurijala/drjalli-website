@@ -5,7 +5,16 @@ import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
-import { PRACTICE_NAME, PRACTICE_PHONE, PRACTICE_PHONE_TEL } from "@/lib/constants";
+import {
+  PRACTICE_NAME,
+  PRACTICE_PHONE,
+  PRACTICE_PHONE_TEL,
+  PRACTICE_HEADER_TAGLINE,
+  PRACTICE_HEADER_TRUST,
+  PRACTICE_HOURS_SHORT,
+  PRACTICE_ADDRESS_LINE1,
+  PRACTICE_CITY_STATE_ZIP,
+} from "@/lib/constants";
 
 const links = [
   { href: "/", label: "Home" },
@@ -39,24 +48,33 @@ export function Navbar() {
           : "bg-navy-900"
       }`}
     >
-      <nav className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3 md:py-3.5">
+      <nav className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-3 md:py-3.5">
 
-        {/* ─── Logo ──────────────────────────────────────────────────────── */}
-        <Link href="/" className="flex items-center gap-3 group" aria-label="Dr. Jalli MD PC home">
-          <div className="overflow-hidden rounded-xl border border-white/10 bg-white/5 p-1 transition group-hover:border-teal-400/30 group-hover:bg-white/10">
+        {/* ─── Logo + meaningful practice context ─────────────────────────── */}
+        <Link
+          href="/"
+          className="group flex min-w-0 flex-1 items-center gap-2.5 sm:gap-3 md:max-w-[min(100%,420px)]"
+          aria-label="Dr. Jalli MD PC home"
+        >
+          <div className="shrink-0 overflow-hidden rounded-xl border border-white/10 bg-white/5 p-1 transition group-hover:border-teal-400/30 group-hover:bg-white/10">
             <Image
               src="/Jalli%20Logo.jpg"
               alt="Dr. Jalli MD PC logo"
-              width={34}
-              height={34}
+              width={36}
+              height={36}
               className="rounded-lg"
               priority
             />
           </div>
-          <div className="flex flex-col leading-tight">
-            <span className="font-display text-sm font-bold text-white">{PRACTICE_NAME}</span>
-            <span className="text-[10px] font-medium text-teal-400">
-              Primary Care · Rockville, MD
+          <div className="min-w-0 flex flex-col leading-snug">
+            <span className="font-display text-sm font-bold tracking-tight text-white md:text-[15px]">
+              {PRACTICE_NAME}
+            </span>
+            <span className="hidden text-[11px] font-medium leading-tight text-slate-300 sm:block">
+              {PRACTICE_HEADER_TAGLINE}
+            </span>
+            <span className="text-[10px] font-medium leading-tight text-teal-400/95 sm:hidden">
+              Primary care · Rockville, MD
             </span>
           </div>
         </Link>
@@ -123,6 +141,34 @@ export function Navbar() {
           )}
         </button>
       </nav>
+
+      {/* ─── Informative strip: hours, location, trust — desktop/tablet ───── */}
+      <div className="hidden border-t border-white/10 bg-black/20 md:block">
+        <div className="mx-auto flex max-w-6xl flex-wrap items-center gap-x-3 gap-y-1 px-4 py-2 text-[11px] leading-snug text-slate-400">
+          <span className="font-medium text-slate-300">{PRACTICE_HEADER_TRUST}</span>
+          <span className="text-slate-600" aria-hidden>
+            ·
+          </span>
+          <span>{PRACTICE_HOURS_SHORT}</span>
+          <span className="text-slate-600" aria-hidden>
+            ·
+          </span>
+          <span className="hidden lg:inline">{PRACTICE_ADDRESS_LINE1}</span>
+          <span className="hidden lg:inline text-slate-600" aria-hidden>
+            ·
+          </span>
+          <span>{PRACTICE_CITY_STATE_ZIP}</span>
+          <span className="text-slate-600" aria-hidden>
+            ·
+          </span>
+          <a
+            href={`tel:${PRACTICE_PHONE_TEL}`}
+            className="font-semibold text-teal-400/95 hover:text-teal-300"
+          >
+            {PRACTICE_PHONE}
+          </a>
+        </div>
+      </div>
 
       {/* ─── Mobile Dropdown ───────────────────────────────────────────────── */}
       {open && (

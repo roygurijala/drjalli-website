@@ -17,12 +17,12 @@ export async function POST(req: NextRequest) {
     const fileName =
       (file as any).name || `uploaded-${Date.now()}`; // Next's Blob may have name
 
-    // TODO: Stream this Blob to S3 / storage provider of your choice.
+    // TODO: Stream this Blob to HIPAA-eligible storage with proper BAAs — do not log filenames that may identify patients.
     // Example (pseudo-code):
     // const arrayBuffer = await file.arrayBuffer();
     // await uploadToS3(fileName, Buffer.from(arrayBuffer));
 
-    console.log("Received file:", fileName, "size:", file.size);
+    console.log("Upload received, size:", file.size);
 
     return NextResponse.json(
       {

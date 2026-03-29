@@ -38,7 +38,7 @@ export const metadata: Metadata = {
   },
 
   description:
-    "Board-certified primary care physicians in Rockville, Maryland. Dr. Sireesha Jalli MD FACP and team provide compassionate internal medicine, preventive care, chronic disease management, InBody body composition analysis, and same-week appointments. Accepting new patients.",
+    "Board-certified primary care physicians in Rockville, Maryland. Dr. Sireesha Jalli MD FACP and team provide internal medicine, preventive care, chronic disease management, InBody body composition, ABI testing, allergy testing, nutrition counseling, and same-week appointments. Accepting new patients.",
 
   keywords: [
     "primary care Rockville MD",
@@ -48,6 +48,9 @@ export const metadata: Metadata = {
     "doctor near me Rockville",
     "primary care physician Montgomery County",
     "InBody body composition analysis",
+    "ABI testing Rockville MD",
+    "allergy testing primary care Rockville",
+    "nutrition counseling Rockville MD",
     "metabolic health Rockville",
     "Medicare doctor Rockville MD",
     "board certified internist Rockville",
@@ -65,7 +68,7 @@ export const metadata: Metadata = {
     siteName: "Dr. Jalli MD PC",
     title: "Dr. Jalli MD PC | Primary Care in Rockville, MD",
     description:
-      "Compassionate primary care for adults in Rockville, MD. Accepting new patients. Same-week appointments available.",
+      "Board-certified primary care in Rockville, MD. InBody, ABI testing, allergy testing, nutrition counseling, preventive care. Accepting new patients.",
     images: [
       {
         url: "/images/Jalli_high_res_logo.png",
@@ -80,7 +83,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Dr. Jalli MD PC | Primary Care in Rockville, MD",
     description:
-      "Board-certified primary care in Rockville, Maryland. Accepting new patients. InBody body composition technology.",
+      "Board-certified primary care in Rockville, MD. InBody, ABI testing, allergy testing, nutrition counseling. Accepting new patients.",
     images: ["/images/Jalli_high_res_logo.png"],
   },
 

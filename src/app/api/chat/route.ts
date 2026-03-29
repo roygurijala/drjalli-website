@@ -1,4 +1,6 @@
 // src/app/api/chat/route.ts
+// General clinic Q&A only. Production HIPAA compliance for PHI requires appropriate
+// vendor agreements (e.g., OpenAI Business Associate Agreement where applicable), policies, and safeguards.
 import { NextRequest, NextResponse } from "next/server";
 import OpenAI from "openai";
 
@@ -130,19 +132,64 @@ function seemsSpanish(text: string) {
   return /(¿|¡|hola|buenos|gracias|por favor|abierto|cerrado|horario|hoy|ahora|están|aseguranza|seguro)/i.test(t);
 }
 
+function seemsMentalHealthCrisis(text: string) {
+  const t = text.toLowerCase();
+  return /\b(suicid|kill myself|end my life|want to die|self[- ]harm|hurt myself)\b/i.test(t);
+}
+
+/** Possible acute emergency — prioritize 911 / ER (avoid matching generic “stroke” in FAQ-style questions) */
+function seemsAcuteEmergencyQuery(text: string) {
+  const t = text.toLowerCase();
+  return (
+    /\b(i('m| am) having|having)\s+(chest pain|crushing chest|trouble breathing|severe shortness of breath)\b/i.test(t) ||
+    /\b(can't breathe|cannot breathe|heart attack)\b/i.test(t) ||
+    /\b(having a stroke|symptoms of a stroke|think i'm having a stroke)\b/i.test(t) ||
+    /\b(sudden|severe)\s+(face drooping|weakness on one side|slurred speech)\b/i.test(t)
+  );
+}
+
+/** User may be asking for individualized medical guidance — steer to phone/portal, not chat */
+function seemsPersonalMedicalQuery(text: string) {
+  if (seemsMentalHealthCrisis(text) || seemsAcuteEmergencyQuery(text)) return false;
+  const t = text.toLowerCase();
+  return (
+    /\b(my (chart|record|labs?|results?|test results?|diagnosis|symptoms?|medications?|meds|prescription|condition|appointment|mri|x-?ray|ct scan))\b/i.test(
+      t
+    ) || /\b(should i (take|stop|increase|decrease|skip)|is it safe to|what dose|side effect)\b/i.test(t)
+  );
+}
+
+const MAX_USER_MSG_CHARS = 6000;
+const MAX_MESSAGES_IN_REQUEST = 40;
+
+function sanitizeChatMessages(raw: unknown): { role: "user" | "assistant"; content: string }[] | null {
+  if (!Array.isArray(raw) || raw.length === 0) return null;
+  const out: { role: "user" | "assistant"; content: string }[] = [];
+  for (const m of raw.slice(-MAX_MESSAGES_IN_REQUEST)) {
+    if (!m || typeof m !== "object") continue;
+    const role = (m as { role?: string }).role;
+    const content = (m as { content?: unknown }).content;
+    if (role !== "user" && role !== "assistant") continue;
+    if (typeof content !== "string") continue;
+    const trimmed = content.trim().slice(0, MAX_USER_MSG_CHARS);
+    if (!trimmed) continue;
+    out.push({ role, content: trimmed });
+  }
+  return out.length ? out : null;
+}
+
 /* =========================
    MAIN HANDLER
    ========================= */
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const messages = body.messages ?? [];
-    if (!Array.isArray(messages) || messages.length === 0) {
+    const messages = sanitizeChatMessages(body.messages);
+    if (!messages) {
       return NextResponse.json({ error: "No messages provided." }, { status: 400 });
     }
 
-    const lastUserMsg =
-      [...messages].reverse().find((m: any) => m.role === "user")?.content ?? "";
+    const lastUserMsg = [...messages].reverse().find((m) => m.role === "user")?.content ?? "";
     const userEs = seemsSpanish(lastUserMsg);
 
     const systemMessage = {
@@ -150,10 +197,23 @@ export async function POST(req: NextRequest) {
       content: `
 You are the friendly virtual assistant for "Dr. Jalli MD PC" in Rockville, Maryland.
 
-RULES
-- Provide general clinic information only (no medical advice, diagnosis, or treatment).
-- For emergencies: instruct to call 911. For urgent/personal medical issues: call (301) 686-8554.
-- Detect English vs. Spanish and respond in the SAME language.
+SCOPE (stay within this)
+- Answer questions about the practice: hours, location, parking, providers, services offered in general terms, insurance lists (remind callers to verify with the office), how to become a patient, and how to reach the office or patient portal.
+- You may give high-level, non-personal wellness education (e.g., why body composition or preventive visits matter) without tailoring advice to an individual.
+
+STRICTLY OUT OF SCOPE — do not do any of the following
+- No medical advice, diagnosis, treatment plans, medication instructions, or interpretation of symptoms, labs, imaging, or vitals for any individual.
+- Do not confirm or deny whether someone is a patient, whether they have an appointment, balances, or anything from a medical record.
+- Do not ask users to share, and do not encourage sharing of: Social Security numbers, insurance member/plan ID numbers, medical record numbers, full date of birth, detailed symptoms for triage, lab or imaging results, photos of ID or insurance cards, or copies of medical records. If the user pastes such information, do NOT repeat it back in full; briefly acknowledge and tell them to call (301) 686-8554 or use the official patient portal for private matters, and do not store or analyze it.
+- Do not claim this chat is private, encrypted, or HIPAA-compliant; it is a general information assistant only.
+
+EMERGENCIES AND URGENT SITUATIONS
+- Life-threatening emergency (chest pain, trouble breathing, stroke symptoms, severe bleeding, etc.): tell them to call **911** or go to the nearest ER immediately.
+- Mental health crisis or thoughts of self-harm: in the U.S., **988** (Suicide & Crisis Lifeline) or **911** for immediate danger; encourage reaching emergency services — you cannot provide crisis counseling.
+- Non-emergency but personal medical questions: direct to **(301) 686-8554** or the patient portal for account-specific help.
+
+LANGUAGE AND FORMAT
+- Detect English vs. Spanish and respond in the SAME language as the user’s latest message when reasonable.
 - Use **Markdown**, short paragraphs, bold labels, and line breaks.
 
 **Office Hours:**
@@ -162,7 +222,7 @@ RULES
 
 **Address:**  
 2401 Research Blvd, Suite 330  
-Rockville, MD 20854  
+Rockville, MD 20850  
 
 **Phone:**  
 (301) 686-8554  
@@ -207,6 +267,10 @@ Aetna Better Health (pending; previously enrolled)
 Johns Hopkins Health Plans  
 GEHA  
 
+IN-OFFICE SERVICES (when relevant):
+- The practice offers InBody body composition analysis, ABI (ankle–brachial index) testing for leg circulation/PAD screening when appropriate, allergy testing when clinically indicated, and nutrition counseling tied to medical goals.
+- Direct users to call (301) 686-8554 for scheduling; do not give test results or medical advice.
+
 WEIGHT MANAGEMENT (when relevant):
 - Emphasize lifestyle & metabolic health (nutrition, movement, sleep, stress).
 - Mention InBody body-composition testing (body fat %, skeletal muscle mass, segmental analysis, water balance) to track progress beyond weight.
@@ -215,8 +279,28 @@ WEIGHT MANAGEMENT (when relevant):
 `.trim(),
     };
 
-    // Primers based on the user's last message
+    // Primers based on the user's last message (safety and scope first)
     const primers: { role: "system"; content: string }[] = [];
+
+    if (seemsMentalHealthCrisis(lastUserMsg)) {
+      primers.push({
+        role: "system",
+        content:
+          "The user may be in psychological crisis. Reply briefly and compassionately with U.S. resources: call or text **988** (Suicide & Crisis Lifeline) or **911** if in immediate danger, or go to the nearest emergency department. Do not provide therapy. Mention (301) 686-8554 only for routine scheduling, not crisis care.",
+      });
+    } else if (seemsAcuteEmergencyQuery(lastUserMsg)) {
+      primers.push({
+        role: "system",
+        content:
+          "The user may describe a possible medical emergency. Tell them to call **911** or go to the nearest emergency room now. Do not give medical instructions. Keep the reply very short.",
+      });
+    } else if (seemsPersonalMedicalQuery(lastUserMsg)) {
+      primers.push({
+        role: "system",
+        content:
+          "The user appears to seek personal medical guidance or account-specific help. Do NOT give individualized medical advice or discuss their chart, appointments, or results. State that this tool only provides general clinic information; direct them to call (301) 686-8554 or use the patient portal for private matters. For emergencies, 911.",
+      });
+    }
 
     // Weight-management nudge
     if (isWeightManagementQuery(lastUserMsg)) {
@@ -281,7 +365,10 @@ WEIGHT MANAGEMENT (when relevant):
 
     return NextResponse.json({ reply });
   } catch (err) {
-    console.error("Chat API error:", err);
+    console.error(
+      "Chat API error:",
+      err instanceof Error ? err.message : "unknown"
+    );
     return NextResponse.json(
       { error: "Something went wrong processing your request." },
       { status: 500 }

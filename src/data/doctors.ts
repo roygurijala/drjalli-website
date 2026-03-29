@@ -9,12 +9,16 @@ export type Doctor = {
   imageAlt: string;
   shortBlurb: string;
   bio: string[] | string; // <-- allow array (preferred) or legacy string
+  /** one of these for booking */
+  bookingHref?: string;     // full deep link to Athena, if you have it
+  providerId?: string;      // Athena provider id (we will build a link)
+  departmentId?: string;    // optional, if you want department in the link
 };
 
 export const doctors: Doctor[] = [
   {
     slug: "sireesha-jalli",
-    name: "Dr. Sireesha Jalli, MD, FACP",
+    name: "Dr. Sireesha Jalli, MD, FACP",                                                                       
     title: "Primary Care Physician",
     credentials: "Board-Certified in Internal Medicine",
     imageSrc: "/images/doctors/sireesha-jalli.jpg",
@@ -24,8 +28,10 @@ export const doctors: Doctor[] = [
     bio: [
       "Dr. Sireesha Jalli is a trusted and compassionate internist dedicated to providing exceptional care to the Rockville, Maryland community. With more than 20 years of experience in internal medicine, she focuses on building long-term relationships with her patients and delivering personalized, preventive care.",
       "Dr. Jalli earned her medical degree from Andhra Medical College and completed her residency in Internal Medicine at University of Maryland Capital Region Medical Center. She is board-certified by the American Board of Internal Medicine and affiliated with Adventist HealthCare Shady Grove Medical Center. As a Fellow of the American College of Physicians, Dr. Jalli brings a wealth of knowledge and expertise to every patient interaction.",
-      "Her approach emphasizes comprehensive care, clear communication, and shared decision-making, ensuring that patients feel informed and supported at every step. Whether managing chronic conditions or promoting preventive health, Dr. Jalli is committed to helping patients achieve lasting wellness."
+      "Her approach emphasizes comprehensive care, clear communication,  and shared decision-making, ensuring that patients feel informed and supported at every step. Whether managing chronic conditions or promoting preventive health, Dr. Jalli is committed to helping patients achieve lasting wellness."
     ],
+    providerId: "3",
+    departmentId: "1",
   },
   {
     slug: "mythily-vancha",
@@ -39,7 +45,9 @@ export const doctors: Doctor[] = [
     bio: [
       "Dr. Mythily Vancha is a caring and experienced board-certified internist dedicated to helping adults live healthier, fuller lives. With nearly three decades of medical experience, she provides comprehensive primary care with a focus on preventive health, chronic disease management, and personalized treatment plans.",
       "Dr. Vancha earned her medical degree from Gandhi Medical College, completed her residency in Internal Medicine at University of Maryland Capital Region Health and is board-certified by the American Board of Internal Medicine. Her philosophy is simple: listen, understand, and partner with patients to achieve lasting wellness. Whether you need routine check-ups, help managing conditions like diabetes or heart disease, or guidance on healthy living, Dr. Vancha is here to support you every step of the way.",
-    ]
+    ],
+    providerId: "6",
+    departmentId: "1",
   },
   {
     slug: "ntoge-penda",
@@ -53,7 +61,9 @@ export const doctors: Doctor[] = [
     bio: [
       "Ntoge Penda is a warm and highly skilled Family Nurse Practitioner dedicated to helping patients achieve their best health. With over six years of experience, she provides comprehensive care that includes preventive health, chronic disease management, and personalized treatment plans tailored to your lifestyle.",
       "Ntoge earned her credentials as a Family Nurse Practitioner in 2019, graduating with honors and is fully licensed in Maryland. She is part of the collaborative care team at Dr. Jalli MD PC, ensuring patients receive seamless, coordinated care. Her approach emphasizes listening, understanding, and partnering with patients to create practical health solutions that work for everyday life.",
-    ]
+    ],
+    providerId: "7",
+    departmentId: "1",
   },
 ];
 

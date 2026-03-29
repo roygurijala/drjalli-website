@@ -1,7 +1,7 @@
 // src/app/page.tsx
 import type { Metadata } from "next";
 import BrandedQRCode from "@/components/BrandedQRCode";
-import ServicesCarousel from "@/components/ServicesCarousel";
+import { HomeServicesSection } from "@/components/HomeServicesSection";
 import { HeroSection } from "@/components/HeroSection";
 import { InBodyHighlightSection } from "@/components/InBodyHighlightSection";
 import {
@@ -18,15 +18,18 @@ import Link from "next/link";
 export const metadata: Metadata = {
   title: "Dr. Jalli MD PC | Primary Care in Rockville, MD",
   description:
-    "Compassionate board-certified primary care in Rockville, Maryland. Accepting new patients. InBody body composition, preventive care, chronic disease management, and telehealth available.",
+    "Compassionate board-certified primary care in Rockville, Maryland. InBody body composition, ABI testing, allergy testing, nutrition counseling, preventive care, chronic disease management, and telehealth.",
   alternates: { canonical: "https://www.drjalli.com" },
 };
 
 // ─── Trust Bar ───────────────────────────────────────────────────────────────
 function TrustBar() {
   const items = [
-    { icon: "🏥", label: "Board-Certified Physicians" },
+    { icon: "🩺", label: "Board-Certified Physicians" },
     { icon: "🔬", label: "InBody Technology In-Office" },
+    { icon: "🫀", label: "ABI Testing On-Site" },
+    { icon: "🌿", label: "Allergy Testing" },
+    { icon: "🥗", label: "Nutrition Counseling" },
     { icon: "💳", label: "Medicare & Medicaid Accepted" },
     { icon: "🖥️", label: "AthenaHealth Patient Portal" },
     { icon: "📅", label: "Same-Week Appointments" },
@@ -226,7 +229,7 @@ function CareJourneySection() {
 // ─── Location Section ─────────────────────────────────────────────────────────
 function LocationAndMapSection() {
   const mapsLink =
-    "https://www.google.com/maps?q=Dr.+Jalli+MD+PC+2401+Research+Blvd+Suite+330+Rockville+MD+20854";
+    "https://www.google.com/maps?q=Dr.+Jalli+MD+PC+2401+Research+Blvd+Suite+330+Rockville+MD+20850";
   const mapsEmbed = mapsLink + "&output=embed";
 
   return (
@@ -362,7 +365,7 @@ function ContactCtaStrip() {
 
 // ─── FAQ Section ──────────────────────────────────────────────────────────────
 function FAQSection() {
-  const faqs = newPatientFAQs.slice(0, 5);
+  const faqs = newPatientFAQs;
 
   return (
     <section className="bg-white py-14 md:py-18" aria-label="Frequently asked questions">
@@ -409,7 +412,7 @@ export default function HomePage() {
       <HeroSection />
       <TrustBar />
       <PatientActionsSection />
-      <ServicesCarousel heading="Services we provide" />
+      <HomeServicesSection />
       <InBodyHighlightSection />
       <CareJourneySection />
       <FAQSection />

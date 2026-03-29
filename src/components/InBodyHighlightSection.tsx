@@ -1,5 +1,6 @@
 // src/components/InBodyHighlightSection.tsx
 "use client";
+import Link from "next/link";
 import { PRACTICE_PHONE, PRACTICE_PHONE_TEL } from "@/lib/constants";
 
 const metrics = [
@@ -71,7 +72,7 @@ export function InBodyHighlightSection() {
         {/* Section header */}
         <div className="text-center">
           <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-teal-300 bg-teal-50 px-4 py-2 text-xs font-semibold uppercase tracking-widest text-teal-700">
-            Advanced In-Office Technology
+            In-office testing & counseling
           </div>
           <h2 className="font-display text-3xl font-bold tracking-tight text-slate-900 md:text-4xl lg:text-5xl">
             <span className="text-teal-600">InBody</span> Analysis —{" "}
@@ -82,6 +83,21 @@ export function InBodyHighlightSection() {
             In-office InBody body composition scanning gives you and your
             clinician precise, objective data — muscle, fat, hydration, and
             more — to guide metabolic health, weight management, and lifestyle goals.
+          </p>
+          <p className="mx-auto mt-4 max-w-2xl text-sm leading-relaxed text-slate-600">
+            At this location we also offer{" "}
+            <Link href="/services/abi-testing" className="font-medium text-teal-700 underline-offset-2 hover:underline">
+              ABI testing
+            </Link>
+            ,{" "}
+            <Link href="/services/allergy-testing" className="font-medium text-teal-700 underline-offset-2 hover:underline">
+              allergy testing
+            </Link>
+            , and{" "}
+            <Link href="/services/nutrition-counseling" className="font-medium text-teal-700 underline-offset-2 hover:underline">
+              nutrition counseling
+            </Link>{" "}
+            — ask our team what is right for you.
           </p>
         </div>
 

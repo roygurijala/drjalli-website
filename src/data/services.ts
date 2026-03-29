@@ -51,7 +51,7 @@ export type Service = {
       title: "Chronic Disease Management",
       blurb:
         "Support for conditions like hypertension, diabetes, cholesterol, thyroid disorders, and more.",
-      icon: "📈",
+      icon: "🎯",
       tags: ["Hypertension", "Diabetes", "Cholesterol"],
       body: `
   Thoughtful, **evidence-based management** of chronic conditions with a plan that's clear and practical.
@@ -82,8 +82,8 @@ export type Service = {
       slug: "lifestyle-and-metabolic-health",
       title: "Lifestyle & Metabolic Health",
       blurb:
-        "Coaching around nutrition, activity, weight management, and metabolic health using tools like InBody.",
-      icon: "⚖️",
+        "Coaching around nutrition, activity, weight management, and metabolic health using tools like InBody — including dedicated nutrition counseling when you need deeper guidance.",
+      icon: "🏃",
       tags: ["Metabolic", "Weight", "Coaching"],
       body: `
   We take a **whole-person** approach to metabolic health, combining lifestyle strategies with medical guidance.
@@ -125,11 +125,68 @@ export type Service = {
       `.trim(),
     },
     {
+      slug: "abi-testing",
+      title: "ABI (Ankle–Brachial Index) Testing",
+      blurb:
+        "In-office screening for circulation in the legs—useful for peripheral artery disease (PAD) risk and cardiovascular health planning.",
+      icon: "🫀",
+      tags: ["Vascular", "Screening", "In-office"],
+      body: `
+  **Ankle–Brachial Index (ABI)** testing is a quick, non-invasive way to compare blood pressure at your ankle and arm. It helps assess **circulation in the legs** and can support evaluation of **peripheral artery disease (PAD)** risk when clinically appropriate.
+  
+  **Why it matters**
+  - Adds objective information beyond symptoms alone  
+  - Supports heart and vascular health discussions with your clinician  
+  - Results are interpreted **in context** with your history and exam
+  
+  **Good to know**  
+  ABI is one tool among many. Your clinician will recommend it when it fits your care plan—not every patient needs it at every visit.
+      `.trim(),
+    },
+    {
+      slug: "allergy-testing",
+      title: "Allergy Testing",
+      blurb:
+        "Evaluation and testing to help identify environmental or other allergies when symptoms suggest allergy—and guide a sensible treatment plan.",
+      icon: "🌿",
+      tags: ["Allergies", "Testing", "In-office"],
+      body: `
+  When **allergy symptoms** get in the way of daily life, we can evaluate your history and, when appropriate, order **allergy testing** to help clarify triggers. Testing options depend on your symptoms, exam, and clinical judgment.
+  
+  **What we focus on**
+  - Clear history-taking and exam  
+  - Testing when it changes management  
+  - Practical next steps: avoidance, medications, and follow-up
+  
+  **Please note**  
+  Not every symptom is allergic—and not everyone needs broad panels. We aim for **evidence-based, individualized** testing rather than one-size-fits-all approaches.
+      `.trim(),
+    },
+    {
+      slug: "nutrition-counseling",
+      title: "Nutrition Counseling & Advice",
+      blurb:
+        "Personalized nutrition guidance tied to your health goals—weight, diabetes, cholesterol, blood pressure, and overall wellness.",
+      icon: "🥗",
+      tags: ["Nutrition", "Lifestyle", "Goals"],
+      body: `
+  Nutrition is a cornerstone of **metabolic health**, **chronic disease management**, and **prevention**. We provide **practical, realistic advice** aligned with your medical conditions and preferences—not fad diets.
+  
+  **Common topics**
+  - Meal patterns, portions, and sustainable habits  
+  - Diabetes, cholesterol, and blood pressure–friendly eating  
+  - Coordination with activity, sleep, and medications  
+  
+  **How we work with you**  
+  Visits combine **medical guidance** with coaching-style support so your nutrition plan fits your culture, schedule, and budget.
+      `.trim(),
+    },
+    {
       slug: "care-coordination-and-results",
       title: "Care Coordination & Results",
       blurb:
         "Clear explanations, timely follow-up, and coordination across labs, imaging, and specialists.",
-      icon: "🔄",
+      icon: "🔗",
       tags: ["Follow-up", "Clarity"],
       body: `
   We prioritize **clear communication** and **timely follow-up**. When tests are ordered, we explain what to expect and how results will be shared.
@@ -142,10 +199,28 @@ export type Service = {
     },
   ];
   
+  /** Home page spotlight (order preserved) — primary care, prevention, differentiator, access */
+  export const HOME_FEATURED_SERVICE_SLUGS = [
+    "primary-care-for-adults",
+    "preventive-care",
+    "inbody-body-composition",
+    "telehealth-when-appropriate",
+  ] as const;
+
   /* ---------- Helpers ---------- */
-  
+
   export function getServiceBySlug(slug: string): Service | undefined {
     return services.find((s) => s.slug === slug);
+  }
+
+  export function getHomeFeaturedServices(): Service[] {
+    return HOME_FEATURED_SERVICE_SLUGS.map((slug) => {
+      const s = getServiceBySlug(slug);
+      if (!s) {
+        throw new Error(`Home featured service missing from catalog: ${slug}`);
+      }
+      return s;
+    });
   }
   
   export function getAllServiceSlugs(): string[] {

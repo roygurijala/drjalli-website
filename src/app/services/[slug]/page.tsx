@@ -4,22 +4,27 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import ReactMarkdown from "react-markdown";
 
+import { InnerPageHero } from "@/components/InnerPageHero";
 import {
   services,
   getServiceBySlug,
   getServiceIndex,
   type Service,
 } from "@/data/services";
+import {
+  DEFAULT_OG_IMAGE,
+  PRACTICE_DOMAIN,
+  PRACTICE_PHONE,
+  PRACTICE_PHONE_TEL,
+} from "@/lib/constants";
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.drjalli.com";
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? PRACTICE_DOMAIN;
 const PRACTICE_NAME = "Dr. Jalli MD PC";
 
-/* ---------- Static generation for all service pages ---------- */
 export function generateStaticParams() {
   return services.map((s) => ({ slug: s.slug }));
 }
 
-/* ---------- Per-page SEO (Next 16: await params) ---------- */
 export async function generateMetadata(
   { params }: { params: Promise<{ slug: string }> }
 ): Promise<Metadata> {
@@ -46,16 +51,25 @@ export async function generateMetadata(
       url,
       type: "article",
       siteName: PRACTICE_NAME,
+      locale: "en_US",
+      images: [
+        {
+          url: DEFAULT_OG_IMAGE,
+          width: 1200,
+          height: 630,
+          alt: `${svc.title} — ${PRACTICE_NAME}`,
+        },
+      ],
     },
     twitter: {
-      card: "summary",
+      card: "summary_large_image",
       title,
       description,
+      images: [DEFAULT_OG_IMAGE],
     },
   };
 }
 
-/* ---------- JSON-LD ---------- */
 function ServiceJsonLd({ service }: { service: Service }) {
   const jsonLd = {
     "@context": "https://schema.org",
@@ -74,7 +88,6 @@ function ServiceJsonLd({ service }: { service: Service }) {
   );
 }
 
-/* ---------- Page ---------- */
 export default async function ServicePage({
   params,
 }: {
@@ -89,66 +102,53 @@ export default async function ServicePage({
   const next = i < services.length - 1 ? services[i + 1] : undefined;
 
   return (
-    <div className="bg-[#FFF7F0]">
+    <>
       <ServiceJsonLd service={service} />
+      <InnerPageHero
+        badge="Primary care"
+        title={service.title}
+        description={service.blurb}
+        breadcrumbs={[
+          { label: "Home", href: "/" },
+          { label: "Services", href: "/services" },
+          { label: service.title },
+        ]}
+      />
 
-      {/* Header */}
-      <section className="bg-gradient-to-b from-[#FFE7DA] to-[#FFF7F0]">
-        <div className="mx-auto max-w-6xl px-4 py-10 md:py-12">
-          <nav className="text-[12px] text-slate-600">
-            <Link href="/" className="hover:text-slate-900">Home</Link>
-            <span className="mx-2">/</span>
-            <Link href="/services" className="hover:text-slate-900">Services</Link>
-            <span className="mx-2">/</span>
-            <span className="text-slate-900">{service.title}</span>
-          </nav>
-
-          <h1 className="mt-3 text-2xl font-bold tracking-tight text-slate-900 md:text-4xl">
-            {service.title}
-          </h1>
-
-          <p className="mt-3 max-w-3xl text-sm text-slate-700 md:text-base">
-            {service.blurb}
-          </p>
-
+      <div className="bg-white">
+        <div className="mx-auto max-w-6xl px-4 py-8 md:py-12">
           {service.tags?.length ? (
-            <div className="mt-4 flex flex-wrap gap-2">
+            <div className="mb-6 flex flex-wrap gap-2">
               {service.tags.map((t) => (
                 <span
                   key={t}
-                  className="rounded-full border border-[#F3D3C6] bg-white px-3 py-1 text-[11px] text-slate-700"
+                  className="rounded-full border border-teal-200 bg-teal-50 px-3 py-1 text-[11px] font-medium text-slate-800"
                 >
                   {t}
                 </span>
               ))}
             </div>
           ) : null}
-        </div>
-      </section>
 
-      {/* Body */}
-      <section className="bg-white">
-        <div className="mx-auto max-w-6xl px-4 py-8 md:py-12">
           <div className="prose prose-slate max-w-none prose-p:my-3 prose-li:my-1 md:prose-lg">
             <ReactMarkdown>{service.body}</ReactMarkdown>
           </div>
 
-          {/* Call-to-action */}
-          <div className="mt-8 rounded-2xl border border-[#F3D3C6] bg-[#FFF4EC] p-4 md:p-6">
-            <h2 className="text-lg font-semibold text-slate-900">
+          <div className="mt-8 rounded-2xl border border-teal-200/80 bg-gradient-to-br from-teal-50/80 to-white p-4 md:p-6">
+            <h2 className="font-display text-lg font-bold text-slate-900">
               Questions or ready to schedule?
             </h2>
             <p className="mt-1 text-sm text-slate-700">
               For appointments and medical questions, please call the office.
-              Established patients may use the secure patient portal when appropriate.
-              For emergencies, call 911.
+              Established patients may use the secure patient portal when
+              appropriate. For emergencies, call 911.
             </p>
             <div className="mt-3 flex flex-wrap gap-2">
               <a
-                href="tel:+13016868554"
-                className="inline-flex items-center justify-center rounded-full bg-black px-4 py-2 text-sm font-semibold text-white hover:bg-slate-900"
+                href={`tel:${PRACTICE_PHONE_TEL}`}
+                className="inline-flex items-center justify-center rounded-full bg-teal-500 px-4 py-2 text-sm font-semibold text-white shadow-md shadow-teal-500/20 hover:bg-teal-400"
               >
-                Call (301) 686-8554
+                Call {PRACTICE_PHONE}
               </a>
               <Link
                 href="/contact"
@@ -159,34 +159,37 @@ export default async function ServicePage({
             </div>
           </div>
 
-          {/* Prev / Next */}
           <div className="mt-10 flex items-center justify-between gap-3">
             {prev ? (
               <Link
                 href={`/services/${prev.slug}`}
-                className="group inline-flex max-w-[48%] items-center gap-2 rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700 hover:border-slate-300 hover:bg-slate-50"
+                className="group inline-flex max-w-[48%] items-center gap-2 rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700 hover:border-teal-200 hover:bg-teal-50/50"
               >
                 <span className="inline-block rounded-full bg-slate-100 px-2 py-1 text-[11px] text-slate-700">
                   Prev
                 </span>
                 <span className="truncate group-hover:underline">{prev.title}</span>
               </Link>
-            ) : <span />}
+            ) : (
+              <span />
+            )}
 
             {next ? (
               <Link
                 href={`/services/${next.slug}`}
-                className="group inline-flex max-w-[48%] items-center gap-2 rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700 hover:border-slate-300 hover:bg-slate-50"
+                className="group inline-flex max-w-[48%] items-center gap-2 rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700 hover:border-teal-200 hover:bg-teal-50/50"
               >
                 <span className="truncate group-hover:underline">{next.title}</span>
                 <span className="inline-block rounded-full bg-slate-100 px-2 py-1 text-[11px] text-slate-700">
                   Next
                 </span>
               </Link>
-            ) : <span />}
+            ) : (
+              <span />
+            )}
           </div>
         </div>
-      </section>
-    </div>
+      </div>
+    </>
   );
 }

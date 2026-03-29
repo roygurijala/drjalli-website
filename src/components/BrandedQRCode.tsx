@@ -26,10 +26,10 @@ export default function BrandedQRCode({
 
   return (
     <div
-    className={`relative inline-block rounded-3xl border border-[#F4D9CA] bg-white/80 p-3 shadow-sm ${className ?? ""}`}
+    className={`relative inline-block rounded-3xl border border-teal-200/80 bg-white/90 p-3 shadow-sm ${className ?? ""}`}
     >
       {/* Peach backdrop behind the QR */}
-      <div className="rounded-2xl bg-[#FFF7F0] p-2">
+      <div className="rounded-2xl bg-slate-50 p-2">
         <div
           className="relative"
           style={{ width: size, height: size }}
@@ -39,7 +39,7 @@ export default function BrandedQRCode({
             value={value}
             size={size}
             level="H"             // High error correction => safe with center logo
-            bgColor="#FFF7F0"     // matches your theme
+            bgColor="#f8fafc"
             fgColor="#141414"     // near-black for high contrast
           />
 

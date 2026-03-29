@@ -7,7 +7,11 @@ import { useCallback, useEffect, useState } from "react";
 import useEmblaCarousel from "embla-carousel-react";
 import type { EmblaOptionsType } from "embla-carousel";
 import { doctorCards as doctors } from "@/data/doctors";
-import { PRACTICE_PHONE, PRACTICE_PHONE_TEL } from "@/lib/constants";
+import {
+  PRACTICE_PHONE,
+  PRACTICE_PHONE_TEL,
+  PRACTICE_HEADER_TAGLINE,
+} from "@/lib/constants";
 
 const OPTIONS: EmblaOptionsType = {
   loop: true,
@@ -81,17 +85,15 @@ export function HeroSection() {
             </div>
 
             <h1 className="font-display text-4xl font-bold leading-tight text-white md:text-5xl lg:text-[3.5rem]">
-              Compassionate{" "}
-              <span className="text-gradient-teal">Primary Care</span>
-              <br />
-              <span className="text-white/90">for Rockville, Maryland</span>
+              We <span className="text-gradient-teal">care</span> for you…
             </h1>
 
             <p className="mt-5 max-w-lg text-base leading-relaxed text-slate-300 md:text-lg">
-              Board-certified physicians and a nurse practitioner delivering
-              relationship-based internal medicine, preventive care, and advanced
-              metabolic health services — including{" "}
-              <span className="font-semibold text-teal-300">InBody body composition analysis</span>.
+              Primary care with heart, expertise, and a personal touch — serving
+              individuals and families in Rockville, Maryland.
+            </p>
+            <p className="mt-4 max-w-lg border-l-2 border-teal-500/35 pl-3 text-xs leading-relaxed text-slate-400 md:text-sm">
+              {PRACTICE_HEADER_TAGLINE}
             </p>
 
             {/* CTA buttons */}
@@ -130,7 +132,10 @@ export function HeroSection() {
             <div className="mt-6 flex flex-wrap gap-2">
               {[
                 "Medicare Accepted",
-                "InBody Technology",
+                "InBody Analysis",
+                "ABI Testing",
+                "Allergy Testing",
+                "Nutrition Counseling",
                 "Telehealth Available",
                 "Same-Day Sick Visits",
               ].map((pill) => (

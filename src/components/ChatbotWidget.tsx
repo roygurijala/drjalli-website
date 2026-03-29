@@ -4,7 +4,14 @@
 import React, { useState } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import rehypeRaw from "rehype-raw";
+import rehypeSanitize, { defaultSchema } from "rehype-sanitize";
+import { AI_CHAT_DISCLAIMER_COMPACT } from "@/lib/constants";
+
+const safeSchema = {
+  ...defaultSchema,
+  tagNames: ["p", "br", "strong", "em", "u", "s", "a", "ul", "ol", "li", "blockquote", "code"],
+  attributes: { a: ["href", "title", "rel", "target"] },
+};
 
 type ChatRole = "assistant" | "user";
 
@@ -51,7 +58,7 @@ function Bubble({ role, content }: ChatMessageType) {
       >
         <ReactMarkdown
           remarkPlugins={[remarkGfm]}
-          rehypePlugins={[rehypeRaw]}
+          rehypePlugins={[[rehypeSanitize, safeSchema]]}
         >
           {content}
         </ReactMarkdown>
@@ -66,7 +73,7 @@ export function ChatbotWidget() {
     {
       role: "assistant",
       content:
-        "Hello! I’m the virtual assistant for **Dr. Jalli MD PC**. How can I help you today?",
+        "Hello! I’m the assistant for **Dr. Jalli MD PC**. I share **general clinic information** only—not personal medical advice.\n\nPlease don’t share health details here; call the office or use the patient portal for private matters.\n\nHow can I help?",
     },
   ]);
   const [input, setInput] = useState("");
@@ -145,7 +152,7 @@ export function ChatbotWidget() {
         <div>
           <p className="text-xs font-semibold text-slate-900">Chat with AI</p>
           <p className="mt-0.5 text-[11px] text-slate-500">
-            General info only · Not for emergencies
+            {AI_CHAT_DISCLAIMER_COMPACT}
           </p>
         </div>
         <button
@@ -197,7 +204,8 @@ export function ChatbotWidget() {
           <input
             className="flex-1 border rounded-full px-3 py-1.5 text-xs border-brand/50 bg-white"
             value={input}
-            placeholder="Ask about clinic hours, services, location..."
+            placeholder="Hours, location, insurance… (no personal health info)"
+            aria-describedby="chatbot-widget-disclaimer"
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) =>
               e.key === "Enter" && !isLoading && sendMessage()
@@ -211,8 +219,8 @@ export function ChatbotWidget() {
             Send
           </button>
         </div>
-        <p className="text-[10px] text-slate-500">
-          For emergencies, call 911. No personal medical advice here.
+        <p id="chatbot-widget-disclaimer" className="text-[10px] text-slate-500 leading-snug">
+          Emergencies: 911. {AI_CHAT_DISCLAIMER_COMPACT}
         </p>
       </div>
     </div>

@@ -7,6 +7,7 @@ import {
   PRACTICE_PHONE,
   PRACTICE_EMAIL,
   MAPS_DIRECTIONS_URL,
+  DEFAULT_OG_IMAGE,
 } from "./constants";
 
 // ─── Organization Schema ──────────────────────────────────────────────────────
@@ -26,7 +27,7 @@ export function generateOrganizationJsonLd() {
       streetAddress: PRACTICE_ADDRESS_LINE1,
       addressLocality: "Rockville",
       addressRegion: "MD",
-      postalCode: "20854",
+      postalCode: "20850",
       addressCountry: "US",
     },
     geo: {
@@ -36,6 +37,16 @@ export function generateOrganizationJsonLd() {
     },
     medicalSpecialty: ["PrimaryCare", "FamilyPractice", "InternalMedicine"],
     sameAs: [MAPS_DIRECTIONS_URL],
+    knowsAbout: [
+      "Primary care",
+      "Internal medicine",
+      "Preventive care",
+      "InBody body composition",
+      "ABI testing",
+      "Allergy testing",
+      "Nutrition counseling",
+      "Chronic disease management",
+    ],
   };
 }
 
@@ -55,7 +66,7 @@ export function generateLocalBusinessJsonLd() {
       streetAddress: PRACTICE_ADDRESS_LINE1,
       addressLocality: "Rockville",
       addressRegion: "MD",
-      postalCode: "20854",
+      postalCode: "20850",
       addressCountry: "US",
     },
     geo: {
@@ -74,7 +85,7 @@ export function generateLocalBusinessJsonLd() {
     hasMap: MAPS_DIRECTIONS_URL,
     medicalSpecialty: "General Practice",
     description:
-      "Board-certified internal medicine physicians providing compassionate primary care, preventive care, chronic disease management, and InBody body composition analysis in Rockville, Maryland. Accepting new patients.",
+      "Board-certified internal medicine physicians providing compassionate primary care in Rockville, Maryland — including InBody body composition analysis, ABI testing, allergy testing, and nutrition counseling. Accepting new patients.",
     priceRange: "$$",
     currenciesAccepted: "USD",
     paymentAccepted: "Insurance, Cash, Credit Card",
@@ -86,6 +97,14 @@ export function generateLocalBusinessJsonLd() {
       "Germantown, MD",
       "Potomac, MD",
       "Montgomery County, MD",
+    ],
+    knowsAbout: [
+      "Primary care",
+      "Internal medicine",
+      "InBody analysis",
+      "Ankle-brachial index testing",
+      "Allergy testing",
+      "Nutrition counseling",
     ],
   };
 }
@@ -137,23 +156,42 @@ export function generateBreadcrumbJsonLd(
   };
 }
 
-// ─── Physician Person Schema (use on clinician profile pages) ─────────────────
-export function generatePhysicianJsonLd(physician: {
+// ─── Clinician profile schema (Physician vs NP) ──────────────────────────────
+export function generateClinicianProfileJsonLd(opts: {
   name: string;
   title: string;
   description: string;
-  image: string;
-  specialty: string;
+  imagePath: string;
+  pageUrl: string;
 }) {
-  return {
+  const desc = opts.description.replace(/\s+/g, " ").trim().slice(0, 800);
+  const isNurse =
+    /\bNP\b|Nurse Practitioner/i.test(opts.title) ||
+    /\bNP\b/i.test(opts.name);
+
+  const shared = {
     "@context": "https://schema.org",
-    "@type": "Physician",
-    name: physician.name,
-    jobTitle: physician.title,
-    description: physician.description,
-    image: `${PRACTICE_DOMAIN}${physician.image}`,
-    medicalSpecialty: physician.specialty,
+    name: opts.name,
+    jobTitle: opts.title,
+    description: desc,
+    image: `${PRACTICE_DOMAIN}${opts.imagePath}`,
+    url: opts.pageUrl,
     worksFor: { "@id": `${PRACTICE_DOMAIN}/#organization` },
+    mainEntityOfPage: { "@type": "WebPage", "@id": opts.pageUrl },
+  };
+
+  if (isNurse) {
+    return {
+      ...shared,
+      "@type": "Person",
+      knowsAbout: ["Primary care", "Family medicine", "Adult health"],
+    };
+  }
+
+  return {
+    ...shared,
+    "@type": "Physician",
+    medicalSpecialty: ["InternalMedicine", "PrimaryCare"],
   };
 }
 
@@ -161,7 +199,7 @@ export function generatePhysicianJsonLd(physician: {
 export const defaultMeta = {
   title: `${PRACTICE_NAME} | Primary Care in Rockville, MD`,
   description:
-    "Compassionate, comprehensive primary care for adults at Dr. Jalli MD PC in Rockville, MD. New patients welcome. Board-certified physicians. InBody body composition technology.",
+    "Compassionate, comprehensive primary care for adults at Dr. Jalli MD PC in Rockville, MD. InBody analysis, ABI testing, allergy testing, nutrition counseling, and more. New patients welcome.",
 };
 
 export function makePageMeta(
@@ -169,16 +207,35 @@ export function makePageMeta(
   description: string,
   path: string = ""
 ) {
+  const url = `${PRACTICE_DOMAIN}${path}`;
+  const ogTitle = `${title} | ${PRACTICE_NAME}`;
   return {
     title,
     description,
     openGraph: {
-      title: `${title} | ${PRACTICE_NAME}`,
+      type: "website" as const,
+      locale: "en_US",
+      siteName: PRACTICE_NAME,
+      title: ogTitle,
       description,
-      url: `${PRACTICE_DOMAIN}${path}`,
+      url,
+      images: [
+        {
+          url: DEFAULT_OG_IMAGE,
+          width: 1200,
+          height: 630,
+          alt: `${PRACTICE_NAME} — Primary care in Rockville, MD`,
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image" as const,
+      title: ogTitle,
+      description,
+      images: [DEFAULT_OG_IMAGE],
     },
     alternates: {
-      canonical: `${PRACTICE_DOMAIN}${path}`,
+      canonical: url,
     },
   };
 }
@@ -214,5 +271,15 @@ export const newPatientFAQs = [
     question: "Do you offer telehealth visits?",
     answer:
       "Yes, we offer telehealth for select follow-up visits and medication checks when an in-person exam is not clinically required. Call the office to determine if your concern is appropriate for a virtual visit.",
+  },
+  {
+    question: "Do you offer ABI testing at your office?",
+    answer:
+      "Yes. We offer ankle–brachial index (ABI) testing in the office when clinically appropriate to help assess circulation in the legs. Ask your clinician whether ABI testing is right for you.",
+  },
+  {
+    question: "Do you offer allergy testing?",
+    answer:
+      "Yes. We provide allergy evaluation and can order appropriate allergy testing when it will change your care plan. Call the office to discuss your symptoms and next steps.",
   },
 ];
