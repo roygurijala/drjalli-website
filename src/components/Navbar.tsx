@@ -20,6 +20,7 @@ const links = [
   { href: "/", label: "Home" },
   { href: "/clinicians", label: "Our Team" },
   { href: "/services", label: "Services" },
+  { href: "/wellness/multivitamins", label: "Wellness" },
   { href: "/patient-resources", label: "Patients" },
   { href: "/contact", label: "Contact" },
 ];

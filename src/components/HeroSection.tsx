@@ -128,24 +128,36 @@ export function HeroSection() {
               </a>
             </div>
 
-            {/* Trust pills */}
+            {/* Trust pills — InBody links to the full guide */}
             <div className="mt-6 flex flex-wrap gap-2">
-              {[
-                "Medicare Accepted",
-                "InBody Analysis",
-                "ABI Testing",
-                "Allergy Testing",
-                "Nutrition Counseling",
-                "Telehealth Available",
-                "Same-Day Sick Visits",
-              ].map((pill) => (
-                <span
-                  key={pill}
-                  className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[11px] font-medium text-slate-300"
-                >
-                  {pill}
-                </span>
-              ))}
+              {(
+                [
+                  { label: "Medicare Accepted" },
+                  { label: "InBody Analysis", href: "/inbody" },
+                  { label: "ABI Testing" },
+                  { label: "Allergy Testing" },
+                  { label: "Nutrition Counseling" },
+                  { label: "Telehealth Available" },
+                  { label: "Same-Day Sick Visits" },
+                ] as const
+              ).map((pill) =>
+                "href" in pill && pill.href ? (
+                  <Link
+                    key={pill.label}
+                    href={pill.href}
+                    className="rounded-full border border-teal-400/35 bg-teal-400/15 px-3 py-1 text-[11px] font-medium text-teal-200 transition hover:border-teal-300/50 hover:bg-teal-400/25 hover:text-white"
+                  >
+                    {pill.label} →
+                  </Link>
+                ) : (
+                  <span
+                    key={pill.label}
+                    className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[11px] font-medium text-slate-300"
+                  >
+                    {pill.label}
+                  </span>
+                )
+              )}
             </div>
 
             {/* Stats bar */}

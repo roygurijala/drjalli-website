@@ -6,6 +6,7 @@ import { GoogleReviewsSection } from "@/components/GoogleReviewsSection";
 import { HomeServicesSection } from "@/components/HomeServicesSection";
 import { HeroSection } from "@/components/HeroSection";
 import { InBodyHighlightSection } from "@/components/InBodyHighlightSection";
+import { MultivitaminsSection } from "@/components/wellness/MultivitaminsSection";
 import {
   PRACTICE_ADDRESS_LINE1,
   PRACTICE_CITY_STATE_ZIP,
@@ -28,7 +29,7 @@ export const metadata: Metadata = {
 function TrustBar() {
   const items = [
     { icon: "🩺", label: "Board-Certified Physicians" },
-    { icon: "🔬", label: "InBody Technology In-Office" },
+    { icon: "🔬", label: "InBody Technology In-Office", href: "/inbody" },
     { icon: "🫀", label: "ABI Testing On-Site" },
     { icon: "🌿", label: "Allergy Testing" },
     { icon: "🥗", label: "Nutrition Counseling" },
@@ -37,7 +38,6 @@ function TrustBar() {
     { icon: "📅", label: "Same-Week Appointments" },
     { icon: "🌐", label: "Telehealth Available" },
   ];
-
   return (
     <section className="border-b border-slate-200/60 bg-white py-4" aria-label="Trust signals">
       <div className="mx-auto max-w-6xl px-4">
@@ -45,7 +45,16 @@ function TrustBar() {
           {items.map((item) => (
             <div key={item.label} className="flex items-center gap-2 text-xs text-slate-600">
               <span className="text-base" aria-hidden>{item.icon}</span>
-              <span className="font-medium text-slate-700">{item.label}</span>
+              {"href" in item && item.href ? (
+                <Link
+                  href={item.href}
+                  className="font-medium text-teal-700 underline-offset-2 hover:text-teal-800 hover:underline"
+                >
+                  {item.label}
+                </Link>
+              ) : (
+                <span className="font-medium text-slate-700">{item.label}</span>
+              )}
             </div>
           ))}
         </div>
@@ -437,6 +446,7 @@ export default async function HomePage() {
         <GoogleReviewsSection />
       </Suspense>
       <HomeServicesSection />
+      <MultivitaminsSection variant="home" />
       <InBodyHighlightSection />
       <CareJourneySection />
       <FAQSection />

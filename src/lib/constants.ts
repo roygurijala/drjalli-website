@@ -17,6 +17,23 @@ export const PRACTICE_EMAIL = "patientcare@drjalli.com"; // change if needed
 export const MAPS_DIRECTIONS_URL =
   "https://www.google.com/maps?q=Dr.%20Jalli%20MD%20PC%2C%202401%20Research%20Blvd%20Suite%20330%2C%20Rockville%2C%20MD%2020850";
 
+/** Default online wellness store (multivitamins / supplements). Override with `NEXT_PUBLIC_WELLNESS_STORE_URL` if needed. */
+export const DEFAULT_WELLNESS_STORE_URL =
+  "https://us.fullscript.com/continue-without-password";
+
+/**
+ * URL for the practice’s online wellness store. Uses `NEXT_PUBLIC_WELLNESS_STORE_URL` when set;
+ * otherwise {@link DEFAULT_WELLNESS_STORE_URL}.
+ */
+export function getWellnessStoreUrl(): string {
+  const raw = process.env.NEXT_PUBLIC_WELLNESS_STORE_URL;
+  if (typeof raw === "string") {
+    const t = raw.trim();
+    if (t.length > 0) return t;
+  }
+  return DEFAULT_WELLNESS_STORE_URL;
+}
+
 /** One-line notice for AI chat UIs — general info only; avoid sharing health details in chat */
 export const AI_CHAT_DISCLAIMER_SHORT =
   "General clinic information only — not medical advice. For emergencies call 911. Do not share personal health information (symptoms, diagnoses, medications, lab results, or ID numbers) in this chat; call the office or use the patient portal for private matters.";

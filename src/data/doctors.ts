@@ -54,8 +54,9 @@ export const doctors: Doctor[] = [
     name: "Ntoge Penda, NP",
     title: "Nurse Practitioner",
     credentials: "Advanced Practice Provider",
-    imageSrc: "/images/doctors/doctor-placeholder.svg",
-    imageAlt: "Portrait of Nurse Practitioner Ntoge Penda",
+    imageSrc: "/images/doctors/ntoge-penda.png",
+    imageAlt:
+      "Portrait of Ntoge Penda in a white lab coat, smiling at the camera",
     shortBlurb:
       "Attentive, patient-centered visits with clear explanations and support for day-to-day health.",
     bio: [

@@ -2,7 +2,14 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 import { InnerPageHero } from "@/components/InnerPageHero";
-import { InBodyHighlightSection } from "@/components/InBodyHighlightSection";
+import {
+  InBodyBookingCtaSection,
+  InBodyFaqSection,
+  InBodyMeasuresSection,
+  InBodyTwoTierSection,
+  InBodyVisitFlowSection,
+  InBodyWhoSection,
+} from "@/components/inbody/InBodyLandingSections";
 import {
   DEFAULT_OG_IMAGE,
   PRACTICE_DOMAIN,
@@ -19,7 +26,7 @@ const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? PRACTICE_DOMAIN;
 const PRACTICE_NAME = "Dr. Jalli MD PC";
 
 const DESC =
-  "InBody body composition scanning in Rockville, Maryland—muscle, fat, hydration, and segmental analysis beyond the scale. Primary care at Dr. Jalli MD PC. Call to schedule.";
+  "Full guide to InBody at Dr. Jalli MD PC in Rockville, MD: what we measure, who it’s for, how your visit works (scan → staff review → optional clinician visit), and FAQs. Call to schedule.";
 
 export const metadata: Metadata = {
   title: `InBody Body Composition Analysis | Rockville, MD | ${PRACTICE_NAME}`,
@@ -29,6 +36,8 @@ export const metadata: Metadata = {
     "body composition analysis Rockville",
     "InBody test Maryland",
     "metabolic health screening Rockville",
+    "InBody fasting",
+    "InBody how long",
   ],
   alternates: { canonical: `${SITE_URL}/inbody` },
   openGraph: {
@@ -107,7 +116,13 @@ export default function InBodyLandingPage() {
           { label: "InBody" },
         ]}
       />
-      <InBodyHighlightSection showHeroHeading={false} />
+
+      <InBodyMeasuresSection />
+      <InBodyWhoSection />
+      <InBodyVisitFlowSection />
+      <InBodyTwoTierSection />
+      <InBodyFaqSection />
+      <InBodyBookingCtaSection />
 
       <section
         className="border-t border-slate-200 bg-white py-10"

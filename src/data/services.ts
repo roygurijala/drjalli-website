@@ -213,6 +213,11 @@ export type Service = {
     return services.find((s) => s.slug === slug);
   }
 
+  /** Prefer the rich landing page when a service has one (e.g. InBody → `/inbody`). */
+  export function getServiceHref(service: Service): string {
+    return service.canonicalLandingPath ?? `/services/${service.slug}`;
+  }
+
   export function getHomeFeaturedServices(): Service[] {
     return HOME_FEATURED_SERVICE_SLUGS.map((slug) => {
       const s = getServiceBySlug(slug);

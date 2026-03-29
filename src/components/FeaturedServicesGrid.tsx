@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { getHomeFeaturedServices } from "@/data/services";
+import { getHomeFeaturedServices, getServiceHref } from "@/data/services";
 
 /**
  * Static spotlight services on the home page — scannable grid before the full carousel.
@@ -34,7 +34,7 @@ export function FeaturedServicesGrid() {
         {featured.map((s) => (
           <Link
             key={s.slug}
-            href={`/services/${s.slug}`}
+            href={getServiceHref(s)}
             prefetch
             className="flex h-full flex-col rounded-2xl border border-teal-200/80 bg-gradient-to-br from-teal-50/90 to-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:border-teal-300 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-teal-400"
             aria-label={`${s.title} — learn more`}

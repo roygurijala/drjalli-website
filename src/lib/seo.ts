@@ -294,12 +294,27 @@ export const inbodyPageFaqs = [
   {
     question: "How long does an InBody scan take?",
     answer:
-      "The test usually takes under two minutes. You stand on the device and hold the handles; there is no radiation and no needles.",
+      "The scan itself usually takes under two minutes. Plan for check-in, changing footwear, and review time with staff—your full visit length depends on whether you are also seeing a clinician that day.",
+  },
+  {
+    question: "Do I need to fast before an InBody scan?",
+    answer:
+      "Follow any instructions the office gives you when you book. For many patients, fasting is not required for InBody, but eating a very large meal or heavy exercise right before the scan can affect hydration-related readings. When in doubt, ask us when you schedule.",
+  },
+  {
+    question: "How often should I get scanned?",
+    answer:
+      "Frequency depends on your goals and your clinician’s plan—some patients repeat every few months to track progress; others use it as a one-time baseline. We’ll recommend an interval that makes sense for you.",
   },
   {
     question: "Who is InBody helpful for?",
     answer:
       "It can support patients focused on weight management, metabolic health, muscle tracking, or lifestyle coaching—when your clinician recommends it as part of your care plan.",
+  },
+  {
+    question: "What is the two-tier model (staff vs. clinician)?",
+    answer:
+      "Tier 1 is the scan plus staff review of your printout—focused on quality and education. Tier 2 is when a physician or nurse practitioner integrates InBody with your chart, medications, and goals for medical decision-making. The same visit may include one or both, depending on how your appointment is scheduled.",
   },
   {
     question: "Is InBody safe for everyone?",

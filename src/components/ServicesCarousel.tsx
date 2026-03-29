@@ -5,7 +5,7 @@ import useEmblaCarousel from "embla-carousel-react";
 import type { EmblaOptionsType } from "embla-carousel";
 import Autoplay from "embla-carousel-autoplay";
 import { useCallback } from "react";
-import { services } from "@/data/services";
+import { getServiceHref, services } from "@/data/services";
 
 type Props = {
   heading?: string;
@@ -115,7 +115,7 @@ export default function ServicesCarousel({
                 className="min-w-0 shrink-0 basis-[78%] px-2 sm:basis-[55%] md:basis-[40%] lg:basis-[32%]"
               >
                 <Link
-                  href={`/services/${s.slug}`}
+                  href={getServiceHref(s)}
                   prefetch
                   draggable={false}
                   className="block h-full rounded-2xl border border-teal-200/80 bg-gradient-to-br from-teal-50/90 to-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:border-teal-300 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-teal-400"
