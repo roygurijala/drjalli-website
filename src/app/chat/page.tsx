@@ -107,7 +107,7 @@ export default function ChatPage() {
   };
 
   return (
-    <div className="flex flex-col h-screen max-w-3xl mx-auto border rounded-lg shadow-sm">
+    <div className="mx-auto flex max-w-3xl flex-col rounded-lg border border-slate-200 shadow-sm h-[calc(100dvh-11rem)] min-h-[20rem] max-h-[900px] sm:h-[calc(100dvh-10rem)]">
       {/* Header with logo + subtitle */}
       <header className="flex items-center gap-3 px-4 py-3 border-b bg-white">
         <img

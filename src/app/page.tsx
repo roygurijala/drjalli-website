@@ -1,6 +1,8 @@
 // src/app/page.tsx
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import BrandedQRCode from "@/components/BrandedQRCode";
+import { GoogleReviewsSection } from "@/components/GoogleReviewsSection";
 import { HomeServicesSection } from "@/components/HomeServicesSection";
 import { HeroSection } from "@/components/HeroSection";
 import { InBodyHighlightSection } from "@/components/InBodyHighlightSection";
@@ -397,8 +399,27 @@ function FAQSection() {
   );
 }
 
+// ─── Reviews loading skeleton (Places API) ────────────────────────────────────
+function ReviewsSkeleton() {
+  return (
+    <section
+      className="border-y border-slate-200/80 bg-slate-50/50 py-14 md:py-18"
+      aria-hidden
+    >
+      <div className="mx-auto max-w-6xl px-4">
+        <div className="mx-auto mb-8 h-8 max-w-xs animate-pulse rounded bg-slate-200" />
+        <div className="grid gap-4 md:grid-cols-3">
+          {[1, 2, 3].map((i) => (
+            <div key={i} className="h-48 animate-pulse rounded-2xl bg-slate-200" />
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
 // ─── Page ──────────────────────────────────────────────────────────────────────
-export default function HomePage() {
+export default async function HomePage() {
   const faqSchema = generateFAQJsonLd(newPatientFAQs);
 
   return (
@@ -412,6 +433,9 @@ export default function HomePage() {
       <HeroSection />
       <TrustBar />
       <PatientActionsSection />
+      <Suspense fallback={<ReviewsSkeleton />}>
+        <GoogleReviewsSection />
+      </Suspense>
       <HomeServicesSection />
       <InBodyHighlightSection />
       <CareJourneySection />

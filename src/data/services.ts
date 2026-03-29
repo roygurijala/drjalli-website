@@ -6,7 +6,9 @@ export type Service = {
     blurb: string;         // short one-liner shown on cards
     icon?: string;         // optional emoji or icon text
     tags?: string[];       // small pills on the card
-    body: string;       // long markdown used on the service detail page
+    body: string;          // markdown on the service detail page (may be short if canonicalLandingPath is set)
+    /** Rich SEO page path (e.g. /inbody); catalog entry canonical points here */
+    canonicalLandingPath?: string;
   };
   
   export const services: Service[] = [
@@ -109,19 +111,17 @@ export type Service = {
       `.trim(),
     },
     {
-      slug: "inbody-body-composition",
+      slug: "inbody",
       title: "InBody Body Composition",
       blurb:
         "Beyond the scale—objective insight into muscle, fat, and water balance to support metabolic care.",
       icon: "📊",
       tags: ["InBody", "Insight"],
+      canonicalLandingPath: "/inbody",
       body: `
-  **InBody** provides a quick, non-invasive assessment of muscle mass, body fat, and water balance. Results are interpreted **in context** with your history and goals.
-  
-  **Why it helps**
-  - Tracks changes beyond weight alone  
-  - Informs metabolic and lifestyle plans  
-  - Supports realistic, individualized targets
+  **InBody** is available in-office for body composition assessment. Your clinician recommends it when it fits your goals and care plan.
+
+  For metrics, how the scan works, who it is for, and what to expect, use our **[full InBody guide](/inbody)**.
       `.trim(),
     },
     {
@@ -203,7 +203,7 @@ export type Service = {
   export const HOME_FEATURED_SERVICE_SLUGS = [
     "primary-care-for-adults",
     "preventive-care",
-    "inbody-body-composition",
+    "inbody",
     "telehealth-when-appropriate",
   ] as const;
 

@@ -1,5 +1,5 @@
 // src/app/layout.tsx
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Sora, Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 import AnnouncementBar from "@/components/AnnouncementBar";
@@ -113,6 +113,13 @@ export const metadata: Metadata = {
   },
 };
 
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 5,
+  themeColor: "#0B1628",
+};
+
 // ─── Root Layout ──────────────────────────────────────────────────────────────
 export default function RootLayout({
   children,
@@ -142,10 +149,13 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(webSiteSchema) }}
         />
       </head>
-      <body className="min-h-screen bg-neutralBg text-slate-900 antialiased">
+      <body className="min-h-screen overflow-x-clip bg-neutralBg text-slate-900 antialiased">
         <AnnouncementBar />
         <Navbar />
-        <main className="pt-0">{children}</main>
+        {/* Bottom padding clears fixed StickyFooterBar + home indicator; chat FAB sits above bar */}
+        <main className="pb-[calc(5rem+env(safe-area-inset-bottom))] pt-0 md:pb-[calc(4.5rem+env(safe-area-inset-bottom))]">
+          {children}
+        </main>
         <Footer />
         <StickyFooterBar />
         <FloatingChatWidget />

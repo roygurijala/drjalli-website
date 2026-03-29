@@ -195,7 +195,7 @@ export function FloatingChatWidget() {
         ref={launcherRef}
         type="button"
         onClick={() => setIsOpen((o) => !o)}
-        className="fixed bottom-5 right-5 z-50 flex items-center gap-2.5 rounded-full border border-teal-200 bg-white px-4 py-2.5 shadow-xl shadow-slate-200/60 transition-all hover:border-teal-300 hover:shadow-teal-100/80 focus:outline-none focus-visible:ring-2 focus-visible:ring-teal-500 focus-visible:ring-offset-2"
+        className="fixed bottom-[calc(4.5rem+env(safe-area-inset-bottom,0px))] right-4 z-50 flex min-h-[48px] items-center gap-2.5 rounded-full border border-teal-200 bg-white px-4 py-2.5 shadow-xl shadow-slate-200/60 transition-all hover:border-teal-300 hover:shadow-teal-100/80 focus:outline-none focus-visible:ring-2 focus-visible:ring-teal-500 focus-visible:ring-offset-2 md:bottom-6 md:right-5"
         aria-expanded={isOpen}
         aria-controls="clinic-ai-chat"
         aria-label={isOpen ? "Close AI assistant" : "Open AI assistant"}
@@ -220,7 +220,7 @@ export function FloatingChatWidget() {
           role="dialog"
           aria-modal="false"
           aria-label="Clinic AI assistant"
-          className="fixed bottom-20 right-5 z-50 flex h-[540px] w-[380px] max-h-[75vh] max-w-[93vw] flex-col overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-2xl shadow-slate-200/80"
+          className="fixed bottom-[calc(10rem+env(safe-area-inset-bottom,0px))] right-4 z-50 flex h-[min(540px,75vh)] w-[min(380px,93vw)] max-h-[75vh] max-w-[93vw] flex-col overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-2xl shadow-slate-200/80 md:bottom-24 md:right-5"
         >
           {/* Header — dark teal strip for brand anchoring */}
           <div className="flex items-center gap-3 bg-teal-700 px-4 py-3">

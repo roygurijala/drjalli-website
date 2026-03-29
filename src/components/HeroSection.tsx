@@ -84,7 +84,7 @@ export function HeroSection() {
               Now Accepting New Patients · Rockville, MD
             </div>
 
-            <h1 className="font-display text-4xl font-bold leading-tight text-white md:text-5xl lg:text-[3.5rem]">
+            <h1 className="font-display text-4xl font-bold leading-tight tracking-tight text-white text-balance md:text-5xl lg:text-[3.5rem]">
               We <span className="text-gradient-teal">care</span> for you…
             </h1>
 

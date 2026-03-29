@@ -39,16 +39,19 @@ export async function generateMetadata(
 
   const title = `${svc.title} · ${PRACTICE_NAME}`;
   const description = svc.blurb;
+  const canonicalUrl = svc.canonicalLandingPath
+    ? `${SITE_URL}${svc.canonicalLandingPath}`
+    : `${SITE_URL}/services/${svc.slug}`;
   const url = `${SITE_URL}/services/${svc.slug}`;
 
   return {
     title,
     description,
-    alternates: { canonical: url },
+    alternates: { canonical: canonicalUrl },
     openGraph: {
       title,
       description,
-      url,
+      url: canonicalUrl,
       type: "article",
       siteName: PRACTICE_NAME,
       locale: "en_US",
@@ -71,11 +74,14 @@ export async function generateMetadata(
 }
 
 function ServiceJsonLd({ service }: { service: Service }) {
+  const primaryUrl = service.canonicalLandingPath
+    ? `${SITE_URL}${service.canonicalLandingPath}`
+    : `${SITE_URL}/services/${service.slug}`;
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "MedicalBusiness",
     name: `${service.title} · ${PRACTICE_NAME}`,
-    url: `${SITE_URL}/services/${service.slug}`,
+    url: primaryUrl,
     description: service.blurb,
     medicalSpecialty: "PrimaryCare",
     areaServed: { "@type": "Place", name: "Rockville, Maryland" },
@@ -117,6 +123,24 @@ export default async function ServicePage({
 
       <div className="bg-white">
         <div className="mx-auto max-w-6xl px-4 py-8 md:py-12">
+          {service.canonicalLandingPath ? (
+            <div className="mb-8 rounded-2xl border border-teal-200 bg-gradient-to-br from-teal-50/90 to-white p-5 shadow-sm md:p-6">
+              <p className="font-display text-base font-bold text-slate-900">
+                Full guide on our website
+              </p>
+              <p className="mt-1 text-sm text-slate-600">
+                This service has a detailed page with metrics, how the scan works, and who it is
+                for—ideal for search and sharing.
+              </p>
+              <Link
+                href={service.canonicalLandingPath}
+                className="mt-4 inline-flex items-center justify-center rounded-full bg-teal-600 px-5 py-2.5 text-sm font-semibold text-white shadow-md shadow-teal-600/20 transition hover:bg-teal-500"
+              >
+                Open the full guide →
+              </Link>
+            </div>
+          ) : null}
+
           {service.tags?.length ? (
             <div className="mb-6 flex flex-wrap gap-2">
               {service.tags.map((t) => (

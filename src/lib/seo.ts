@@ -283,3 +283,32 @@ export const newPatientFAQs = [
       "Yes. We provide allergy evaluation and can order appropriate allergy testing when it will change your care plan. Call the office to discuss your symptoms and next steps.",
   },
 ];
+
+/** FAQs for the dedicated /inbody landing page (SEO) */
+export const inbodyPageFaqs = [
+  {
+    question: "What is InBody body composition analysis?",
+    answer:
+      "InBody is a quick, non-invasive scan that estimates skeletal muscle mass, body fat percentage, segmental composition, hydration, and related metrics—giving a fuller picture than weight or BMI alone. Your clinician interprets results in context with your history and goals.",
+  },
+  {
+    question: "How long does an InBody scan take?",
+    answer:
+      "The test usually takes under two minutes. You stand on the device and hold the handles; there is no radiation and no needles.",
+  },
+  {
+    question: "Who is InBody helpful for?",
+    answer:
+      "It can support patients focused on weight management, metabolic health, muscle tracking, or lifestyle coaching—when your clinician recommends it as part of your care plan.",
+  },
+  {
+    question: "Is InBody safe for everyone?",
+    answer:
+      "InBody may not be appropriate for people with certain implanted devices or during pregnancy. Discuss with your clinician before scheduling.",
+  },
+  {
+    question: "How do I schedule InBody at Dr. Jalli MD PC?",
+    answer:
+      "Call our office at 301-686-8554 to ask whether InBody is appropriate for you and to schedule. Established patients may also use the patient portal for non-urgent requests when appropriate.",
+  },
+];

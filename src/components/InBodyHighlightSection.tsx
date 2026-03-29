@@ -56,7 +56,17 @@ const howItWorks = [
   },
 ];
 
-export function InBodyHighlightSection() {
+type InBodyHighlightSectionProps = {
+  /**
+   * When false, the large centered headline block is hidden (use with `InnerPageHero` on `/inbody`).
+   * @default true
+   */
+  showHeroHeading?: boolean;
+};
+
+export function InBodyHighlightSection({
+  showHeroHeading = true,
+}: InBodyHighlightSectionProps) {
   return (
     <section
       id="inbody"
@@ -69,40 +79,52 @@ export function InBodyHighlightSection() {
 
       <div className="relative mx-auto max-w-6xl px-4">
 
-        {/* Section header */}
-        <div className="text-center">
-          <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-teal-300 bg-teal-50 px-4 py-2 text-xs font-semibold uppercase tracking-widest text-teal-700">
-            In-office testing & counseling
+        {/* Section header — hidden on dedicated /inbody page (hero handles title) */}
+        {showHeroHeading ? (
+          <div className="text-center">
+            <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-teal-300 bg-teal-50 px-4 py-2 text-xs font-semibold uppercase tracking-widest text-teal-700">
+              In-office testing & counseling
+            </div>
+            <h2 className="font-display text-3xl font-bold tracking-tight text-slate-900 md:text-4xl lg:text-5xl">
+              <span className="text-teal-600">InBody</span> Analysis —{" "}
+              <br className="hidden md:block" />
+              Know Your Body Beyond the Scale
+            </h2>
+            <p className="mx-auto mt-5 max-w-2xl text-base leading-relaxed text-slate-600 md:text-lg">
+              In-office InBody body composition scanning gives you and your
+              clinician precise, objective data — muscle, fat, hydration, and
+              more — to guide metabolic health, weight management, and lifestyle goals.
+            </p>
+            <p className="mx-auto mt-4 max-w-2xl text-sm leading-relaxed text-slate-600">
+              At this location we also offer{" "}
+              <Link href="/services/abi-testing" className="font-medium text-teal-700 underline-offset-2 hover:underline">
+                ABI testing
+              </Link>
+              ,{" "}
+              <Link href="/services/allergy-testing" className="font-medium text-teal-700 underline-offset-2 hover:underline">
+                allergy testing
+              </Link>
+              , and{" "}
+              <Link href="/services/nutrition-counseling" className="font-medium text-teal-700 underline-offset-2 hover:underline">
+                nutrition counseling
+              </Link>{" "}
+              — ask our team what is right for you.
+            </p>
+            <p className="mx-auto mt-4 max-w-2xl">
+              <Link
+                href="/inbody"
+                className="text-sm font-semibold text-teal-700 underline-offset-2 hover:underline"
+              >
+                Read the full InBody guide →
+              </Link>
+            </p>
           </div>
-          <h2 className="font-display text-3xl font-bold tracking-tight text-slate-900 md:text-4xl lg:text-5xl">
-            <span className="text-teal-600">InBody</span> Analysis —{" "}
-            <br className="hidden md:block" />
-            Know Your Body Beyond the Scale
-          </h2>
-          <p className="mx-auto mt-5 max-w-2xl text-base leading-relaxed text-slate-600 md:text-lg">
-            In-office InBody body composition scanning gives you and your
-            clinician precise, objective data — muscle, fat, hydration, and
-            more — to guide metabolic health, weight management, and lifestyle goals.
-          </p>
-          <p className="mx-auto mt-4 max-w-2xl text-sm leading-relaxed text-slate-600">
-            At this location we also offer{" "}
-            <Link href="/services/abi-testing" className="font-medium text-teal-700 underline-offset-2 hover:underline">
-              ABI testing
-            </Link>
-            ,{" "}
-            <Link href="/services/allergy-testing" className="font-medium text-teal-700 underline-offset-2 hover:underline">
-              allergy testing
-            </Link>
-            , and{" "}
-            <Link href="/services/nutrition-counseling" className="font-medium text-teal-700 underline-offset-2 hover:underline">
-              nutrition counseling
-            </Link>{" "}
-            — ask our team what is right for you.
-          </p>
-        </div>
+        ) : null}
 
         {/* Metrics grid — light cards, dark readable text */}
-        <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <div
+          className={`grid gap-4 sm:grid-cols-2 lg:grid-cols-4 ${showHeroHeading ? "mt-12" : "mt-0"}`}
+        >
           {metrics.map((m) => (
             <div
               key={m.label}
