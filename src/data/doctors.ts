@@ -54,7 +54,7 @@ export const doctors: Doctor[] = [
     name: "Ntoge Penda, NP",
     title: "Nurse Practitioner",
     credentials: "Advanced Practice Provider",
-    imageSrc: "/images/doctors/ntoge-penda.png",
+    imageSrc: "/images/doctors/ntoge-penda.jpg",
     imageAlt:
       "Portrait of Ntoge Penda in a white lab coat, smiling at the camera",
     shortBlurb:
