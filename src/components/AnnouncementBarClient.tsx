@@ -18,45 +18,45 @@ function variantStyles(v?: AnnouncementMessage["variant"]) {
   switch (v) {
     case "warning":
       return {
-        bar: "bg-amber-950/98 border-amber-400/25",
-        pill: "bg-amber-400/15 text-amber-300 border border-amber-400/30",
-        pillDot: "bg-amber-400",
-        text: "text-amber-100",
-        link: "text-amber-300 underline decoration-amber-400/50 hover:decoration-amber-300",
-        close: "text-amber-400/50 hover:text-amber-300",
+        bar: "bg-amber-900 border-b-2 border-amber-400/80 shadow-md shadow-amber-950/40",
+        pill: "bg-amber-500/25 text-amber-100 border border-amber-300/60",
+        pillDot: "bg-amber-300",
+        text: "text-amber-50 font-semibold",
+        link: "text-amber-100 font-semibold underline decoration-amber-200/90 underline-offset-2 hover:text-white hover:decoration-white",
+        close: "text-amber-200/90 hover:text-white hover:bg-amber-800/80",
         label: "Notice",
         dotAnimate: "",
       };
     case "success":
       return {
-        bar: "bg-emerald-950/98 border-emerald-400/25",
-        pill: "bg-emerald-400/15 text-emerald-300 border border-emerald-400/30",
-        pillDot: "bg-emerald-400",
-        text: "text-emerald-100",
-        link: "text-emerald-300 underline decoration-emerald-400/50",
-        close: "text-emerald-400/50 hover:text-emerald-300",
+        bar: "bg-emerald-900 border-b-2 border-emerald-400/70 shadow-md shadow-emerald-950/40",
+        pill: "bg-emerald-500/25 text-emerald-100 border border-emerald-300/60",
+        pillDot: "bg-emerald-300",
+        text: "text-emerald-50 font-semibold",
+        link: "text-emerald-100 font-semibold underline decoration-emerald-200/90 underline-offset-2 hover:text-white",
+        close: "text-emerald-200/90 hover:text-white hover:bg-emerald-800/80",
         label: "Update",
         dotAnimate: "",
       };
     case "danger":
       return {
-        bar: "bg-rose-950/98 border-rose-500/30",
-        pill: "bg-rose-500/15 text-rose-300 border border-rose-500/30",
-        pillDot: "bg-rose-400 animate-pulse",
-        text: "text-rose-100",
-        link: "text-rose-300 underline decoration-rose-400/50",
-        close: "text-rose-400/50 hover:text-rose-300",
+        bar: "bg-rose-900 border-b-2 border-rose-400/80 shadow-md shadow-rose-950/40",
+        pill: "bg-rose-500/25 text-rose-100 border border-rose-300/60",
+        pillDot: "bg-rose-300 animate-pulse",
+        text: "text-rose-50 font-semibold",
+        link: "text-rose-100 font-semibold underline decoration-rose-200/90 underline-offset-2 hover:text-white",
+        close: "text-rose-200/90 hover:text-white hover:bg-rose-800/80",
         label: "Urgent",
         dotAnimate: "animate-pulse",
       };
     default:
       return {
-        bar: "bg-navy-950/98 border-teal-400/20",
-        pill: "bg-teal-400/12 text-teal-300 border border-teal-400/25",
-        pillDot: "bg-teal-400",
-        text: "text-slate-300",
-        link: "text-teal-300 underline decoration-teal-400/40 hover:decoration-teal-300",
-        close: "text-slate-500 hover:text-slate-300",
+        bar: "bg-slate-900 border-b-2 border-teal-500/70 shadow-md shadow-black/30",
+        pill: "bg-teal-500/25 text-teal-100 border border-teal-400/55",
+        pillDot: "bg-teal-300",
+        text: "text-white font-semibold",
+        link: "text-teal-100 font-semibold underline decoration-teal-200/90 underline-offset-2 hover:text-white hover:decoration-white",
+        close: "text-slate-300 hover:text-white hover:bg-slate-800",
         label: "Announcement",
         dotAnimate: "",
       };
@@ -133,15 +133,15 @@ export default function AnnouncementBarClient({
 
   return (
     <div
-      className={`sticky top-0 z-50 border-b backdrop-blur-xl ${s.bar}`}
+      className={`sticky top-0 z-50 ${s.bar}`}
       role="status"
       aria-live="polite"
       aria-atomic="true"
     >
-      <div className="mx-auto flex max-w-6xl items-center gap-3 px-4 py-2">
+      <div className="mx-auto flex max-w-6xl items-center gap-3 px-4 py-2.5 md:py-3">
 
         {/* Variant pill */}
-        <div className={`hidden shrink-0 items-center gap-1.5 rounded-full px-2.5 py-1 text-[10px] font-bold uppercase tracking-widest sm:flex ${s.pill}`}>
+        <div className={`hidden shrink-0 items-center gap-1.5 rounded-full px-3 py-1.5 text-[11px] font-bold uppercase tracking-widest sm:flex ${s.pill}`}>
           <span className={`h-1.5 w-1.5 rounded-full flex-shrink-0 ${s.pillDot} ${s.dotAnimate}`} aria-hidden />
           {s.label}
         </div>
@@ -157,13 +157,13 @@ export default function AnnouncementBarClient({
                 animation: "dj-marquee var(--dj-d) linear infinite",
               }}
             >
-              <span className={`whitespace-nowrap text-xs font-medium ${s.text}`}>
+              <span className={`whitespace-nowrap text-sm font-semibold md:text-[15px] ${s.text}`}>
                 {current.href
                   ? <a href={current.href} className={s.link}>{current.text}</a>
                   : current.text}
               </span>
               <span style={{ display: "inline-block", width: GAP_PX }} aria-hidden />
-              <span className={`whitespace-nowrap text-xs font-medium ${s.text}`}>
+              <span className={`whitespace-nowrap text-sm font-semibold md:text-[15px] ${s.text}`}>
                 {current.href
                   ? <a href={current.href} className={s.link}>{current.text}</a>
                   : current.text}
@@ -180,11 +180,11 @@ export default function AnnouncementBarClient({
         ) : (
           <div className={`flex min-w-0 flex-1 transition-opacity duration-300 ${fading ? "opacity-0" : "opacity-100"}`}>
             {current.href ? (
-              <a href={current.href} className={`truncate text-xs font-medium ${s.link}`} title={current.text}>
+              <a href={current.href} className={`truncate text-sm font-semibold md:text-[15px] ${s.link}`} title={current.text}>
                 {current.text}
               </a>
             ) : (
-              <p className={`truncate text-xs font-medium ${s.text}`} title={current.text}>
+              <p className={`truncate text-sm font-semibold md:text-[15px] ${s.text}`} title={current.text}>
                 {current.text}
               </p>
             )}
@@ -214,7 +214,7 @@ export default function AnnouncementBarClient({
         <button
           type="button"
           onClick={() => dismiss(current.id)}
-          className={`ml-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-[11px] transition ${s.close}`}
+          className={`ml-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-sm font-medium transition ${s.close}`}
           aria-label="Dismiss announcement"
         >
           ✕
