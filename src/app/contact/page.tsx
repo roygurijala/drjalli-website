@@ -9,6 +9,8 @@ import {
   PRACTICE_CITY_STATE_ZIP,
   PRACTICE_PHONE,
   PRACTICE_PHONE_TEL,
+  PRACTICE_FAX,
+  PRACTICE_FAX_HREF,
 } from "@/lib/constants";
 
 export const metadata: Metadata = {
@@ -63,6 +65,15 @@ export default function ContactPage() {
                   Get directions
                 </a>
               </div>
+              <p className="mt-3 text-sm text-slate-800">
+                <span className="font-medium text-slate-600">Fax:</span>{" "}
+                <a
+                  href={PRACTICE_FAX_HREF}
+                  className="font-semibold text-teal-700 hover:text-teal-600 hover:underline"
+                >
+                  {PRACTICE_FAX}
+                </a>
+              </p>
 
               <p className="mt-4 text-xs text-slate-600">
                 Established patients may use the secure patient portal for

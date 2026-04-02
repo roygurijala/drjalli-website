@@ -4,6 +4,8 @@ import Link from "next/link";
 import {
   PRACTICE_PHONE,
   PRACTICE_PHONE_TEL,
+  PRACTICE_FAX,
+  PRACTICE_FAX_HREF,
   PRACTICE_ADDRESS_LINE1,
   PRACTICE_CITY_STATE_ZIP,
 } from "@/lib/constants";
@@ -25,7 +27,7 @@ const pageFAQs = [
   {
     question: "How do I schedule my first appointment?",
     answer:
-      "Call our office at 301-686-8554 during business hours (Monday–Friday, 9:00 AM–5:00 PM). Our staff will walk you through the process, verify your insurance, and schedule a time that works for you.",
+      "Call our office at 301-686-8554 during business hours (Monday–Friday, 9:00 AM–5:00 PM). Our staff will help you schedule your first visit, answer questions about the practice, and let you know what to bring.",
   },
   {
     question: "What should I bring to my first visit?",
@@ -60,15 +62,15 @@ const steps = [
     n: "1",
     icon: "📞",
     title: "Call to Schedule",
-    body: "Call our office at 301-686-8554 Monday–Friday, 9 AM–5 PM. Tell us you are a new patient. We will verify your insurance and find a convenient time — often same-week or next-week.",
+    body: "Call our office Monday–Friday, 9 AM–5 PM. Tell us you are a new patient. Please have your insurance card handy when you call. We'll help you book an appointment — often same-week or next-week — and explain what to expect before you arrive.",
     detail: "For emergencies, call 911. For urgent care needs after hours, visit your nearest urgent care center.",
   },
   {
     n: "2",
     icon: "💳",
-    title: "Verify Your Insurance",
-    body: "We accept most major insurance plans including Medicare, Medicaid, CareFirst, Aetna, Cigna, and UnitedHealthcare. Our staff will confirm your coverage when you call.",
-    detail: "If you are unsure about your coverage, call your insurance company directly using the number on the back of your card.",
+    title: "Insurance & coverage",
+    body: "We accept most major insurance plans including Medicare, Medicaid, CareFirst, Aetna, Cigna, and UnitedHealthcare. During your scheduling call, we'll check that we participate with your plan and record your member information for the visit.",
+    detail: "If you are unsure about your benefits or network status, call your insurance company using the number on the back of your card.",
   },
   {
     n: "3",
@@ -251,6 +253,12 @@ export default function NewPatientPage() {
                     {PRACTICE_PHONE}
                   </a>
                 </div>
+                <div className="flex items-center gap-2">
+                  <span className="text-teal-500">📠</span>
+                  <a href={PRACTICE_FAX_HREF} className="font-medium hover:text-teal-600">
+                    Fax {PRACTICE_FAX}
+                  </a>
+                </div>
                 <div className="flex items-start gap-2">
                   <span className="text-teal-500">🕒</span>
                   <p>Mon–Fri: 9:00 AM – 5:00 PM<br />Sat–Sun: Closed</p>
@@ -335,7 +343,10 @@ export default function NewPatientPage() {
             📞 Call {PRACTICE_PHONE}
           </a>
           <p className="mt-3 text-xs text-slate-500">
-            Monday – Friday, 9:00 AM – 5:00 PM
+            Monday – Friday, 9:00 AM – 5:00 PM · Fax{" "}
+            <a href={PRACTICE_FAX_HREF} className="text-slate-400 hover:text-teal-300">
+              {PRACTICE_FAX}
+            </a>
           </p>
         </section>
       </div>

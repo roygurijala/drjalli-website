@@ -4,7 +4,8 @@ import {
   PRACTICE_NAME,
   PRACTICE_PHONE,
   PRACTICE_PHONE_TEL,
-  PRACTICE_HEADER_TRUST,
+  PRACTICE_FAX,
+  PRACTICE_FAX_HREF,
   PRACTICE_HOURS_SHORT,
 } from "@/lib/constants";
 
@@ -78,10 +79,6 @@ export function InnerPageHero({
               {PRACTICE_NAME}
             </p>
             <p className="mt-2 flex max-w-3xl flex-wrap items-center gap-x-2 gap-y-1 text-xs leading-relaxed text-slate-400">
-              <span className="text-slate-300">{PRACTICE_HEADER_TRUST}</span>
-              <span className="text-slate-600" aria-hidden>
-                ·
-              </span>
               <span>{PRACTICE_HOURS_SHORT}</span>
               <span className="text-slate-600" aria-hidden>
                 ·
@@ -91,6 +88,15 @@ export function InnerPageHero({
                 className="font-semibold text-teal-300 hover:text-teal-200"
               >
                 {PRACTICE_PHONE}
+              </a>
+              <span className="text-slate-600" aria-hidden>
+                ·
+              </span>
+              <a
+                href={PRACTICE_FAX_HREF}
+                className="text-slate-300 hover:text-teal-200"
+              >
+                Fax {PRACTICE_FAX}
               </a>
               <span className="text-slate-600" aria-hidden>
                 ·

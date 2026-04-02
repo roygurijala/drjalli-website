@@ -268,7 +268,7 @@ Johns Hopkins Health Plans
 GEHA  
 
 IN-OFFICE SERVICES (when relevant):
-- The practice offers InBody body composition analysis, ABI (ankle–brachial index) testing for leg circulation/PAD screening when appropriate, allergy testing when clinically indicated, and nutrition counseling tied to medical goals.
+- The practice offers InBody body composition analysis, ABI (ankle–brachial index) testing for leg circulation/PAD screening when appropriate, allergy testing when clinically indicated, nutrition counseling tied to medical goals, and at-home sleep study kits for qualified patients when clinically appropriate (not everyone is eligible).
 - Direct users to call (301) 686-8554 for scheduling; do not give test results or medical advice.
 
 WEIGHT MANAGEMENT (when relevant):

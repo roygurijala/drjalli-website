@@ -12,6 +12,8 @@ import {
   PRACTICE_CITY_STATE_ZIP,
   PRACTICE_PHONE,
   PRACTICE_PHONE_TEL,
+  PRACTICE_FAX,
+  PRACTICE_FAX_HREF,
   MAPS_DIRECTIONS_URL,
 } from "@/lib/constants";
 import { generateFAQJsonLd, newPatientFAQs } from "@/lib/seo";
@@ -21,7 +23,7 @@ import Link from "next/link";
 export const metadata: Metadata = {
   title: "Dr. Jalli MD PC | Primary Care in Rockville, MD",
   description:
-    "Compassionate board-certified primary care in Rockville, Maryland. InBody body composition, ABI testing, allergy testing, nutrition counseling, preventive care, chronic disease management, and telehealth.",
+    "Compassionate board-certified primary care in Rockville, Maryland. InBody body composition, at-home sleep studies for qualified patients, ABI testing, allergy testing, nutrition counseling, preventive care, chronic disease management, and telehealth.",
   alternates: { canonical: "https://www.drjalli.com" },
 };
 
@@ -35,7 +37,6 @@ function TrustBar() {
     { icon: "🥗", label: "Nutrition Counseling" },
     { icon: "💳", label: "Medicare & Medicaid Accepted" },
     { icon: "🖥️", label: "AthenaHealth Patient Portal" },
-    { icon: "📅", label: "Same-Week Appointments" },
     { icon: "🌐", label: "Telehealth Available" },
   ];
   return (
@@ -284,6 +285,15 @@ function LocationAndMapSection() {
               <p className="mt-1.5 text-xs font-semibold text-slate-700">
                 {PRACTICE_PHONE}
               </p>
+              <p className="mt-1 text-xs text-slate-700">
+                Fax:{" "}
+                <a
+                  href={PRACTICE_FAX_HREF}
+                  className="font-semibold text-teal-700 hover:text-teal-600 hover:underline"
+                >
+                  {PRACTICE_FAX}
+                </a>
+              </p>
               <p className="mt-3 text-xs text-slate-500">
                 Mon–Fri: 9:00 AM – 5:00 PM · Sat–Sun: Closed
               </p>
@@ -335,39 +345,45 @@ function LocationAndMapSection() {
 }
 
 // ─── Contact CTA ──────────────────────────────────────────────────────────────
+/** Light card band before the footer — avoids mirroring the dark site footer. */
 function ContactCtaStrip() {
   return (
     <section
-      className="relative overflow-hidden bg-navy-900 px-4 py-12"
+      className="border-t border-slate-200/90 bg-gradient-to-b from-slate-50 to-white px-4 py-12 md:py-14"
       aria-label="Contact call to action"
     >
-      <div className="pointer-events-none absolute inset-0" aria-hidden>
-        <div className="absolute inset-0 grid-pattern opacity-30" />
-        <div className="absolute -left-20 -top-20 h-64 w-64 rounded-full bg-teal-500/10 blur-3xl" />
-        <div className="absolute -bottom-20 right-0 h-64 w-64 rounded-full bg-cyan-500/8 blur-3xl" />
-      </div>
-
-      <div className="relative mx-auto flex max-w-6xl flex-col items-start gap-5 md:flex-row md:items-center md:justify-between">
-        <div>
-          <h2 className="font-display text-xl font-bold text-white md:text-2xl">
-            Ready to schedule or have questions?
-          </h2>
-          <p className="mt-2 max-w-xl text-xs leading-relaxed text-slate-300 md:text-sm">
-            Call the office for appointments and medical questions. Established
-            patients may use the secure portal for non-urgent needs. For
-            emergencies, call 911.
-          </p>
-        </div>
-        <div className="flex flex-shrink-0 flex-col gap-2 md:items-end">
-          <a
-            href={`tel:${PRACTICE_PHONE_TEL}`}
-            className="inline-flex items-center justify-center gap-2 rounded-full bg-teal-500 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-teal-500/20 transition hover:bg-teal-400"
-          >
-            Call {PRACTICE_PHONE}
-          </a>
-          <p className="text-[11px] text-slate-400">
-            Phone is the best way to reach us during office hours.
-          </p>
+      <div className="relative mx-auto max-w-6xl">
+        <div className="relative overflow-hidden rounded-3xl border border-teal-200/70 bg-white p-6 shadow-[0_12px_40px_-12px_rgba(15,23,42,0.12)] md:p-8 md:pl-10">
+          <div
+            className="pointer-events-none absolute left-0 top-0 h-full w-1.5 bg-gradient-to-b from-teal-500 to-teal-600"
+            aria-hidden
+          />
+          <div className="flex flex-col gap-6 pl-2 md:flex-row md:items-center md:justify-between md:gap-10 md:pl-4">
+            <div>
+              <p className="text-[11px] font-semibold uppercase tracking-widest text-teal-700">
+                Get in touch
+              </p>
+              <h2 className="mt-1 font-display text-xl font-bold tracking-tight text-slate-900 md:text-2xl">
+                Ready to schedule or have questions?
+              </h2>
+              <p className="mt-2 max-w-xl text-xs leading-relaxed text-slate-600 md:text-sm">
+                Call the office for appointments and medical questions. Established
+                patients may use the secure portal for non-urgent needs. For
+                emergencies, call 911.
+              </p>
+            </div>
+            <div className="flex flex-shrink-0 flex-col gap-2 md:items-end">
+              <a
+                href={`tel:${PRACTICE_PHONE_TEL}`}
+                className="inline-flex items-center justify-center gap-2 rounded-full bg-teal-600 px-6 py-3 text-sm font-semibold text-white shadow-md shadow-teal-600/25 transition hover:bg-teal-500"
+              >
+                Call {PRACTICE_PHONE}
+              </a>
+              <p className="text-[11px] text-slate-500 md:text-right">
+                Phone is the best way to reach us during office hours.
+              </p>
+            </div>
+          </div>
         </div>
       </div>
     </section>

@@ -111,6 +111,28 @@ export type Service = {
       `.trim(),
     },
     {
+      slug: "home-sleep-study",
+      title: "At-Home Sleep Study",
+      blurb:
+        "Take-home sleep study kits for qualified patients when your clinician recommends testing for sleep apnea or related concerns.",
+      icon: "😴",
+      tags: ["Sleep apnea", "Home kit", "OSA"],
+      body: `
+  When clinically appropriate, we may offer **at-home sleep testing** using a portable kit you use in your own bed. This can help evaluate for **obstructive sleep apnea** and related concerns, with results interpreted in the context of your symptoms and overall health.
+
+  **How it works (high level)**
+  - Your clinician determines whether a home study is appropriate for you  
+  - You receive instructions and use the device as directed at home  
+  - Results are reviewed with you so you understand next steps  
+
+  **Important**  
+  Home sleep studies are **not for everyone**. Some people need an in-lab sleep study or a different evaluation. **Insurance coverage and medical necessity vary**—ask our team what applies to your situation.
+
+  **Questions?**  
+  Call the office to discuss whether this option fits your care plan.
+      `.trim(),
+    },
+    {
       slug: "inbody",
       title: "InBody Body Composition",
       blurb:
@@ -119,7 +141,7 @@ export type Service = {
       tags: ["InBody", "Insight"],
       canonicalLandingPath: "/inbody",
       body: `
-  **InBody** is available in-office for body composition assessment. Your clinician recommends it when it fits your goals and care plan.
+  **InBody** is available in-office for body composition assessment. Your clinician recommends it when it fits your goals and care plan. Visits typically include about **15 minutes of structured review** so your results are explained clearly; you can **schedule time with your physician or nurse practitioner** to discuss findings in a medical visit when needed.
 
   For metrics, how the scan works, who it is for, and what to expect, use our **[full InBody guide](/inbody)**.
       `.trim(),
@@ -185,24 +207,26 @@ export type Service = {
       slug: "care-coordination-and-results",
       title: "Care Coordination & Results",
       blurb:
-        "Clear explanations, timely follow-up, and coordination across labs, imaging, and specialists.",
+        "Labs and imaging tailored to your health concerns—plus clear explanations, timely follow-up, and coordination with specialists.",
       icon: "🔗",
       tags: ["Follow-up", "Clarity"],
       body: `
-  We prioritize **clear communication** and **timely follow-up**. When tests are ordered, we explain what to expect and how results will be shared.
+  We prioritize **clear communication** and **timely follow-up**. Lab work and other testing are **chosen for you—based on your symptoms, conditions, medications, and goals**—not a generic checklist. We explain what we are ordering, why it matters for your situation, and how results will be shared.
   
   **Includes**
-  - Ordering and tracking labs/imaging  
-  - Explaining results in plain language  
-  - Coordinating referrals and next steps
+  - Personalized lab and imaging orders aligned with your clinical picture  
+  - Tracking results and explaining them in plain language  
+  - Coordinating referrals and next steps when specialist care is needed
       `.trim(),
     },
   ];
   
-  /** Home page spotlight (order preserved) — primary care, prevention, differentiator, access */
+  /** Home page spotlight (order preserved) — breadth without duplicating a second carousel */
   export const HOME_FEATURED_SERVICE_SLUGS = [
     "primary-care-for-adults",
     "preventive-care",
+    "chronic-disease-management",
+    "home-sleep-study",
     "inbody",
     "telehealth-when-appropriate",
   ] as const;

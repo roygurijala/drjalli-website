@@ -18,8 +18,8 @@ const howItWorks = [
   },
   {
     step: "03",
-    title: "Clinician Review & Action Plan",
-    desc: "Your clinician reviews the data in context with your history, goals, and care plan.",
+    title: "15-minute results review",
+    desc: "About 15 minutes of in-depth explanation of your printout—clear, plain-language guidance on what your numbers mean. If needed, schedule time with your physician or NP to discuss results in a medical visit.",
   },
 ];
 
@@ -58,21 +58,6 @@ export function InBodyHighlightSection({
               In-office InBody body composition scanning gives you and your
               clinician precise, objective data — muscle, fat, hydration, and
               more — to guide metabolic health, weight management, and lifestyle goals.
-            </p>
-            <p className="mx-auto mt-4 max-w-2xl text-sm leading-relaxed text-slate-600">
-              At this location we also offer{" "}
-              <Link href="/services/abi-testing" className="font-medium text-teal-700 underline-offset-2 hover:underline">
-                ABI testing
-              </Link>
-              ,{" "}
-              <Link href="/services/allergy-testing" className="font-medium text-teal-700 underline-offset-2 hover:underline">
-                allergy testing
-              </Link>
-              , and{" "}
-              <Link href="/services/nutrition-counseling" className="font-medium text-teal-700 underline-offset-2 hover:underline">
-                nutrition counseling
-              </Link>{" "}
-              — ask our team what is right for you.
             </p>
             <div className="mx-auto mt-8 flex max-w-xl flex-col items-stretch gap-3 sm:mx-auto sm:flex-row sm:justify-center">
               <Link

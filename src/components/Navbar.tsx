@@ -10,7 +10,6 @@ import {
   PRACTICE_PHONE,
   PRACTICE_PHONE_TEL,
   PRACTICE_HEADER_TAGLINE,
-  PRACTICE_HEADER_TRUST,
   PRACTICE_HOURS_SHORT,
   PRACTICE_ADDRESS_LINE1,
   PRACTICE_CITY_STATE_ZIP,
@@ -147,10 +146,6 @@ export function Navbar() {
       {/* ─── Informative strip: hours, location, trust — desktop/tablet ───── */}
       <div className="hidden border-t border-white/10 bg-black/20 md:block">
         <div className="mx-auto flex max-w-6xl flex-wrap items-center gap-x-3 gap-y-1 px-4 py-2 text-[11px] leading-snug text-slate-400">
-          <span className="font-medium text-slate-300">{PRACTICE_HEADER_TRUST}</span>
-          <span className="text-slate-600" aria-hidden>
-            ·
-          </span>
           <span>{PRACTICE_HOURS_SHORT}</span>
           <span className="text-slate-600" aria-hidden>
             ·

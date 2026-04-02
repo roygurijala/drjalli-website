@@ -56,12 +56,12 @@ export const INBODY_VISIT_STEPS = [
   },
   {
     step: "3",
-    title: "Staff review",
-    desc: "A trained staff member ensures the reading is high quality, prints or saves your results, and walks you through the basics of what each section means — so you’re not staring at numbers alone.",
+    title: "In-depth results review",
+    desc: "A trained staff member ensures the reading is high quality, prints or saves your results, then spends about 15 minutes with you on a structured, in-depth walkthrough—explaining your test results clearly in plain language so you understand what each metric means for you.",
   },
   {
     step: "4",
-    title: "Optional clinician visit",
-    desc: "When scheduled, your physician or nurse practitioner reviews InBody in context with your history, medications, and goals — and turns numbers into a plan. This may be the same appointment or a follow-up, depending on your visit type.",
+    title: "Optional visit with your clinician",
+    desc: "If you need or want a physician or nurse practitioner to discuss your results in a medical context—medications, labs, or a personalized plan—you can schedule an appointment to review your InBody with your doctor or NP. That may be the same day when available or a separate visit, depending on how you book.",
   },
 ] as const;

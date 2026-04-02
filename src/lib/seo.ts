@@ -5,6 +5,7 @@ import {
   PRACTICE_ADDRESS_LINE1,
   PRACTICE_CITY_STATE_ZIP,
   PRACTICE_PHONE,
+  PRACTICE_FAX,
   PRACTICE_EMAIL,
   MAPS_DIRECTIONS_URL,
   DEFAULT_OG_IMAGE,
@@ -21,6 +22,7 @@ export function generateOrganizationJsonLd() {
     logo: `${PRACTICE_DOMAIN}/images/Jalli_high_res_logo.png`,
     image: `${PRACTICE_DOMAIN}/images/Jalli_high_res_logo.png`,
     telephone: PRACTICE_PHONE,
+    faxNumber: PRACTICE_FAX,
     email: PRACTICE_EMAIL,
     address: {
       "@type": "PostalAddress",
@@ -46,6 +48,8 @@ export function generateOrganizationJsonLd() {
       "Allergy testing",
       "Nutrition counseling",
       "Chronic disease management",
+      "Home sleep study",
+      "Sleep apnea screening",
     ],
   };
 }
@@ -59,6 +63,7 @@ export function generateLocalBusinessJsonLd() {
     name: PRACTICE_NAME,
     url: PRACTICE_DOMAIN,
     telephone: PRACTICE_PHONE,
+    faxNumber: PRACTICE_FAX,
     email: PRACTICE_EMAIL,
     image: `${PRACTICE_DOMAIN}/images/Jalli_high_res_logo.png`,
     address: {
@@ -85,7 +90,7 @@ export function generateLocalBusinessJsonLd() {
     hasMap: MAPS_DIRECTIONS_URL,
     medicalSpecialty: "General Practice",
     description:
-      "Board-certified internal medicine physicians providing compassionate primary care in Rockville, Maryland — including InBody body composition analysis, ABI testing, allergy testing, and nutrition counseling. Accepting new patients.",
+      "Board-certified internal medicine physicians providing compassionate primary care in Rockville, Maryland — including InBody body composition analysis, at-home sleep studies when appropriate, ABI testing, allergy testing, and nutrition counseling. Accepting new patients.",
     priceRange: "$$",
     currenciesAccepted: "USD",
     paymentAccepted: "Insurance, Cash, Credit Card",
@@ -294,7 +299,7 @@ export const inbodyPageFaqs = [
   {
     question: "How long does an InBody scan take?",
     answer:
-      "The scan itself usually takes under two minutes. Plan for check-in, changing footwear, and review time with staff—your full visit length depends on whether you are also seeing a clinician that day.",
+      "The scan itself usually takes under two minutes. When included, plan for about 15 minutes of staff-led review so your results are explained clearly—plus additional time if you are also scheduled with a physician or nurse practitioner that day.",
   },
   {
     question: "Do I need to fast before an InBody scan?",
@@ -314,7 +319,7 @@ export const inbodyPageFaqs = [
   {
     question: "What is the two-tier model (staff vs. clinician)?",
     answer:
-      "Tier 1 is the scan plus staff review of your printout—focused on quality and education. Tier 2 is when a physician or nurse practitioner integrates InBody with your chart, medications, and goals for medical decision-making. The same visit may include one or both, depending on how your appointment is scheduled.",
+      "Tier 1 is the scan plus about 15 minutes of staff-led, in-depth review—we explain your results clearly in plain language (education, not prescribing). Tier 2 is when a physician or nurse practitioner integrates InBody with your chart, medications, and goals for medical decision-making. If you need a clinician discussion after Tier 1, you can schedule an appointment with your doctor or NP to review results. The same visit may include one or both tiers, depending on how your appointment is scheduled.",
   },
   {
     question: "Is InBody safe for everyone?",

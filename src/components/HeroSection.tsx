@@ -81,7 +81,7 @@ export function HeroSection() {
                 <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-teal-400 opacity-75" style={{ animationDuration: "2s" }} />
                 <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-teal-400" />
               </span>
-              Now Accepting New Patients · Rockville, MD
+              Accepting new patients. Same-week appointments often available
             </div>
 
             <h1 className="font-display text-4xl font-bold leading-tight tracking-tight text-white text-balance md:text-5xl lg:text-[3.5rem]">

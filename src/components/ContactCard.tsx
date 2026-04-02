@@ -2,6 +2,8 @@ import {
     PRACTICE_ADDRESS_LINE1,
     PRACTICE_CITY_STATE_ZIP,
     PRACTICE_PHONE,
+    PRACTICE_FAX,
+    PRACTICE_FAX_HREF,
   } from "@/lib/constants";
   
   export function ContactCard() {
@@ -22,6 +24,12 @@ import {
             </p>
             <p className="mt-2 text-xs text-slate-700">
               Phone: {PRACTICE_PHONE}
+            </p>
+            <p className="mt-1 text-xs text-slate-700">
+              Fax:{" "}
+              <a href={PRACTICE_FAX_HREF} className="font-medium text-teal-700 hover:underline">
+                {PRACTICE_FAX}
+              </a>
             </p>
             <p className="mt-2 text-xs text-slate-700">
               Please call the office for appointments. Established patients may

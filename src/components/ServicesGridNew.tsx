@@ -1,7 +1,7 @@
 // components/ServicesGridV2.tsx
 
 import { InfoCard, type InfoCardItem } from "@/components/InfoCard";
-import { services } from "@/data/services";
+import { getServiceHref, services } from "@/data/services";
 import Link from "next/link";
 
 export function ServicesGridNew() {
@@ -39,7 +39,7 @@ export function ServicesGridNew() {
                 key={service.slug}
                 item={item}
                 pillLabel="Primary care service"
-                href={`/services/${service.slug}`}   // 👈 make cards clickable
+                href={getServiceHref(service)}
               />
             );
           })}

@@ -86,18 +86,22 @@ export function MultivitaminsSection({ variant = "page" }: Props) {
               >
                 Shop our wellness store ↗
               </a>
-              <a
-                href={`tel:${PRACTICE_PHONE_TEL}`}
-                className="inline-flex items-center justify-center rounded-full border border-teal-300 bg-white px-6 py-3 text-sm font-semibold text-teal-800 transition hover:bg-teal-50"
-              >
-                Questions? Call {PRACTICE_PHONE}
-              </a>
-              <Link
-                href="/contact"
-                className="inline-flex items-center justify-center rounded-full border border-slate-200 bg-slate-50 px-6 py-3 text-sm font-semibold text-slate-800 transition hover:bg-slate-100"
-              >
-                Contact &amp; directions
-              </Link>
+              {!isHome ? (
+                <>
+                  <a
+                    href={`tel:${PRACTICE_PHONE_TEL}`}
+                    className="inline-flex items-center justify-center rounded-full border border-teal-300 bg-white px-6 py-3 text-sm font-semibold text-teal-800 transition hover:bg-teal-50"
+                  >
+                    Questions? Call {PRACTICE_PHONE}
+                  </a>
+                  <Link
+                    href="/contact"
+                    className="inline-flex items-center justify-center rounded-full border border-slate-200 bg-slate-50 px-6 py-3 text-sm font-semibold text-slate-800 transition hover:bg-slate-100"
+                  >
+                    Contact &amp; directions
+                  </Link>
+                </>
+              ) : null}
             </div>
 
             <p className="mt-6 text-xs leading-relaxed text-slate-500">

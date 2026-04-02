@@ -2,12 +2,13 @@ export const PRACTICE_NAME = "Dr. Jalli MD PC";
 /** One line for nav / page headers — what you do + for whom + where */
 export const PRACTICE_HEADER_TAGLINE =
   "Board-certified internal medicine & primary care for adults in Rockville, MD";
-/** Short trust signals for compact header strips */
-export const PRACTICE_HEADER_TRUST =
-  "Accepting new patients · Same-week appointments often available";
 export const PRACTICE_HOURS_SHORT = "Mon–Fri 9–5 · Sat–Sun closed";
 export const PRACTICE_PHONE = "301-686-8554";
 export const PRACTICE_PHONE_TEL = PRACTICE_PHONE.replace(/[^0-9]/g, ""); // "3016868554"
+export const PRACTICE_FAX = "301-686-8602";
+export const PRACTICE_FAX_DIGITS = PRACTICE_FAX.replace(/[^0-9]/g, "");
+/** Use with `<a href={PRACTICE_FAX_HREF}>` — opens fax-capable clients where supported */
+export const PRACTICE_FAX_HREF = `fax:+1${PRACTICE_FAX_DIGITS}`;
 export const PRACTICE_ADDRESS_LINE1 = "2401 Research Blvd, Suite 330";
 export const PRACTICE_CITY_STATE_ZIP = "Rockville, MD 20850";
 export const PRACTICE_DOMAIN = "https://www.drjalli.com";

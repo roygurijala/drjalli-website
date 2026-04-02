@@ -57,6 +57,8 @@ export const metadata: Metadata = {
     "preventive care Rockville",
     "new patient primary care Maryland",
     "AthenaHealth patient portal",
+    "home sleep study Rockville MD",
+    "sleep apnea testing",
   ],
 
   authors: [{ name: "Dr. Jalli MD PC", url: "https://www.drjalli.com" }],

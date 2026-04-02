@@ -2,7 +2,12 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { InnerPageHero } from "@/components/InnerPageHero";
 import { InsuranceTabs } from "@/components/InsuranceTabs";
-import { PRACTICE_PHONE, PRACTICE_PHONE_TEL } from "@/lib/constants";
+import {
+  PRACTICE_PHONE,
+  PRACTICE_PHONE_TEL,
+  PRACTICE_FAX,
+  PRACTICE_FAX_HREF,
+} from "@/lib/constants";
 import { makePageMeta } from "@/lib/seo";
 
 const PORTAL_URL = "https://30779-1.portal.athenahealth.com/";
@@ -38,8 +43,19 @@ export default function PatientResourcesPage() {
                 className="font-semibold text-teal-700 hover:text-teal-600"
               >
                 {PRACTICE_PHONE}
-              </a>{" "}
-              <span className="text-slate-500">Mon–Fri 9–5</span>
+              </a>
+              <span className="text-slate-400" aria-hidden>
+                {" "}
+                ·{" "}
+              </span>
+              Fax{" "}
+              <a
+                href={PRACTICE_FAX_HREF}
+                className="font-semibold text-teal-700 hover:text-teal-600"
+              >
+                {PRACTICE_FAX}
+              </a>
+              <span className="text-slate-500"> · Mon–Fri 9–5</span>
             </span>
           </div>
         </div>
@@ -207,6 +223,13 @@ export default function PatientResourcesPage() {
                   className="font-semibold text-teal-800 hover:underline"
                 >
                   {PRACTICE_PHONE}
+                </a>{" "}
+                or fax{" "}
+                <a
+                  href={PRACTICE_FAX_HREF}
+                  className="font-semibold text-teal-800 hover:underline"
+                >
+                  {PRACTICE_FAX}
                 </a>{" "}
                 if you don&apos;t see your insurer or need help verifying
                 benefits.

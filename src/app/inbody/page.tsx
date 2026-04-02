@@ -15,6 +15,8 @@ import {
   PRACTICE_DOMAIN,
   PRACTICE_PHONE,
   PRACTICE_PHONE_TEL,
+  PRACTICE_FAX,
+  PRACTICE_FAX_HREF,
 } from "@/lib/constants";
 import {
   generateBreadcrumbJsonLd,
@@ -153,6 +155,10 @@ export default function InBodyLandingPage() {
               className="font-semibold text-teal-700"
             >
               {PRACTICE_PHONE}
+            </a>{" "}
+            or fax{" "}
+            <a href={PRACTICE_FAX_HREF} className="font-semibold text-teal-700 hover:underline">
+              {PRACTICE_FAX}
             </a>
             .
           </p>

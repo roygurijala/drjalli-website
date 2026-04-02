@@ -159,10 +159,12 @@ export function InBodyTwoTierSection() {
             </h3>
             <p className="mt-3 text-sm leading-relaxed text-slate-600">
               You complete the InBody; our team ensures a quality reading, prints or saves your
-              results, and reviews the basics with you — what each section means and how to read
-              your printout. This tier focuses on{" "}
-              <strong className="text-slate-800">accuracy and education</strong>, not prescribing or
-              changing medications.
+              results, then guides you through roughly{" "}
+              <strong className="text-slate-800">15 minutes of in-depth review</strong>—explaining
+              your test results clearly and what each section of the printout means. This tier
+              focuses on <strong className="text-slate-800">accuracy and education</strong>, not
+              prescribing or changing medications. If you need a clinician discussion, you can
+              schedule an appointment with your doctor or NP to go deeper on your results.
             </p>
           </div>
           <div className="rounded-3xl border border-navy-900/15 bg-navy-900 p-6 text-white shadow-md md:p-8">
@@ -179,7 +181,8 @@ export function InBodyTwoTierSection() {
               translate numbers into <strong className="text-white">clinical decisions</strong> —
               follow-up labs, medication adjustments, referrals, or referrals to nutrition — as
               appropriate. This may be the same visit as your scan or a separate appointment,
-              depending on how your visit is booked.
+              depending on how your visit is booked. If you start with staff review only and later
+              need a doctor visit to discuss results, we can help you schedule that.
             </p>
           </div>
         </div>

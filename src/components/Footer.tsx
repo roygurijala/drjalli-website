@@ -3,6 +3,8 @@ import {
   PRACTICE_NAME,
   PRACTICE_PHONE,
   PRACTICE_PHONE_TEL,
+  PRACTICE_FAX,
+  PRACTICE_FAX_HREF,
   PRACTICE_ADDRESS_LINE1,
   PRACTICE_CITY_STATE_ZIP,
   PRACTICE_EMAIL,
@@ -61,6 +63,13 @@ export function Footer() {
               className="font-semibold text-white hover:text-teal-300"
             >
               {PRACTICE_PHONE}
+            </a>
+            <Sep />
+            <a
+              href={PRACTICE_FAX_HREF}
+              className="font-medium text-slate-200 hover:text-teal-300"
+            >
+              Fax {PRACTICE_FAX}
             </a>
             {PRACTICE_EMAIL ? (
               <>

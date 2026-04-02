@@ -10,6 +10,8 @@ import {
   PRACTICE_DOMAIN,
   PRACTICE_PHONE,
   PRACTICE_PHONE_TEL,
+  PRACTICE_FAX,
+  PRACTICE_FAX_HREF,
   PRACTICE_ADDRESS_LINE1,
   PRACTICE_CITY_STATE_ZIP,
   DEFAULT_OG_IMAGE,
@@ -186,6 +188,12 @@ export default async function ClinicianPage({
                     <br />
                     {PRACTICE_CITY_STATE_ZIP}
                   </div>
+                  <p className="text-xs text-slate-600">
+                    Fax:{" "}
+                    <a href={PRACTICE_FAX_HREF} className="font-medium text-teal-700 hover:underline">
+                      {PRACTICE_FAX}
+                    </a>
+                  </p>
                   <div className="flex flex-wrap items-center gap-3">
                     <a
                       href={`tel:${PRACTICE_PHONE_TEL}`}
