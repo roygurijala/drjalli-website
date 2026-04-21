@@ -11,8 +11,9 @@ type Props = {
 };
 
 const DISMISS_KEY = "dj_announce_dismiss_v3";
-const PX_PER_SEC = 80;
-const GAP_PX = 160;
+const PX_PER_SEC = 60;
+const GAP_PX = 120;
+const SEPARATOR = "  •  ";
 
 function variantStyles(v?: AnnouncementMessage["variant"]) {
   switch (v) {
@@ -80,7 +81,7 @@ export default function AnnouncementBarClient({
 
   const [index, setIndex] = useState(0);
   const [fading, setFading] = useState(false);
-  const [durationSec, setDurationSec] = useState(20);
+  const [durationSec, setDurationSec] = useState(30);
   const containerRef = useRef<HTMLDivElement | null>(null);
   const trackRef = useRef<HTMLDivElement | null>(null);
 
@@ -88,6 +89,18 @@ export default function AnnouncementBarClient({
     () => messages.filter((m) => !dismissed.has(m.id)),
     [messages, dismissed]
   );
+
+  // Use the first message's variant for the bar color in marquee mode
+  const current = visible[index % visible.length];
+
+  function dismissAll() {
+    const next = new Set(dismissed);
+    visible.forEach((m) => next.add(m.id));
+    setDismissed(next);
+    try {
+      localStorage.setItem(DISMISS_KEY, JSON.stringify([...next]));
+    } catch {}
+  }
 
   function dismiss(id: string) {
     const next = new Set(dismissed).add(id);
@@ -110,26 +123,32 @@ export default function AnnouncementBarClient({
     return () => clearInterval(t);
   }, [mode, rotateMs, visible.length]);
 
-  // Marquee speed from measured widths
+  // Marquee: compute duration based on total content width
   useEffect(() => {
     if (mode !== "marquee") return;
     const compute = () => {
-      const cW = containerRef.current?.offsetWidth ?? 800;
-      const contentW =
-        (trackRef.current?.firstElementChild as HTMLElement)?.offsetWidth ?? 400;
-      setDurationSec(Math.max(8, (cW + contentW + GAP_PX) / PX_PER_SEC));
+      const trackEl = trackRef.current?.firstElementChild as HTMLElement | null;
+      const contentW = trackEl?.offsetWidth ?? 600;
+      setDurationSec(Math.max(10, (contentW + GAP_PX) / PX_PER_SEC));
     };
     compute();
     const ro = new ResizeObserver(compute);
     if (containerRef.current) ro.observe(containerRef.current);
     window.addEventListener("resize", compute);
-    return () => { ro.disconnect(); window.removeEventListener("resize", compute); };
+    return () => {
+      ro.disconnect();
+      window.removeEventListener("resize", compute);
+    };
   }, [mode, visible.length]);
 
   if (visible.length === 0) return null;
 
-  const current = mode === "single" ? visible[0] : visible[index % visible.length];
-  const s = variantStyles(current.variant);
+  const s = variantStyles(current?.variant);
+
+  // Build the full combined text for marquee — all messages joined by separator
+  const combinedText = visible
+    .map((m) => m.text)
+    .join(`  ${SEPARATOR}  `);
 
   return (
     <div
@@ -138,7 +157,7 @@ export default function AnnouncementBarClient({
       aria-live="polite"
       aria-atomic="true"
     >
-      <div className="mx-auto flex max-w-6xl items-center gap-3 px-4 py-2.5 md:py-3">
+      <div className="mx-auto flex max-w-full items-center gap-3 px-4 py-2.5 md:py-3">
 
         {/* Variant pill */}
         <div className={`hidden shrink-0 items-center gap-1.5 rounded-full px-3 py-1.5 text-[11px] font-bold uppercase tracking-widest sm:flex ${s.pill}`}>
@@ -157,16 +176,15 @@ export default function AnnouncementBarClient({
                 animation: "dj-marquee var(--dj-d) linear infinite",
               }}
             >
+              {/* First copy */}
               <span className={`whitespace-nowrap text-sm font-semibold md:text-[15px] ${s.text}`}>
-                {current.href
-                  ? <a href={current.href} className={s.link}>{current.text}</a>
-                  : current.text}
+                {combinedText}
               </span>
+              {/* Gap between loops */}
               <span style={{ display: "inline-block", width: GAP_PX }} aria-hidden />
-              <span className={`whitespace-nowrap text-sm font-semibold md:text-[15px] ${s.text}`}>
-                {current.href
-                  ? <a href={current.href} className={s.link}>{current.text}</a>
-                  : current.text}
+              {/* Duplicate for seamless loop */}
+              <span className={`whitespace-nowrap text-sm font-semibold md:text-[15px] ${s.text}`} aria-hidden>
+                {combinedText}
               </span>
               <span style={{ display: "inline-block", width: GAP_PX }} aria-hidden />
             </div>
@@ -179,7 +197,7 @@ export default function AnnouncementBarClient({
           </div>
         ) : (
           <div className={`flex min-w-0 flex-1 transition-opacity duration-300 ${fading ? "opacity-0" : "opacity-100"}`}>
-            {current.href ? (
+            {current?.href ? (
               <a href={current.href} className={`truncate text-sm font-semibold md:text-[15px] ${s.link}`} title={current.text}>
                 {current.text}
               </a>
@@ -213,7 +231,7 @@ export default function AnnouncementBarClient({
         {/* Dismiss */}
         <button
           type="button"
-          onClick={() => dismiss(current.id)}
+          onClick={() => mode === "marquee" ? dismissAll() : dismiss(current.id)}
           className={`ml-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-sm font-medium transition ${s.close}`}
           aria-label="Dismiss announcement"
         >
