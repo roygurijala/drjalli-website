@@ -255,6 +255,25 @@ function buildFollowUpPrompts(intent: ChatIntent): string[] {
   }
 }
 
+async function logAnalyticsEventSafely(input: {
+  source: string;
+  intent: ChatIntent;
+  status: "ok" | "error";
+  usedFallbackReply: boolean;
+}) {
+  try {
+    await appendChatAnalyticsEvent({
+      ts: new Date().toISOString(),
+      ...input,
+    });
+  } catch (err) {
+    console.warn(
+      "chat analytics logging skipped:",
+      err instanceof Error ? err.message : "unknown"
+    );
+  }
+}
+
 function sanitizeChatMessages(raw: unknown): { role: "user" | "assistant"; content: string }[] | null {
   if (!Array.isArray(raw) || raw.length === 0) return null;
   const out: { role: "user" | "assistant"; content: string }[] = [];
@@ -464,8 +483,7 @@ WEIGHT MANAGEMENT (when relevant):
     const suggestedPrompts = buildFollowUpPrompts(intent);
     const usedFallbackReply = !completion.choices[0]?.message?.content;
     console.info(`[chat-intent] source=${source} intent=${intent}`);
-    await appendChatAnalyticsEvent({
-      ts: new Date().toISOString(),
+    await logAnalyticsEventSafely({
       source,
       intent,
       status: "ok",
@@ -478,8 +496,7 @@ WEIGHT MANAGEMENT (when relevant):
       "Chat API error:",
       err instanceof Error ? err.message : "unknown"
     );
-    await appendChatAnalyticsEvent({
-      ts: new Date().toISOString(),
+    await logAnalyticsEventSafely({
       source,
       intent,
       status: "error",

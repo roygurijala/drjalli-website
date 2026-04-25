@@ -71,11 +71,20 @@ async function writeStore(store: ChatAnalyticsStore) {
 }
 
 export async function appendChatAnalyticsEvent(event: ChatAnalyticsEvent) {
-  writeQueue = writeQueue.then(async () => {
-    const store = await readStore();
-    const nextEvents = [...store.events, event].slice(-MAX_EVENTS);
-    await writeStore({ events: nextEvents });
-  });
+  // Never let analytics writes interrupt user-facing requests.
+  writeQueue = writeQueue
+    .catch(() => undefined)
+    .then(async () => {
+      const store = await readStore();
+      const nextEvents = [...store.events, event].slice(-MAX_EVENTS);
+      await writeStore({ events: nextEvents });
+    })
+    .catch((err) => {
+      console.warn(
+        "chat analytics write skipped:",
+        err instanceof Error ? err.message : "unknown"
+      );
+    });
   await writeQueue;
 }
 
