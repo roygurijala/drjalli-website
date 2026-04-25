@@ -58,6 +58,19 @@ Optional token for scripts/curl (in addition to Basic Auth):
 CHAT_ANALYTICS_TOKEN=replace-with-a-long-random-token
 ```
 
+Retention window for analytics events (default 180 days):
+
+```bash
+CHAT_ANALYTICS_RETENTION_DAYS=180
+```
+
+For persistent analytics in production, configure Vercel KV / Upstash Redis REST:
+
+```bash
+KV_REST_API_URL=your-kv-rest-api-url
+KV_REST_API_TOKEN=your-kv-rest-api-token
+```
+
 ### Local Development
 
 1. Start the app:
@@ -86,10 +99,10 @@ Bearer token:
 curl -H "Authorization: Bearer your-token" "http://localhost:3000/api/chat/analytics?days=30"
 ```
 
-Weekly CSV export:
+CSV export (uses selected dashboard window):
 
 ```bash
-curl -u admin:your-password "http://localhost:3000/api/chat/analytics?days=7&format=csv" -o chat-analytics-7d.csv
+curl -u admin:your-password "http://localhost:3000/api/chat/analytics?days=30&format=csv" -o chat-analytics-30d.csv
 ```
 
 ### Vercel / Hosting-Level Protection (Recommended)

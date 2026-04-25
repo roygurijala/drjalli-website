@@ -1,5 +1,6 @@
 import { mkdir, readFile, writeFile } from "fs/promises";
 import path from "path";
+import { kv } from "@vercel/kv";
 
 export type ChatIntent =
   | "emergency"
@@ -14,7 +15,7 @@ export type ChatIntent =
   | "weight-management"
   | "general";
 
-type ChatAnalyticsEvent = {
+export type ChatAnalyticsEvent = {
   ts: string;
   source: string;
   intent: ChatIntent;
@@ -41,8 +42,45 @@ const STORE_DIR = path.join(process.cwd(), ".data");
 const STORE_FILE = path.join(STORE_DIR, "chat-analytics.json");
 const MAX_EVENTS = 3000;
 const MAX_RECENT_EVENTS = 20;
+const KV_EVENTS_KEY = "chat:analytics:events";
+const DEFAULT_RETENTION_DAYS = 180;
+const MAX_RETENTION_DAYS = 730;
 
 let writeQueue: Promise<void> = Promise.resolve();
+
+function getRetentionDays() {
+  const raw = Number(process.env.CHAT_ANALYTICS_RETENTION_DAYS ?? DEFAULT_RETENTION_DAYS);
+  if (!Number.isFinite(raw) || raw < 1) return DEFAULT_RETENTION_DAYS;
+  return Math.min(Math.floor(raw), MAX_RETENTION_DAYS);
+}
+
+function isKvConfigured() {
+  return Boolean(process.env.KV_REST_API_URL && process.env.KV_REST_API_TOKEN);
+}
+
+function eventTsToScore(ts: string) {
+  const parsed = Date.parse(ts);
+  return Number.isFinite(parsed) ? parsed : Date.now();
+}
+
+function safeParseEvent(raw: unknown): ChatAnalyticsEvent | null {
+  if (typeof raw !== "string") return null;
+  try {
+    const event = JSON.parse(raw) as Partial<ChatAnalyticsEvent>;
+    if (
+      typeof event.ts === "string" &&
+      typeof event.source === "string" &&
+      typeof event.intent === "string" &&
+      (event.status === "ok" || event.status === "error") &&
+      typeof event.usedFallbackReply === "boolean"
+    ) {
+      return event as ChatAnalyticsEvent;
+    }
+  } catch {
+    return null;
+  }
+  return null;
+}
 
 async function readStore(): Promise<ChatAnalyticsStore> {
   try {
@@ -71,6 +109,17 @@ async function writeStore(store: ChatAnalyticsStore) {
 }
 
 export async function appendChatAnalyticsEvent(event: ChatAnalyticsEvent) {
+  if (isKvConfigured()) {
+    const retentionDays = getRetentionDays();
+    const cutoff = Date.now() - retentionDays * 24 * 60 * 60 * 1000;
+    await kv.zadd(KV_EVENTS_KEY, {
+      score: eventTsToScore(event.ts),
+      member: JSON.stringify(event),
+    });
+    await kv.zremrangebyscore(KV_EVENTS_KEY, 0, cutoff);
+    return;
+  }
+
   // Never let analytics writes interrupt user-facing requests.
   writeQueue = writeQueue
     .catch(() => undefined)
@@ -139,8 +188,19 @@ export async function getChatAnalyticsSummary(periodDays = 30): Promise<ChatAnal
 }
 
 export async function getChatAnalyticsEvents(periodDays = 30): Promise<ChatAnalyticsEvent[]> {
+  if (isKvConfigured()) {
+    const retentionDays = getRetentionDays();
+    const boundedDays = Math.min(Math.max(periodDays, 1), retentionDays);
+    const cutoff = Date.now() - boundedDays * 24 * 60 * 60 * 1000;
+    const rows = await kv.zrangebyscore(KV_EVENTS_KEY, cutoff, Date.now());
+    return rows
+      .map((row) => safeParseEvent(row))
+      .filter((event): event is ChatAnalyticsEvent => Boolean(event));
+  }
+
   const store = await readStore();
-  const cutoff = Date.now() - periodDays * 24 * 60 * 60 * 1000;
+  const boundedDays = Math.min(Math.max(periodDays, 1), getRetentionDays());
+  const cutoff = Date.now() - boundedDays * 24 * 60 * 60 * 1000;
   return store.events.filter((event) => {
     const ts = Date.parse(event.ts);
     return Number.isFinite(ts) && ts >= cutoff;

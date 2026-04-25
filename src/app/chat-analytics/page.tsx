@@ -103,6 +103,7 @@ export default function ChatAnalyticsPage() {
             <option value={7}>7 days</option>
             <option value={30}>30 days</option>
             <option value={90}>90 days</option>
+            <option value={180}>180 days</option>
           </select>
           <button
             type="button"
@@ -112,10 +113,10 @@ export default function ChatAnalyticsPage() {
             Refresh
           </button>
           <a
-            href="/api/chat/analytics?days=7&format=csv"
+            href={`/api/chat/analytics?days=${days}&format=csv`}
             className="rounded-md border border-slate-300 bg-white px-3 py-1.5 text-sm font-medium text-slate-700 hover:bg-slate-50"
           >
-            Export Weekly CSV
+            Export CSV
           </a>
         </div>
       </div>
