@@ -192,10 +192,14 @@ export async function getChatAnalyticsEvents(periodDays = 30): Promise<ChatAnaly
     const retentionDays = getRetentionDays();
     const boundedDays = Math.min(Math.max(periodDays, 1), retentionDays);
     const cutoff = Date.now() - boundedDays * 24 * 60 * 60 * 1000;
-    const rows = await kv.zrangebyscore(KV_EVENTS_KEY, cutoff, Date.now());
+    const rows = await kv.zrange<string[]>(KV_EVENTS_KEY, 0, -1);
     return rows
       .map((row) => safeParseEvent(row))
-      .filter((event): event is ChatAnalyticsEvent => Boolean(event));
+      .filter((event): event is ChatAnalyticsEvent => {
+        if (!event) return false;
+        const ts = Date.parse(event.ts);
+        return Number.isFinite(ts) && ts >= cutoff;
+      });
   }
 
   const store = await readStore();
