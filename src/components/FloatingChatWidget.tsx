@@ -11,7 +11,18 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeSanitize, { defaultSchema } from "rehype-sanitize";
 
-type ChatMessage = { role: "user" | "assistant"; content: string };
+type SuggestedAction = {
+  label: string;
+  href: string;
+  kind: "call" | "portal" | "directions" | "link";
+};
+
+type ChatMessage = {
+  role: "user" | "assistant";
+  content: string;
+  suggestedActions?: SuggestedAction[];
+  suggestedPrompts?: string[];
+};
 
 function normalizeBotText(src: string) {
   return src.replace(/<br\s*\/?>/gi, "\n").trim();
@@ -99,6 +110,11 @@ export function FloatingChatWidget() {
   const [input, setInput] = useState("");
   const [isSending, setIsSending] = useState(false);
   const [hasUnread, setHasUnread] = useState(false);
+  const STARTER_PROMPTS = [
+    "I'm a new patient. How do I schedule?",
+    "What insurances do you accept?",
+    "What are your office hours today?",
+  ];
 
   const panelRef = useRef<HTMLDivElement | null>(null);
   const launcherRef = useRef<HTMLButtonElement | null>(null);
@@ -149,19 +165,19 @@ export function FloatingChatWidget() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [messages.length]);
 
-  async function handleSend(e?: React.FormEvent) {
+  async function handleSend(e?: React.FormEvent, overridePrompt?: string) {
     e?.preventDefault();
-    const trimmed = input.trim();
+    const trimmed = (overridePrompt ?? input).trim();
     if (!trimmed || isSending) return;
     const next = [...messages, { role: "user", content: trimmed } as const];
     setMessages(next);
-    setInput("");
+    if (!overridePrompt) setInput("");
     setIsSending(true);
     try {
       const res = await fetch("/api/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ messages: next }),
+        body: JSON.stringify({ messages: next, source: "floating-widget" }),
       });
       if (!res.ok) throw new Error("AI error");
       const data = await res.json();
@@ -170,6 +186,8 @@ export function FloatingChatWidget() {
         {
           role: "assistant",
           content: data.reply ?? "I'm sorry, I couldn't process that just now. Please try again or call the office.",
+          suggestedActions: Array.isArray(data.suggestedActions) ? data.suggestedActions : undefined,
+          suggestedPrompts: Array.isArray(data.suggestedPrompts) ? data.suggestedPrompts.slice(0, 2) : undefined,
         },
       ]);
     } catch {
@@ -259,19 +277,51 @@ export function FloatingChatWidget() {
                   }`}
                 >
                   {m.role === "assistant" ? (
-                    <div className="prose prose-sm max-w-none text-slate-800 [&_p]:my-1 [&_p]:text-slate-800 [&_ul]:my-1 [&_li]:my-0.5 [&_strong]:text-teal-700 [&_a]:text-teal-600">
-                      <ReactMarkdown
-                        remarkPlugins={[remarkGfm]}
-                        rehypePlugins={[[rehypeSanitize, safeSchema]]}
-                        components={{
-                          a: ({ node, ...props }) => (
-                            <a {...props} target="_blank" rel="noopener noreferrer"
-                              className="text-teal-600 underline" />
-                          ),
-                        }}
-                      >
-                        {normalizeBotText(m.content)}
-                      </ReactMarkdown>
+                    <div>
+                      <div className="prose prose-sm max-w-none text-slate-800 [&_p]:my-1 [&_p]:text-slate-800 [&_ul]:my-1 [&_li]:my-0.5 [&_strong]:text-teal-700 [&_a]:text-teal-600">
+                        <ReactMarkdown
+                          remarkPlugins={[remarkGfm]}
+                          rehypePlugins={[[rehypeSanitize, safeSchema]]}
+                          components={{
+                            a: ({ node, ...props }) => (
+                              <a {...props} target="_blank" rel="noopener noreferrer"
+                                className="text-teal-600 underline" />
+                            ),
+                          }}
+                        >
+                          {normalizeBotText(m.content)}
+                        </ReactMarkdown>
+                      </div>
+                      {!!m.suggestedActions?.length && (
+                        <div className="mt-2 flex flex-wrap gap-1.5">
+                          {m.suggestedActions.slice(0, 2).map((action) => (
+                            <a
+                              key={`${action.label}-${action.href}`}
+                              href={action.href}
+                              target={action.href.startsWith("http") ? "_blank" : undefined}
+                              rel={action.href.startsWith("http") ? "noopener noreferrer" : undefined}
+                              className="rounded-full border border-teal-200 bg-teal-50 px-2.5 py-1 text-[11px] font-medium text-teal-700 hover:bg-teal-100"
+                            >
+                              {action.label}
+                            </a>
+                          ))}
+                        </div>
+                      )}
+                      {!!m.suggestedPrompts?.length && (
+                        <div className="mt-2 flex flex-wrap gap-1.5">
+                          {m.suggestedPrompts.map((prompt) => (
+                            <button
+                              key={prompt}
+                              type="button"
+                              disabled={isSending}
+                              onClick={() => void handleSend(undefined, prompt)}
+                              className="rounded-full border border-slate-300 bg-white px-2.5 py-1 text-[11px] text-slate-700 hover:bg-slate-100 disabled:opacity-50"
+                            >
+                              {prompt}
+                            </button>
+                          ))}
+                        </div>
+                      )}
                     </div>
                   ) : (
                     <span className="whitespace-pre-wrap text-sm">{m.content}</span>
@@ -305,6 +355,21 @@ export function FloatingChatWidget() {
 
           {/* Input — white, high contrast */}
           <form onSubmit={handleSend} className="border-t border-slate-200 bg-white px-3 pb-3 pt-2.5">
+            {!messages.some((m) => m.role === "user") && (
+              <div className="mb-2 flex flex-wrap gap-1.5">
+                {STARTER_PROMPTS.map((prompt) => (
+                  <button
+                    key={prompt}
+                    type="button"
+                    onClick={() => void handleSend(undefined, prompt)}
+                    disabled={isSending}
+                    className="rounded-full border border-slate-300 bg-slate-50 px-2.5 py-1 text-[11px] text-slate-700 hover:bg-slate-100 disabled:opacity-50"
+                  >
+                    {prompt}
+                  </button>
+                ))}
+              </div>
+            )}
             <div className="flex gap-2">
               <textarea
                 ref={textareaRef}

@@ -3,6 +3,8 @@
 // vendor agreements (e.g., OpenAI Business Associate Agreement where applicable), policies, and safeguards.
 import { NextRequest, NextResponse } from "next/server";
 import OpenAI from "openai";
+import { MAPS_DIRECTIONS_URL, PRACTICE_PHONE_TEL } from "@/lib/constants";
+import { appendChatAnalyticsEvent, type ChatIntent } from "@/lib/chat-analytics";
 
 const client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
@@ -162,6 +164,97 @@ function seemsPersonalMedicalQuery(text: string) {
 const MAX_USER_MSG_CHARS = 6000;
 const MAX_MESSAGES_IN_REQUEST = 40;
 
+type SuggestedAction = {
+  label: string;
+  href: string;
+  kind: "call" | "portal" | "directions" | "link";
+};
+
+function detectIntent(text: string): ChatIntent {
+  const t = text.toLowerCase();
+  if (seemsMentalHealthCrisis(t)) return "mental-health-crisis";
+  if (seemsAcuteEmergencyQuery(t)) return "emergency";
+  if (seemsPersonalMedicalQuery(t)) return "personal-medical";
+  if (isOpenNowQuery(t)) return "office-hours";
+  if (isInsuranceQuery(t)) return "insurance";
+  if (isProvidersQuery(t)) return "providers";
+  if (isWeightManagementQuery(t)) return "weight-management";
+  if (/(location|address|parking|directions|where are you)/i.test(t)) return "location";
+  if (/(new patient|first visit|become a patient|new appointment)/i.test(t)) return "new-patient";
+  if (/(existing patient|follow up|follow-up|reschedule|refill)/i.test(t)) return "existing-patient";
+  return "general";
+}
+
+function buildSuggestedActions(intent: ChatIntent): SuggestedAction[] {
+  const phoneHref = `tel:+1${PRACTICE_PHONE_TEL}`;
+  const callAction: SuggestedAction = { label: "Call Office", href: phoneHref, kind: "call" };
+  const portalAction: SuggestedAction = { label: "Open Patient Portal", href: PATIENT_PORTAL_URL, kind: "portal" };
+  const directionsAction: SuggestedAction = { label: "Get Directions", href: MAPS_DIRECTIONS_URL, kind: "directions" };
+
+  switch (intent) {
+    case "mental-health-crisis":
+      return [
+        { label: "Call 988", href: "tel:988", kind: "call" },
+        { label: "Call 911", href: "tel:911", kind: "call" },
+      ];
+    case "emergency":
+      return [{ label: "Call 911", href: "tel:911", kind: "call" }];
+    case "personal-medical":
+      return [callAction, portalAction];
+    case "office-hours":
+      return [callAction, directionsAction];
+    case "insurance":
+      return [callAction];
+    case "providers":
+      return [callAction];
+    case "new-patient":
+      return [callAction, directionsAction];
+    case "existing-patient":
+      return [portalAction, callAction];
+    case "location":
+      return [directionsAction, callAction];
+    case "weight-management":
+      return [callAction, portalAction];
+    default:
+      return [callAction];
+  }
+}
+
+function buildFollowUpPrompts(intent: ChatIntent): string[] {
+  switch (intent) {
+    case "new-patient":
+      return [
+        "What should I bring to my first visit?",
+        "What are your office hours this week?",
+      ];
+    case "insurance":
+      return [
+        "Do you accept my insurance plan?",
+        "How can I verify coverage before booking?",
+      ];
+    case "office-hours":
+      return [
+        "What is your exact address?",
+        "How do I schedule an appointment?",
+      ];
+    case "weight-management":
+      return [
+        "Tell me about your InBody body composition test.",
+        "How do I book a weight management consultation?",
+      ];
+    case "location":
+      return [
+        "Where should I park?",
+        "What are your office hours?",
+      ];
+    default:
+      return [
+        "How do I schedule as a new patient?",
+        "What insurances do you accept?",
+      ];
+  }
+}
+
 function sanitizeChatMessages(raw: unknown): { role: "user" | "assistant"; content: string }[] | null {
   if (!Array.isArray(raw) || raw.length === 0) return null;
   const out: { role: "user" | "assistant"; content: string }[] = [];
@@ -182,8 +275,11 @@ function sanitizeChatMessages(raw: unknown): { role: "user" | "assistant"; conte
    MAIN HANDLER
    ========================= */
 export async function POST(req: NextRequest) {
+  let source = "unknown";
+  let intent: ChatIntent = "general";
   try {
     const body = await req.json();
+    source = typeof body.source === "string" ? body.source : "unknown";
     const messages = sanitizeChatMessages(body.messages);
     if (!messages) {
       return NextResponse.json({ error: "No messages provided." }, { status: 400 });
@@ -191,6 +287,7 @@ export async function POST(req: NextRequest) {
 
     const lastUserMsg = [...messages].reverse().find((m) => m.role === "user")?.content ?? "";
     const userEs = seemsSpanish(lastUserMsg);
+    intent = detectIntent(lastUserMsg);
 
     const systemMessage = {
       role: "system" as const,
@@ -363,12 +460,31 @@ WEIGHT MANAGEMENT (when relevant):
       completion.choices[0]?.message?.content ??
       "I’m sorry, I couldn’t generate a response just now.";
 
-    return NextResponse.json({ reply });
+    const suggestedActions = buildSuggestedActions(intent);
+    const suggestedPrompts = buildFollowUpPrompts(intent);
+    const usedFallbackReply = !completion.choices[0]?.message?.content;
+    console.info(`[chat-intent] source=${source} intent=${intent}`);
+    await appendChatAnalyticsEvent({
+      ts: new Date().toISOString(),
+      source,
+      intent,
+      status: "ok",
+      usedFallbackReply,
+    });
+
+    return NextResponse.json({ reply, intent, suggestedActions, suggestedPrompts });
   } catch (err) {
     console.error(
       "Chat API error:",
       err instanceof Error ? err.message : "unknown"
     );
+    await appendChatAnalyticsEvent({
+      ts: new Date().toISOString(),
+      source,
+      intent,
+      status: "error",
+      usedFallbackReply: true,
+    });
     return NextResponse.json(
       { error: "Something went wrong processing your request." },
       { status: 500 }

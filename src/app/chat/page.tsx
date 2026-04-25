@@ -8,10 +8,17 @@ import ProviderStrip from "@/components/ProviderStrip";
 import { AI_CHAT_DISCLAIMER_SHORT } from "@/lib/constants";
 
 type ChatRole = "assistant" | "user";
+type SuggestedAction = {
+  label: string;
+  href: string;
+  kind: "call" | "portal" | "directions" | "link";
+};
 
 interface ChatMessageType {
   role: ChatRole;
   content: string;
+  suggestedActions?: SuggestedAction[];
+  suggestedPrompts?: string[];
 }
 
 const QUICK_ACTIONS: { label: string; prompt: string }[] = [
@@ -58,7 +65,7 @@ export default function ChatPage() {
       const response = await fetch("/api/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ messages: updatedMessages }),
+        body: JSON.stringify({ messages: updatedMessages, source: "chat-page" }),
       });
 
       const data = await response.json();
@@ -68,6 +75,8 @@ export default function ChatPage() {
       const botMessage: ChatMessageType = {
         role: "assistant",
         content: replyContent,
+        suggestedActions: Array.isArray(data.suggestedActions) ? data.suggestedActions : undefined,
+        suggestedPrompts: Array.isArray(data.suggestedPrompts) ? data.suggestedPrompts.slice(0, 3) : undefined,
       };
 
       setMessages((prev) => [...prev, botMessage]);
@@ -131,7 +140,17 @@ export default function ChatPage() {
       {/* Messages area */}
       <div className="flex-1 overflow-y-auto p-4 flex flex-col">
         {messages.map((m, idx) => (
-          <ChatMessage key={idx} role={m.role} content={m.content} />
+          <ChatMessage
+            key={idx}
+            role={m.role}
+            content={m.content}
+            suggestedActions={m.suggestedActions}
+            suggestedPrompts={m.suggestedPrompts}
+            onPromptSelect={(prompt) => {
+              if (isLoading) return;
+              void sendMessage(prompt);
+            }}
+          />
         ))}
 
         {isLoading && (
