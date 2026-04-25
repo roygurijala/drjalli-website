@@ -64,20 +64,28 @@ function eventTsToScore(ts: string) {
 }
 
 function safeParseEvent(raw: unknown): ChatAnalyticsEvent | null {
-  if (typeof raw !== "string") return null;
-  try {
-    const event = JSON.parse(raw) as Partial<ChatAnalyticsEvent>;
-    if (
-      typeof event.ts === "string" &&
-      typeof event.source === "string" &&
-      typeof event.intent === "string" &&
-      (event.status === "ok" || event.status === "error") &&
-      typeof event.usedFallbackReply === "boolean"
-    ) {
-      return event as ChatAnalyticsEvent;
-    }
-  } catch {
-    return null;
+  const event =
+    typeof raw === "string"
+      ? (() => {
+          try {
+            return JSON.parse(raw) as Partial<ChatAnalyticsEvent>;
+          } catch {
+            return null;
+          }
+        })()
+      : typeof raw === "object" && raw !== null
+        ? (raw as Partial<ChatAnalyticsEvent>)
+        : null;
+  if (!event) return null;
+
+  if (
+    typeof event.ts === "string" &&
+    typeof event.source === "string" &&
+    typeof event.intent === "string" &&
+    (event.status === "ok" || event.status === "error") &&
+    typeof event.usedFallbackReply === "boolean"
+  ) {
+    return event as ChatAnalyticsEvent;
   }
   return null;
 }
